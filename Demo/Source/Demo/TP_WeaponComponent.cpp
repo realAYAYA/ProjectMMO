@@ -2,13 +2,14 @@
 
 
 #include "TP_WeaponComponent.h"
-#include "DemoCharacter.h"
 #include "DemoProjectile.h"
 #include "GameFramework/PlayerController.h"
 #include "Camera/PlayerCameraManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+
+#include "Characters/MCharacterBase.h"
 
 // Sets default values for this component's properties
 UTP_WeaponComponent::UTP_WeaponComponent()
@@ -31,7 +32,7 @@ void UTP_WeaponComponent::Fire()
 		UWorld* const World = GetWorld();
 		if (World != nullptr)
 		{
-			APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
+			const APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
 			const FRotator SpawnRotation = PlayerController->PlayerCameraManager->GetCameraRotation();
 			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
 			const FVector SpawnLocation = GetOwner()->GetActorLocation() + SpawnRotation.RotateVector(MuzzleOffset);
@@ -63,7 +64,7 @@ void UTP_WeaponComponent::Fire()
 	}
 }
 
-void UTP_WeaponComponent::AttachWeapon(ADemoCharacter* TargetCharacter)
+void UTP_WeaponComponent::AttachWeapon(AMCharacterBase* TargetCharacter)
 {
 	Character = TargetCharacter;
 	if (Character == nullptr)
@@ -72,14 +73,14 @@ void UTP_WeaponComponent::AttachWeapon(ADemoCharacter* TargetCharacter)
 	}
 
 	// Attach the weapon to the First Person Character
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 	AttachToComponent(Character->GetMesh1P(), AttachmentRules, FName(TEXT("GripPoint")));
 	
 	// switch bHasRifle so the animation blueprint can switch to another animation set
 	Character->SetHasRifle(true);
 
 	// Set up action bindings
-	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
+	if (const APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -102,7 +103,7 @@ void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		return;
 	}
 
-	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
+	if (const APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
