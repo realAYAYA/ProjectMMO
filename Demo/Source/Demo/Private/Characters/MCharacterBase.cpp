@@ -84,14 +84,14 @@ void AMCharacterBase::GiveAbilities()
 	{
 		for (const auto& DefaultAbility : DefaultAbilities)
 		{
-			AbilitySystemComponent->GiveAbility(DefaultAbility);
+			AbilitySystemComponent->GiveAbility( FGameplayAbilitySpec(DefaultAbility));
 		}
 	}
 }
 
 void AMCharacterBase::ApplyStartupEffects()
 {
-	if (GetLocalRole() == ROLE_Authority && DefaultAttributeSet && AttributeSet)
+	if (GetLocalRole() == ROLE_Authority)
 	{
 		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
 		EffectContextHandle.AddSourceObject(this);
@@ -100,7 +100,6 @@ void AMCharacterBase::ApplyStartupEffects()
 		{
 			ApplyGameplayEffectToSelf(CharacterEffect, EffectContextHandle);
 		}
-		
 	}
 }
 
@@ -109,6 +108,9 @@ void AMCharacterBase::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	InitializeAttributes();
+	GiveAbilities();
+	ApplyStartupEffects();
 }
 
 void AMCharacterBase::OnRep_PlayerState()

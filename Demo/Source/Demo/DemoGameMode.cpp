@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "DemoGameMode.h"
-#include "DemoCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 ADemoGameMode::ADemoGameMode()
