@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "AbilitySystemInterface.h"
+#include "MGameTypes.h"
 #include "Abilities/GameplayAbility.h"
 #include "MCharacterBase.generated.h"
 
@@ -90,21 +91,12 @@ public:
 	bool ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext);
 
 protected:
-	void InitializeAttributes();
+
 	void GiveAbilities();
 	void ApplyStartupEffects();
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "GAS")
-	TSubclassOf<UGameplayEffect> DefaultAttributeSet;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "GAS")
-	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
-	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "GAS")
-	TArray<TSubclassOf<UGameplayEffect>> DefaultEffects;
 
 	UPROPERTY(EditDefaultsOnly)
 	UMAbilitySystemComponentBase* AbilitySystemComponent;
@@ -112,12 +104,34 @@ protected:
 	UPROPERTY(Transient)
 	UMAttributeSetBase* AttributeSet;
 
+public:
+	UFUNCTION(BlueprintCallable)
+	FCharacterData GetCharacterData() const { return CharacterData; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterData(const FCharacterData& InCharacterData);
+
+protected:
+
+	UPROPERTY(ReplicatedUsing = OnRep_CharacterData)
+	FCharacterData CharacterData;
+
+	UFUNCTION()
+	void OnRep_CharacterData();
+
+	virtual void InitFromCharacterData(const FCharacterData& InCharacterData, const bool bFromReplication = false);
+
+	UPROPERTY(EditDefaultsOnly)
+	class UMCharacterDataAsset* CharacterDataAsset;
+
 	/**
 	 * Default
 	 */
 public:
 	// Sets default values for this character's properties
 	AMCharacterBase();
+
+	virtual void PostInitializeComponents() override;
 	
 protected:
 	// Called when the game starts or when spawned

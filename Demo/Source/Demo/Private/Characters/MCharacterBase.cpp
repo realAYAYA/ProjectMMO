@@ -8,9 +8,27 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AbilitySystemComponent.h"
-#include "AbilitySystemBlueprintLibrary.h"
+
+#include "MCharacterDataAsset.h"
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponentBase.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSetBase.h"
+#include "Net/UnrealNetwork.h"
+
+void AMCharacterBase::SetCharacterData(const FCharacterData& InCharacterData)
+{
+	CharacterData = InCharacterData;
+
+	InitFromCharacterData(InCharacterData);
+}
+
+void AMCharacterBase::OnRep_CharacterData()
+{
+	InitFromCharacterData(CharacterData, true);
+}
+
+void AMCharacterBase::InitFromCharacterData(const FCharacterData& InCharacterData, const bool bFromReplication)
+{
+}
 
 // Sets default values
 AMCharacterBase::AMCharacterBase()
@@ -47,6 +65,15 @@ AMCharacterBase::AMCharacterBase()
 	AttributeSet = CreateDefaultSubobject<UMAttributeSetBase>(TEXT("AttributeSet"));
 }
 
+void AMCharacterBase::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (IsValid(CharacterDataAsset))
+		SetCharacterData(CharacterDataAsset->CharacterData);
+		
+}
+
 UAbilitySystemComponent* AMCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -67,22 +94,11 @@ bool AMCharacterBase::ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffec
 	return false;
 }
 
-void AMCharacterBase::InitializeAttributes()
-{
-	if (GetLocalRole() == ROLE_Authority && DefaultAttributeSet && AttributeSet)
-	{
-		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
-		EffectContextHandle.AddSourceObject(this);
-
-		ApplyGameplayEffectToSelf(DefaultAttributeSet, EffectContextHandle);
-	}
-}
-
 void AMCharacterBase::GiveAbilities()
 {
 	if (HasAuthority() && AbilitySystemComponent)
 	{
-		for (const auto& DefaultAbility : DefaultAbilities)
+		for (const auto& DefaultAbility : CharacterData.Abilities)
 		{
 			AbilitySystemComponent->GiveAbility( FGameplayAbilitySpec(DefaultAbility));
 		}
@@ -96,7 +112,7 @@ void AMCharacterBase::ApplyStartupEffects()
 		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
 		EffectContextHandle.AddSourceObject(this);
 
-		for (const auto& CharacterEffect : DefaultEffects)
+		for (const auto& CharacterEffect : CharacterData.Effects)
 		{
 			ApplyGameplayEffectToSelf(CharacterEffect, EffectContextHandle);
 		}
@@ -108,7 +124,6 @@ void AMCharacterBase::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	InitializeAttributes();
 	GiveAbilities();
 	ApplyStartupEffects();
 }
@@ -118,7 +133,7 @@ void AMCharacterBase::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	InitializeAttributes();
+	ApplyStartupEffects();
 }
 
 // Called when the game starts or when spawned
@@ -195,4 +210,11 @@ void AMCharacterBase::SetHasRifle(const bool bNewHasRifle)
 bool AMCharacterBase::GetHasRifle() const
 {
 	return bHasRifle;
+}
+
+void AMCharacterBase::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMCharacterBase, CharacterData);
 }

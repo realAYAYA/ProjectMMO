@@ -6,7 +6,7 @@
 #include "MGameTypes.generated.h"
 
 USTRUCT(BlueprintType)
-struct FMyStruct
+struct FCharacterData
 {
 	GENERATED_USTRUCT_BODY()
 
