@@ -1,37 +1,41 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Characters/MCharacterBase.h"
+#include "MCharacter.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AbilitySystemComponent.h"
-
-#include "MCharacterDataAsset.h"
-#include "GameplayAbilitySystem/Components/MAbilitySystemComponentBase.h"
-#include "GameplayAbilitySystem/AttributeSets/MAttributeSetBase.h"
 #include "Net/UnrealNetwork.h"
 
-void AMCharacterBase::SetCharacterData(const FCharacterData& InCharacterData)
+#include "MCharacterDataAsset.h"
+#include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
+#include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
+#include "Components/MMovementComponent.h"
+
+
+void AMCharacter::SetCharacterData(const FCharacterData& InCharacterData)
 {
 	CharacterData = InCharacterData;
 
 	InitFromCharacterData(InCharacterData);
 }
 
-void AMCharacterBase::OnRep_CharacterData()
+void AMCharacter::OnRep_CharacterData()
 {
 	InitFromCharacterData(CharacterData, true);
 }
 
-void AMCharacterBase::InitFromCharacterData(const FCharacterData& InCharacterData, const bool bFromReplication)
+void AMCharacter::InitFromCharacterData(const FCharacterData& InCharacterData, const bool bFromReplication)
 {
 }
 
 // Sets default values
-AMCharacterBase::AMCharacterBase()
+/*AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UMMovementComponent>(AMCharacter::CharacterMovementComponentName))*/
+AMCharacter::AMCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -65,7 +69,7 @@ AMCharacterBase::AMCharacterBase()
 	AttributeSet = CreateDefaultSubobject<UMAttributeSetBase>(TEXT("AttributeSet"));
 }
 
-void AMCharacterBase::PostInitializeComponents()
+void AMCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
@@ -74,12 +78,12 @@ void AMCharacterBase::PostInitializeComponents()
 		
 }
 
-UAbilitySystemComponent* AMCharacterBase::GetAbilitySystemComponent() const
+UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
 
-bool AMCharacterBase::ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext)
+bool AMCharacter::ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext)
 {
 	if (!Effect.Get())
 		return false;
@@ -94,7 +98,7 @@ bool AMCharacterBase::ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffec
 	return false;
 }
 
-void AMCharacterBase::GiveAbilities()
+void AMCharacter::GiveAbilities()
 {
 	if (HasAuthority() && AbilitySystemComponent)
 	{
@@ -105,7 +109,7 @@ void AMCharacterBase::GiveAbilities()
 	}
 }
 
-void AMCharacterBase::ApplyStartupEffects()
+void AMCharacter::ApplyStartupEffects()
 {
 	if (GetLocalRole() == ROLE_Authority)
 	{
@@ -119,7 +123,7 @@ void AMCharacterBase::ApplyStartupEffects()
 	}
 }
 
-void AMCharacterBase::PossessedBy(AController* NewController)
+void AMCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
@@ -128,7 +132,7 @@ void AMCharacterBase::PossessedBy(AController* NewController)
 	ApplyStartupEffects();
 }
 
-void AMCharacterBase::OnRep_PlayerState()
+void AMCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
@@ -137,7 +141,7 @@ void AMCharacterBase::OnRep_PlayerState()
 }
 
 // Called when the game starts or when spawned
-void AMCharacterBase::BeginPlay()
+void AMCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -152,14 +156,14 @@ void AMCharacterBase::BeginPlay()
 }
 
 // Called every frame
-void AMCharacterBase::Tick(float DeltaTime)
+void AMCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void AMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
@@ -169,14 +173,14 @@ void AMCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		//Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMCharacterBase::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMCharacter::Move);
 
 		//Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMCharacterBase::Look);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMCharacter::Look);
 	}
 }
 
-void AMCharacterBase::Move(const FInputActionValue& Value)
+void AMCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	const FVector2D MovementVector = Value.Get<FVector2D>();
@@ -189,7 +193,7 @@ void AMCharacterBase::Move(const FInputActionValue& Value)
 	}
 }
 
-void AMCharacterBase::Look(const FInputActionValue& Value)
+void AMCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	const FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -202,19 +206,19 @@ void AMCharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
-void AMCharacterBase::SetHasRifle(const bool bNewHasRifle)
+void AMCharacter::SetHasRifle(const bool bNewHasRifle)
 {
 	bHasRifle = bNewHasRifle;
 }
 
-bool AMCharacterBase::GetHasRifle() const
+bool AMCharacter::GetHasRifle() const
 {
 	return bHasRifle;
 }
 
-void AMCharacterBase::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AMCharacterBase, CharacterData);
+	DOREPLIFETIME(AMCharacter, CharacterData);
 }

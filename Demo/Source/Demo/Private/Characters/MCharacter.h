@@ -8,7 +8,7 @@
 #include "AbilitySystemInterface.h"
 #include "MGameTypes.h"
 #include "Abilities/GameplayAbility.h"
-#include "MCharacterBase.generated.h"
+#include "MCharacter.generated.h"
 
 class UInputComponent;
 class USkeletalMeshComponent;
@@ -24,7 +24,7 @@ class UGameplayAbility;
 class UGameplayEffect;
 
 UCLASS()
-class DEMO_API AMCharacterBase : public ACharacter, public IAbilitySystemInterface
+class DEMO_API AMCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -129,7 +129,9 @@ protected:
 	 */
 public:
 	// Sets default values for this character's properties
-	AMCharacterBase();
+
+	AMCharacter();
+	//AMCharacter(const FObjectInitializer& ObjectInitializer);
 
 	virtual void PostInitializeComponents() override;
 	

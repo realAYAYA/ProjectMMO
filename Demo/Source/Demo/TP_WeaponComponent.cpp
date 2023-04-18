@@ -9,7 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
-#include "Characters/MCharacterBase.h"
+#include "Private\Characters\MCharacter.h"
 
 // Sets default values for this component's properties
 UTP_WeaponComponent::UTP_WeaponComponent()
@@ -64,7 +64,7 @@ void UTP_WeaponComponent::Fire()
 	}
 }
 
-void UTP_WeaponComponent::AttachWeapon(AMCharacterBase* TargetCharacter)
+void UTP_WeaponComponent::AttachWeapon(AMCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;
 	if (Character == nullptr)

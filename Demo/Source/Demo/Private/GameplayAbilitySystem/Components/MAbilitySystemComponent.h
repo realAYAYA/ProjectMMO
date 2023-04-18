@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "MAbilitySystemComponentBase.generated.h"
+#include "MAbilitySystemComponent.generated.h"
 
 /**
  * 
