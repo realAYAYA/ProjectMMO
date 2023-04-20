@@ -130,8 +130,8 @@ protected:
 public:
 	// Sets default values for this character's properties
 
-	AMCharacter();
-	//AMCharacter(const FObjectInitializer& ObjectInitializer);
+	//AMCharacter();
+	AMCharacter(const FObjectInitializer& ObjectInitializer);
 
 	virtual void PostInitializeComponents() override;
 	

@@ -13,7 +13,7 @@
 #include "MCharacterDataAsset.h"
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
-#include "Components/MMovementComponent.h"
+#include "Components/MCharacterMovementComponent.h"
 
 
 void AMCharacter::SetCharacterData(const FCharacterData& InCharacterData)
@@ -33,9 +33,9 @@ void AMCharacter::InitFromCharacterData(const FCharacterData& InCharacterData, c
 }
 
 // Sets default values
-/*AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer.SetDefaultSubobjectClass<UMMovementComponent>(AMCharacter::CharacterMovementComponentName))*/
-AMCharacter::AMCharacter()
+AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UMCharacterMovementComponent>(AMCharacter::CharacterMovementComponentName))
+//AMCharacter::AMCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;

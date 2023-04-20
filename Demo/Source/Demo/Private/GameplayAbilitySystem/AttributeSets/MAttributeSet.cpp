@@ -8,8 +8,7 @@
 #include "Net/UnrealNetwork.h"
 
 #include "Characters/MCharacter.h"
-#include "Characters/Components/MMovementComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "Characters/Components/MCharacterMovementComponent.h"
 
 void UMAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
