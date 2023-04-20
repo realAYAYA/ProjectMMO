@@ -29,7 +29,7 @@ class DEMO_API AMCharacter : public ACharacter, public IAbilitySystemInterface
 	GENERATED_BODY()
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* Mesh1P;
 
 	/** First person camera */
@@ -131,7 +131,7 @@ public:
 	// Sets default values for this character's properties
 
 	//AMCharacter();
-	AMCharacter(const FObjectInitializer& ObjectInitializer);
+	AMCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	virtual void PostInitializeComponents() override;
 	
