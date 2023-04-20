@@ -82,6 +82,9 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	/** Called for jump input */
+	void OnJump(const FInputActionValue& Value);
+
 	/**
 	 * GameAbilitySystem
 	 */
@@ -103,6 +106,9 @@ protected:
 
 	UPROPERTY(Transient)
 	UMAttributeSetBase* AttributeSet;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTag JumpEventTag;
 
 public:
 	UFUNCTION(BlueprintCallable)
