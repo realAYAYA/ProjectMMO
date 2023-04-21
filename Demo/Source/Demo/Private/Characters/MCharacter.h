@@ -63,6 +63,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	/** Crouch Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* CrouchAction;
+
+	/** Sprint Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SprintAction;
+
 	/** Bool for AnimBP to switch to another animation set */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
 	bool bHasRifle;
@@ -83,7 +91,20 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	/** Called for jump input */
-	void OnJump(const FInputActionValue& Value);
+	void TryJump(const FInputActionValue& Value);
+
+	virtual void Landed(const FHitResult& Hit) override;
+
+	/** Called for crouch input */
+	void BeginCrouch(const FInputActionValue& Value);
+	void EndCrouch(const FInputActionValue& Value);
+
+	virtual void OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
+	virtual void OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
+
+	/** Called for sprint input */
+	void BeginSprint(const FInputActionValue& Value);
+	void EndSprint(const FInputActionValue& Value);
 
 	/**
 	 * GameAbilitySystem
@@ -109,6 +130,21 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag JumpEventTag;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer InAirTags;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer CrouchTags;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer SprintTags;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UGameplayEffect> CrouchStateEffect;
+
+	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
+	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
 
 public:
 	UFUNCTION(BlueprintCallable)

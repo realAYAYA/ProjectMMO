@@ -55,7 +55,7 @@ void UMAttributeSetBase::OnRep_MaxMoveSpeed(const FGameplayAttributeData& OldMax
 	const AMCharacter* OwningCharacter = Cast<AMCharacter>(GetOwningActor());
 	if (UCharacterMovementComponent* CharacterMovement = OwningCharacter->GetCharacterMovement())
 	{
-		CharacterMovement->MaxWalkSpeed = GetMaxMoveSpeed();
+		//CharacterMovement->MaxWalkSpeed = GetMaxMoveSpeed();
 	}
 }
 
