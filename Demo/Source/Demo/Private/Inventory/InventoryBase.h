@@ -16,3 +16,12 @@ class DEMO_API UInventoryBase : public UObject
 public:
 	UInventoryBase();
 };
+
+UCLASS()
+class DEMO_API UInventory : public UInventoryBase
+{
+	GENERATED_BODY()
+	
+public:
+	UInventory() {};
+};

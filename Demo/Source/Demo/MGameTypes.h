@@ -6,6 +6,17 @@
 #include "MGameTypes.generated.h"
 
 USTRUCT(BlueprintType)
+struct FGameUserData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int64 UserID = 0;
+
+	
+};
+
+USTRUCT(BlueprintType)
 struct FCharacterData
 {
 	GENERATED_USTRUCT_BODY()
