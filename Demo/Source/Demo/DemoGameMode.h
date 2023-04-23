@@ -14,6 +14,3 @@ class ADemoGameMode : public AGameModeBase
 public:
 	ADemoGameMode();
 };
-
-
-
