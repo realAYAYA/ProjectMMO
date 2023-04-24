@@ -5,5 +5,6 @@
 
 UInventoryBase::UInventoryBase()
 {
+	
 }
 

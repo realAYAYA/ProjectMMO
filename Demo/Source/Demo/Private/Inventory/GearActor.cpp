@@ -3,6 +3,8 @@
 
 #include "Inventory/GearActor.h"
 
+#include "Kismet/KismetSystemLibrary.h"
+
 void AGearActor::InitInternal()
 {
 	Super::InitInternal();
@@ -32,4 +34,24 @@ void AGearActor::InitInternal()
 			MeshComponent = StaticMeshComponent;
 		}
 	}
+}
+
+
+void AGearActor::OnEquipped(AActor* InOwner)
+{
+	ItemState = EItemState::Equipped;
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SphereComponent->SetGenerateOverlapEvents(false);
+}
+
+void AGearActor::OnUnEquipped()
+{
+	ItemState = EItemState::None;
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SphereComponent->SetGenerateOverlapEvents(false);
+}
+
+void AGearActor::OnDropped()
+{
+	Super::OnDropped();
 }

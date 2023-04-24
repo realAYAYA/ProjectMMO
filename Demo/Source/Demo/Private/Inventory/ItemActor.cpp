@@ -63,16 +63,9 @@ void AItemActor::OnOverlap(
 	}
 }
 
-void AItemActor::OnEquipped(AActor* InOwner)
+void AItemActor::OnTake(AActor* InOwner)
 {
 	ItemState = EItemState::Equipped;
-	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SphereComponent->SetGenerateOverlapEvents(false);
-}
-
-void AItemActor::OnUnEquipped()
-{
-	ItemState = EItemState::None;
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SphereComponent->SetGenerateOverlapEvents(false);
 }

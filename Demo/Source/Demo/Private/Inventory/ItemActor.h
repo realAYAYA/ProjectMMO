@@ -17,7 +17,25 @@ public:
 	AItemActor();
 
 	virtual void Init();
-	
+
+	UPROPERTY()
+	class UMeshComponent* MeshComponent;
+
+	UFUNCTION()
+	virtual void OnDropped();
+
+	UFUNCTION()
+	void OnTake(AActor* InOwner);
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	class USphereComponent* SphereComponent;
+
+	UFUNCTION()
+	AActor* GetItemOwner() const { return Owner; }
+
+	UFUNCTION()
+	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 protected:
 
 	virtual void InitInternal();
@@ -30,29 +48,7 @@ protected:
 	
 	UFUNCTION()
 	void OnRep_ItemState();
-
-	UFUNCTION()
-	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-	void OnEquipped(AActor* InOwner);
-
-	UFUNCTION()
-	void OnUnEquipped();
-
-	UFUNCTION()
-	void OnDropped();
-
-	UFUNCTION()
-	AActor* GetItemOwner() const { return Owner; }
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	class USphereComponent* SphereComponent;
-
-	UPROPERTY()
-	class UMeshComponent* MeshComponent;
-
-protected:
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	

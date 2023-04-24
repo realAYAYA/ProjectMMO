@@ -14,6 +14,18 @@ class AGearActor : public AItemActor
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION()
+	void OnEquipped(AActor* InOwner);
+
+	UFUNCTION()
+	void OnUnEquipped();
+
+	UFUNCTION()
+	virtual void OnDropped() override;
+	
 protected:
 	virtual void InitInternal() override;
+
+	
 };
