@@ -31,4 +31,12 @@ class DEMO_API AMPlayerState : public APlayerState
 protected:
 	UPROPERTY()
 	class UInventory* InventoryModule;
+
+	/** 客户端调用，服务器执行*/
+	UFUNCTION(BlueprintCallable, Category = Test, Server, Reliable)
+	void Req();
+
+	/** 服务器调用，客户端执行*/
+	UFUNCTION(Client, Reliable)
+	void Ack(const int32 InData);
 };

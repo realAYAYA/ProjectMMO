@@ -63,7 +63,7 @@ void AItemActor::OnOverlap(
 	}
 }
 
-void AItemActor::OnEquipped()
+void AItemActor::OnEquipped(AActor* InOwner)
 {
 	ItemState = EItemState::Equipped;
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);

@@ -13,5 +13,7 @@ UCLASS()
 class AGearActor : public AItemActor
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void InitInternal() override;
 };

@@ -18,5 +18,6 @@ class UMCharacterDataAsset : public UDataAsset
 public:
 	UPROPERTY(EditDefaultsOnly)
 	FCharacterData CharacterData;
+
 	
 };

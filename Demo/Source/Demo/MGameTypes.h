@@ -21,9 +21,26 @@ struct FCharacterData
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = GAS)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = GAS)
 	TArray<TSubclassOf<class UGameplayEffect>> Effects;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = GAS)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = GAS)
 	TArray<TSubclassOf<class UGameplayAbility>> Abilities;
+};
+
+USTRUCT(BlueprintType)
+struct FItemData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = ProjectSS)
+	int32 ID = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = ProjectSS)
+	TSoftObjectPtr<class USkeletalMesh> SkeletalMesh;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = ProjectSS)
+	TSoftObjectPtr<class UStaticMesh> StaticMesh;
+
+	
 };
