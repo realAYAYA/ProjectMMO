@@ -20,8 +20,21 @@ enum class EItemType : uint8
 	Armor				UMETA(Displayname = "Armor"),
 	MechPart			UMETA(Displayname = "MechPart"),
 
+	WeaponPart			UMETA(Displayname = "WeaponPart"),
 	Mission				UMETA(Displayname = "Mission"),
 	
 	Medicine			UMETA(Displayname = "Medicine"),
 	
+};
+
+UENUM(BlueprintType)
+enum class EProjectileType : uint8
+{
+	Unknown				UMETA(Displayname = "Unknown"),
+};
+
+UENUM(BlueprintType)
+enum class EBulletType : uint8
+{
+	Unknown				UMETA(Displayname = "Unknown"),
 };

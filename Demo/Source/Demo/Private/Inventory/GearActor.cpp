@@ -3,7 +3,10 @@
 
 #include "Inventory/GearActor.h"
 
-#include "Kismet/KismetSystemLibrary.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "Characters/MCharacter.h"
+#include "Components/PickUpComponent.h"
 
 void AGearActor::InitInternal()
 {
@@ -36,12 +39,13 @@ void AGearActor::InitInternal()
 	}
 }
 
-
 void AGearActor::OnEquipped(AActor* InOwner)
 {
 	ItemState = EItemState::Equipped;
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SphereComponent->SetGenerateOverlapEvents(false);
+	
+	TryGrantAbilities(GetItemOwner());
 }
 
 void AGearActor::OnUnEquipped()
@@ -49,9 +53,51 @@ void AGearActor::OnUnEquipped()
 	ItemState = EItemState::None;
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SphereComponent->SetGenerateOverlapEvents(false);
+
+	TryRemoveAbilities(GetItemOwner());
+}
+
+void AGearActor::OnPickUp(AActor* InOwner)
+{
+	//Super::OnPickUp(InOwner);
+	OnEquipped(InOwner);
 }
 
 void AGearActor::OnDropped()
 {
 	Super::OnDropped();
+}
+
+void AGearActor::TryGrantAbilities(AActor* InOwner)
+{
+	if (!InOwner || !InOwner->HasAuthority())
+		return;
+
+	if (UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InOwner))
+	{
+		TArray<UGameplayAbility> Abilities;
+
+		for (auto& GearAbility : Abilities)
+		{
+			GrantedAbilitySpecHandles.Add(AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(&GearAbility)));
+		}
+	}
+}
+
+void AGearActor::TryRemoveAbilities(AActor* InOwner)
+{
+	if (!InOwner || !InOwner->HasAuthority())
+		return;
+
+	if (UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(InOwner))
+	{
+		TArray<UGameplayAbility> Abilities;
+
+		for (auto Handle : GrantedAbilitySpecHandles)
+		{
+			AbilitySystemComponent->ClearAbility(Handle);
+		}
+
+		GrantedAbilitySpecHandles.Empty();
+	}
 }

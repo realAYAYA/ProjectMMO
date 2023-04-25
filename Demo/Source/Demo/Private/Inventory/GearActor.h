@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "ItemActor.h"
 #include "GearActor.generated.h"
 
@@ -21,11 +22,17 @@ public:
 	UFUNCTION()
 	void OnUnEquipped();
 
-	UFUNCTION()
+	virtual void OnPickUp(AActor* InOwner) override;
+	
 	virtual void OnDropped() override;
 	
 protected:
 	virtual void InitInternal() override;
 
-	
+	void TryGrantAbilities(AActor* InOwner);
+
+	void TryRemoveAbilities(AActor* InOwner);
+
+	UPROPERTY()
+	TArray<FGameplayAbilitySpecHandle> GrantedAbilitySpecHandles;
 };

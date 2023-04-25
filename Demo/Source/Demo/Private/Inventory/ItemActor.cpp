@@ -5,9 +5,11 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Abilities/GameplayAbilityTypes.h"
-#include "Components/SphereComponent.h"
+#include "Characters/MCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
+
+#include "Components/PickUpComponent.h"
 
 // Sets default values
 AItemActor::AItemActor()
@@ -17,19 +19,14 @@ AItemActor::AItemActor()
 	SetReplicates(true);
 	SetReplicateMovement(true);
 
-	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	SphereComponent = CreateDefaultSubobject<UPickUpComponent>(TEXT("SphereComponent"));
 	SphereComponent->SetupAttachment(RootComponent);
-	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemActor::OnOverlap);
+	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemActor::OnBeginOverlap);
 }
 
 void AItemActor::Init()
 {
 	InitInternal();
-}
-
-void AItemActor::InitInternal()
-{
-	
 }
 
 void AItemActor::OnRep_ItemState()
@@ -44,7 +41,7 @@ void AItemActor::OnRep_ItemState()
 	}
 }
 
-void AItemActor::OnOverlap(
+void AItemActor::OnBeginOverlap(
 	UPrimitiveComponent* OverlappedComponent,
 	AActor* OtherActor,
 	UPrimitiveComponent* OtherComp,
@@ -54,13 +51,34 @@ void AItemActor::OnOverlap(
 {
 	if (HasAuthority())
 	{
-		FGameplayEventData EventPayload;
-		EventPayload.Instigator = this;
-		EventPayload.OptionalObject;// = ;
-		EventPayload.EventTag;// = UInventory;
+		AMCharacter* Character = Cast<AMCharacter>(OtherActor);
+		if(Character != nullptr)
+		{
+			// Notify that the actor is being picked up
+			SphereComponent->OnPickUp.Broadcast(Character);
 
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, EventPayload.EventTag, EventPayload);
+			// Unregister from the Overlap Event so it is no longer triggered
+			SphereComponent->OnComponentBeginOverlap.RemoveAll(this);
+		}
+
+		OnPickUp(OtherActor);
+		//FGameplayEventData EventPayload;
+		//EventPayload.Instigator = this;
+		//EventPayload.OptionalObject;// = ;
+		//EventPayload.EventTag;// = UInventory;
+
+		//UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, EventPayload.EventTag, EventPayload);
 	}
+}
+
+void AItemActor::InitInternal()
+{
+	
+}
+
+void AItemActor::OnPickUp(AActor* InOwner)
+{
+	// 进包
 }
 
 void AItemActor::OnTake(AActor* InOwner)

@@ -12,7 +12,6 @@ struct FGameUserData
 
 	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
 	int64 UserID = 0;
-
 	
 };
 
@@ -21,26 +20,37 @@ struct FCharacterData
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = GAS)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
 	TArray<TSubclassOf<class UGameplayEffect>> Effects;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = GAS)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
 	TArray<TSubclassOf<class UGameplayAbility>> Abilities;
 };
 
-USTRUCT(BlueprintType)
-struct FItemData
+UCLASS()
+class UItemData : public UObject
 {
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
+public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = ProjectSS)
 	int32 ID = 0;
+	
+};
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = ProjectSS)
+UCLASS()
+class UGearData : public UObject
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = ProjectSS)
+	TSubclassOf<UGameplayEffect> DamageEffect;
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = ProjectSS)
 	TSoftObjectPtr<class USkeletalMesh> SkeletalMesh;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = ProjectSS)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = ProjectSS)
 	TSoftObjectPtr<class UStaticMesh> StaticMesh;
-
-	
 };

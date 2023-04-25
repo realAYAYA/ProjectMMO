@@ -18,9 +18,9 @@ public:
 
 	virtual void Init();
 
-	UPROPERTY()
-	class UMeshComponent* MeshComponent;
-
+	UFUNCTION()
+	virtual void OnPickUp(AActor* InOwner);
+	
 	UFUNCTION()
 	virtual void OnDropped();
 
@@ -28,14 +28,18 @@ public:
 	void OnTake(AActor* InOwner);
 
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	class USphereComponent* SphereComponent;
+	class UPickUpComponent* SphereComponent;
 
 	UFUNCTION()
-	AActor* GetItemOwner() const { return Owner; }
+	AActor* GetItemOwner() const { return ItemOwner; }
 
 	UFUNCTION()
-	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UPROPERTY()
+	class UMeshComponent* MeshComponent;
+
+	
 protected:
 
 	virtual void InitInternal();
@@ -54,5 +58,5 @@ protected:
 	
 private:
 	UPROPERTY()
-	AActor* Owner = nullptr;
+	AActor* ItemOwner = nullptr;
 };
