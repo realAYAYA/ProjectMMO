@@ -19,26 +19,14 @@ AItemActor::AItemActor()
 	SetReplicates(true);
 	SetReplicateMovement(true);
 
-	SphereComponent = CreateDefaultSubobject<UPickUpComponent>(TEXT("SphereComponent"));
-	SphereComponent->SetupAttachment(RootComponent);
-	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemActor::OnBeginOverlap);
+	PickComponent = CreateDefaultSubobject<UPickUpComponent>(TEXT("SphereComponent"));
+	PickComponent->SetupAttachment(RootComponent);
+	PickComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemActor::OnBeginOverlap);
 }
 
 void AItemActor::Init()
 {
 	InitInternal();
-}
-
-void AItemActor::OnRep_ItemState()
-{
-	switch (ItemState)
-	{
-	case EItemState::Equipped:
-		break;
-		default:
-			
-			break;
-	}
 }
 
 void AItemActor::OnBeginOverlap(
@@ -55,10 +43,10 @@ void AItemActor::OnBeginOverlap(
 		if(Character != nullptr)
 		{
 			// Notify that the actor is being picked up
-			SphereComponent->OnPickUp.Broadcast(Character);
+			PickComponent->OnPickUp.Broadcast(Character);
 
 			// Unregister from the Overlap Event so it is no longer triggered
-			SphereComponent->OnComponentBeginOverlap.RemoveAll(this);
+			PickComponent->OnComponentBeginOverlap.RemoveAll(this);
 		}
 
 		OnPickUp(OtherActor);
@@ -73,7 +61,7 @@ void AItemActor::OnBeginOverlap(
 
 void AItemActor::InitInternal()
 {
-	
+	// 从配置文件中读取道具配置
 }
 
 void AItemActor::OnPickUp(AActor* InOwner)
@@ -84,8 +72,8 @@ void AItemActor::OnPickUp(AActor* InOwner)
 void AItemActor::OnTake(AActor* InOwner)
 {
 	ItemState = EItemState::Equipped;
-	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SphereComponent->SetGenerateOverlapEvents(false);
+	PickComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	PickComponent->SetGenerateOverlapEvents(false);
 }
 
 void AItemActor::OnDropped()
@@ -127,8 +115,8 @@ void AItemActor::OnDropped()
 		}
 
 		SetActorLocation(TargetLocation);
-		SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		SphereComponent->SetGenerateOverlapEvents(true);
+		PickComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		PickComponent->SetGenerateOverlapEvents(true);
 	}
 }
 
@@ -136,6 +124,23 @@ void AItemActor::OnDropped()
 void AItemActor::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
+
+void AItemActor::OnRep_ItemState()
+{
+	switch (ItemState)
+	{
+	case EItemState::Equipped:
+		break;
+	default:
+			
+		break;
+	}
+}
+
+void AItemActor::OnRep_ItemID()
+{
 	
 }
 

@@ -25,4 +25,6 @@ public:
 
 protected:
 	int32 ConfigID = 0;
+
+	int32 UID = 0;
 };

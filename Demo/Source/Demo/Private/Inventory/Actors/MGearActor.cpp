@@ -1,17 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Inventory/GearActor.h"
+#include "MGearActor.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "Characters/MCharacter.h"
 #include "Components/PickUpComponent.h"
 
-void AGearActor::InitInternal()
+void AMGearActor::InitInternal()
 {
 	Super::InitInternal();
 
+	// 根据道具id从装备表中读取数据
 	// 根据资产类型来设置道具模型
 	if (false)
 	{
@@ -39,36 +40,38 @@ void AGearActor::InitInternal()
 	}
 }
 
-void AGearActor::OnEquipped(AActor* InOwner)
+void AMGearActor::OnEquipped(AActor* InOwner)
 {
 	ItemState = EItemState::Equipped;
-	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SphereComponent->SetGenerateOverlapEvents(false);
+	PickComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	PickComponent->SetGenerateOverlapEvents(false);
+	
+	//AttachToActor(InOwner, FAttachmentTransformRules::KeepRelativeTransform, TEXT("Socket"));
 	
 	TryGrantAbilities(GetItemOwner());
 }
 
-void AGearActor::OnUnEquipped()
+void AMGearActor::OnUnEquipped()
 {
 	ItemState = EItemState::None;
-	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SphereComponent->SetGenerateOverlapEvents(false);
+	PickComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	PickComponent->SetGenerateOverlapEvents(false);
 
 	TryRemoveAbilities(GetItemOwner());
 }
 
-void AGearActor::OnPickUp(AActor* InOwner)
+void AMGearActor::OnPickUp(AActor* InOwner)
 {
 	//Super::OnPickUp(InOwner);
 	OnEquipped(InOwner);
 }
 
-void AGearActor::OnDropped()
+void AMGearActor::OnDropped()
 {
 	Super::OnDropped();
 }
 
-void AGearActor::TryGrantAbilities(AActor* InOwner)
+void AMGearActor::TryGrantAbilities(AActor* InOwner)
 {
 	if (!InOwner || !InOwner->HasAuthority())
 		return;
@@ -84,7 +87,7 @@ void AGearActor::TryGrantAbilities(AActor* InOwner)
 	}
 }
 
-void AGearActor::TryRemoveAbilities(AActor* InOwner)
+void AMGearActor::TryRemoveAbilities(AActor* InOwner)
 {
 	if (!InOwner || !InOwner->HasAuthority())
 		return;

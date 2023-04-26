@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "ItemActor.h"
-#include "GearActor.generated.h"
+#include "MGearActor.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class AGearActor : public AItemActor
+class AMGearActor : public AItemActor
 {
 	GENERATED_BODY()
 
