@@ -43,9 +43,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ATest)
 	UAnimMontage* FireAnimation;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ATest)
-	FName MuzzleSocketName = FName(TEXT("GripPoint"));
-
 	/** Gun muzzle's offset from the characters location */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ATest)
 	FVector MuzzleOffset;

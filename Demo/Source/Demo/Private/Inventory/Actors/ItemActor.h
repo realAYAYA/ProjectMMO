@@ -3,10 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MGameDefine.h"
 #include "GameFramework/Actor.h"
+
+#include "MGameDefine.h"
 #include "Inventory/ItemBase.h"
+
 #include "ItemActor.generated.h"
+
+class UPickUpComponent;
 
 UCLASS()
 class AItemActor : public AActor
@@ -17,11 +21,11 @@ public:
 	// Sets default values for this actor's properties
 	AItemActor();
 
-	UFUNCTION()
-	AActor* GetItemOwner() const { return ItemOwner; }
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	TObjectPtr<UMeshComponent> MeshComponent;
 
-	UFUNCTION(BlueprintPure, Category = ProjectSS)
-	UMeshComponent* GetMeshComponent() const { return MeshComponent; }
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	TObjectPtr<UPickUpComponent> PickComponent;
 
 	virtual void Init();
 
@@ -34,11 +38,13 @@ public:
 	UFUNCTION()
 	void OnTake(AActor* InOwner);
 
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	class UPickUpComponent* PickComponent;
-
 	UFUNCTION()
 	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UMeshComponent* GetMeshComponent() const { return MeshComponent; }
+
+	UFUNCTION()
+	AActor* GetItemOwner() const { return ItemOwner; }
 	
 protected:
 
@@ -46,9 +52,6 @@ protected:
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY()
-	TObjectPtr<UMeshComponent> MeshComponent;
 
 private:
 	UPROPERTY()

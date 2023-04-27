@@ -16,6 +16,11 @@ class AMGearActor : public AItemActor
 	GENERATED_BODY()
 
 public:
+	AMGearActor();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ATest)
+	FName AttachSocketName = FName(TEXT("GripPoint"));
+	
 	UFUNCTION()
 	void OnEquipped(AActor* InOwner);
 

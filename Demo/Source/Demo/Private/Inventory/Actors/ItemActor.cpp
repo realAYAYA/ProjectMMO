@@ -62,6 +62,29 @@ void AItemActor::OnBeginOverlap(
 void AItemActor::InitInternal()
 {
 	// 从配置文件中读取道具配置
+	// 根据道具id从装备表中读取数据
+	// 根据资产类型来设置道具模型
+	if (true)
+	{
+		if (USkeletalMeshComponent * SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent")))
+		{
+			SkeletalMeshComponent->SetupAttachment(GetRootComponent());
+			//SkeletalMeshComponent->SetSkeletalMesh(nullptr);// 设置资产
+			MeshComponent = SkeletalMeshComponent;
+		}
+	}
+	else if (false)
+	{
+		UStaticMeshComponent* StaticMeshComponent = NewObject<UStaticMeshComponent>(this, UStaticMeshComponent::StaticClass(), TEXT("StaticMeshComponent"));
+		if (StaticMeshComponent)
+		{
+			StaticMeshComponent->RegisterComponent();
+			StaticMeshComponent->SetStaticMesh(nullptr);// 设置资产
+			StaticMeshComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+			MeshComponent = StaticMeshComponent;
+		}
+	}
 }
 
 void AItemActor::OnPickUp(AActor* InOwner)

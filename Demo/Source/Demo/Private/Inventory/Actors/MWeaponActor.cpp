@@ -20,7 +20,7 @@ void AMWeaponActor::AttachWeapon(AMCharacter* TargetCharacter)
 
 	// Attach the weapon to the First Person Character
 	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-	AttachToComponent(Character->GetMesh1P(), AttachmentRules, MuzzleSocketName);
+	AttachToComponent(Character->GetMesh1P(), AttachmentRules, AttachSocketName);
 	
 	// switch bHasRifle so the animation blueprint can switch to another animation set
 	Character->SetHasRifle(true);
@@ -89,6 +89,7 @@ void AMWeaponActor::Fire()
 
 AMWeaponActor::AMWeaponActor()
 {
+	InitInternal();
 }
 
 USkeletalMeshComponent* AMWeaponActor::GetSkeletalMeshComponent() const
