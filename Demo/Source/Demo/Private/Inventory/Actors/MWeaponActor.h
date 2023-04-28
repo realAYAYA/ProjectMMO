@@ -33,7 +33,7 @@ public:
 
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = ATest)
-	TSubclassOf<class ADemoProjectile> ProjectileClass;
+	TSubclassOf<class AMProjectile> ProjectileClass;
 
 	/** Sound to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ATest)

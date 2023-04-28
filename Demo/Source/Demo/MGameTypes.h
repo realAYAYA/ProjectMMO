@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "MGameTypes.generated.h"
 
-USTRUCT(BlueprintType)
-struct FGameUserData
+USTRUCT(BlueprintType) 
+struct FGamePlayerData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -14,6 +14,20 @@ struct FGameUserData
 	int64 UserID = 0;
 	
 };
+
+USTRUCT(BlueprintType)
+struct FGameUserData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int64 UserID = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	FGamePlayerData PlayerData;
+	
+};
+
 
 USTRUCT(BlueprintType)
 struct FCharacterData

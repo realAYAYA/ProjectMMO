@@ -8,7 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Characters/MCharacter.h"
-#include "DemoProjectile.h"
+#include "Projectiles/MProjectile.h"
 
 void AMWeaponActor::AttachWeapon(AMCharacter* TargetCharacter)
 {
@@ -65,7 +65,7 @@ void AMWeaponActor::Fire()
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	
 			// Spawn the projectile at the muzzle
-			World->SpawnActor<ADemoProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			World->SpawnActor<AMProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 		}
 	}
 	
