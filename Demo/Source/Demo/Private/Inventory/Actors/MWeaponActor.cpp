@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Characters/MCharacter.h"
+#include "Components/SphereComponent.h"
 #include "Projectiles/MProjectile.h"
 
 void AMWeaponActor::AttachWeapon(AMCharacter* TargetCharacter)
@@ -50,7 +51,7 @@ void AMWeaponActor::Fire()
 	}
 
 	// Try and fire a projectile
-	if (ProjectileClass != nullptr)
+	if (HasAuthority() && ProjectileClass != nullptr)
 	{
 		UWorld* const World = GetWorld();
 		if (World != nullptr)
@@ -58,21 +59,23 @@ void AMWeaponActor::Fire()
 			const APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
 			const FRotator SpawnRotation = PlayerController->PlayerCameraManager->GetCameraRotation();
 			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-			const FVector SpawnLocation = GetOwner()->GetActorLocation() + SpawnRotation.RotateVector(MuzzleOffset);
+			const FVector SpawnLocation = GetItemOwner()->GetActorLocation() + SpawnRotation.RotateVector(MuzzleOffset);
 	
 			//Set Spawn Collision Handling Override
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	
 			// Spawn the projectile at the muzzle
-			World->SpawnActor<AMProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			AMProjectile* NewProjectile = World->SpawnActor<AMProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			if (NewProjectile)
+				NewProjectile->CollisionComp->IgnoreActorWhenMoving(GetItemOwner(), true);
 		}
 	}
 	
 	// Try and play the sound if specified
 	if (FireSound != nullptr)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, Character->GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(this, FireSound, Character->GetActorLocation(), 0.1f);
 	}
 	
 	// Try and play a firing animation if specified
@@ -89,12 +92,18 @@ void AMWeaponActor::Fire()
 
 AMWeaponActor::AMWeaponActor()
 {
-	InitInternal();
 }
 
 USkeletalMeshComponent* AMWeaponActor::GetSkeletalMeshComponent() const
 {
 	return Cast<USkeletalMeshComponent>(GetMeshComponent());
+}
+
+void AMWeaponActor::OnPickUp(AMCharacter* InOwner)
+{
+	Super::OnPickUp(InOwner);
+
+	AttachWeapon(InOwner);
 }
 
 void AMWeaponActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -113,11 +122,4 @@ void AMWeaponActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
 			Subsystem->RemoveMappingContext(FireMappingContext);
 		}
 	}
-}
-
-void AMWeaponActor::InitInternal()
-{
-	Super::InitInternal();
-
-	// 从武器配置表中读取配置数据
 }

@@ -3,25 +3,25 @@
 
 #include "ItemActor.h"
 
-#include "AbilitySystemBlueprintLibrary.h"
-#include "Abilities/GameplayAbilityTypes.h"
 #include "Characters/MCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 
 #include "Components/PickUpComponent.h"
+#include "Engine/ActorChannel.h"
 
 // Sets default values
 AItemActor::AItemActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	SetReplicates(true);
-	SetReplicateMovement(true);
+	bReplicates = true;
 
 	PickComponent = CreateDefaultSubobject<UPickUpComponent>(TEXT("SphereComponent"));
-	PickComponent->SetupAttachment(RootComponent);
+	SetRootComponent(PickComponent);
 	PickComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemActor::OnBeginOverlap);
+
+	InitInternal();
 }
 
 void AItemActor::Init()
@@ -37,19 +37,17 @@ void AItemActor::OnBeginOverlap(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	if (HasAuthority())
+	AMCharacter* Character = Cast<AMCharacter>(OtherActor);
+	if(Character != nullptr && !Character->bHasRifle && HasAuthority())
 	{
-		AMCharacter* Character = Cast<AMCharacter>(OtherActor);
-		if(Character != nullptr)
-		{
-			// Notify that the actor is being picked up
-			PickComponent->OnPickUp.Broadcast(Character);
+		// Notify that the actor is being picked up
+		PickComponent->OnPickUp.Broadcast(Character);
 
-			// Unregister from the Overlap Event so it is no longer triggered
-			PickComponent->OnComponentBeginOverlap.RemoveAll(this);
-		}
+		// Unregister from the Overlap Event so it is no longer triggered
+		PickComponent->OnComponentBeginOverlap.RemoveAll(this);
 
-		OnPickUp(OtherActor);
+		OnPickUp(Character);
+		OnTake(Character);
 		//FGameplayEventData EventPayload;
 		//EventPayload.Instigator = this;
 		//EventPayload.OptionalObject;// = ;
@@ -67,10 +65,13 @@ void AItemActor::InitInternal()
 	if (true)
 	{
 		if (USkeletalMeshComponent * SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent")))
+		//if (USkeletalMeshComponent * SkeletalMeshComponent = NewObject<USkeletalMeshComponent>(this, USkeletalMeshComponent::StaticClass(), TEXT("MeshComponent")))
 		{
+			
 			SkeletalMeshComponent->SetupAttachment(GetRootComponent());
 			//SkeletalMeshComponent->SetSkeletalMesh(nullptr);// 设置资产
 			MeshComponent = SkeletalMeshComponent;
+			MeshComponent->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 		}
 	}
 	else if (false)
@@ -87,16 +88,17 @@ void AItemActor::InitInternal()
 	}
 }
 
-void AItemActor::OnPickUp(AActor* InOwner)
+void AItemActor::OnPickUp(AMCharacter* InOwner)
 {
 	// 进包
 }
 
-void AItemActor::OnTake(AActor* InOwner)
+void AItemActor::OnTake(AMCharacter* InOwner)
 {
 	ItemState = EItemState::Equipped;
 	PickComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	PickComponent->SetGenerateOverlapEvents(false);
+	ItemOwner = InOwner;
 }
 
 void AItemActor::OnDropped()
@@ -150,6 +152,14 @@ void AItemActor::BeginPlay()
 	
 }
 
+bool AItemActor::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool bWroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+	// 如果Actor里设置其他要同步的UObject，在这里进行同步操作
+	//bWroteSomething = Channel->ReplicateSubobject(Channel, Bunch, RepFlags);
+	return bWroteSomething;
+}
+
 void AItemActor::OnRep_ItemState()
 {
 	switch (ItemState)
@@ -172,4 +182,5 @@ void AItemActor::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLife
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AItemActor, ItemState);
+	DOREPLIFETIME(AItemActor, ItemID);
 }

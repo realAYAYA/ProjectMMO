@@ -10,6 +10,8 @@ UCLASS()
 class AMProjectile : public AActor
 {
 	GENERATED_BODY()
+	
+public:
 
 	/** Sphere collision component */
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
@@ -19,7 +21,6 @@ class AMProjectile : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ProjectSS, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileMovement;
 	
-public:	
 	// Sets default values for this actor's properties
 	AMProjectile();
 

@@ -186,6 +186,7 @@ void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		// Sprint
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AMCharacter::BeginSprint);
+		//EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Canceled, this, &AMCharacter::EndSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AMCharacter::EndSprint);
 	}
 }
@@ -285,4 +286,5 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMCharacter, CharacterData);
+	DOREPLIFETIME(AMCharacter, bHasRifle);
 }

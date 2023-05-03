@@ -20,7 +20,7 @@ class AItemActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AItemActor();
-
+	
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	TObjectPtr<UMeshComponent> MeshComponent;
 
@@ -30,13 +30,13 @@ public:
 	virtual void Init();
 
 	UFUNCTION()
-	virtual void OnPickUp(AActor* InOwner);
+	virtual void OnPickUp(class AMCharacter* InOwner);
 	
 	UFUNCTION()
 	virtual void OnDropped();
 
 	UFUNCTION()
-	void OnTake(AActor* InOwner);
+	void OnTake(AMCharacter* InOwner);
 
 	UFUNCTION()
 	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -61,8 +61,12 @@ private:
 	UItemBase* ItemConfig;
 
 	/**
-	 * @Netwrok Online State based On UE DS
+	 * @Netwrok Replicated
 	 */
+public:
+	
+	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
+	
 protected:
 	
 	UPROPERTY(ReplicatedUsing = OnRep_ItemState)

@@ -27,9 +27,6 @@ public:
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category = ATest)
 	void Fire();
-	
-	UPROPERTY(EditDefaultsOnly, Category = ATest)
-	TObjectPtr<USkeletalMesh> WeaponSkeletalMesh;
 
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = ATest)
@@ -63,8 +60,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = ProjectSS)
 	USkeletalMeshComponent* GetSkeletalMeshComponent() const;
 
+	virtual void OnPickUp(AMCharacter* InOwner) override;
+
 protected:
-	virtual void InitInternal() override;
 
 	/** Ends gameplay for this component. */
 	UFUNCTION()

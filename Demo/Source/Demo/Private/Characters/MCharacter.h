@@ -72,7 +72,7 @@ public:
 	class UInputAction* SprintAction;
 
 	/** Bool for AnimBP to switch to another animation set */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
+	UPROPERTY(BlueprintReadOnly, Category = Weapon, Replicated)
 	bool bHasRifle;
 
 	/** Setter to set the bool */

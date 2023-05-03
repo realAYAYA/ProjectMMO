@@ -14,7 +14,7 @@ AMProjectile::AMProjectile()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SetReplicates(true);
+	bReplicates = true;
 	
 	// Use a sphere as a simple collision representation
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
@@ -42,9 +42,9 @@ AMProjectile::AMProjectile()
 }
 
 void AMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
+ {
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
+	if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
 	{
 		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 		AMCharacter* Character = Cast<AMCharacter>(OtherActor);
@@ -55,12 +55,11 @@ void AMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrim
 			{
 				FGameplayEffectContextHandle EffectContextHandle = Character->GetAbilitySystemComponent()->MakeEffectContext();
 				EffectContextHandle.AddSourceObject(Character);
-				
 				Character->ApplyGameplayEffectToSelf(Effect, EffectContextHandle);
 			}
+
+			Destroy();
 		}
-		
-		Destroy();
 	}
 }
 

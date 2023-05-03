@@ -16,6 +16,7 @@ void AMGearActor::InitInternal()
 
 AMGearActor::AMGearActor()
 {
+	
 }
 
 void AMGearActor::OnEquipped(AActor* InOwner)
@@ -36,7 +37,7 @@ void AMGearActor::OnUnEquipped()
 	TryRemoveAbilities(GetItemOwner());
 }
 
-void AMGearActor::OnPickUp(AActor* InOwner)
+void AMGearActor::OnPickUp(AMCharacter* InOwner)
 {
 	//Super::OnPickUp(InOwner);
 	OnEquipped(InOwner);
