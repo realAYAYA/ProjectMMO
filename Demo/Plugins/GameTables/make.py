@@ -38,7 +38,7 @@ XLS_TEMPL = """
 
 # 生成代码文件及数据文件
 {%- for xls_name in FullExcelFiles %}
-{{XLS}} -src_file={{EXCEL_DIR}}/{{xls_name}}.xlsx -data_dst_dir={{GDD_DIR}}/ -dllexport_decl=GAMETABLES_API -hpp_dst_dir=Source/GameTables/Public/ -cpp_dst_dir=Source/GameTables/Private/
+{{XLS}} -src_file={{EXCEL_DIR}}/{{xls_name}}.xlsx -data_dst_dir={{GDD_DIR}}/ -dllexport_decl=GAMETABLES_API -hpp_dst_dir=Source/GameTables/Public/Tables -cpp_dst_dir=Source/GameTables/Private/Tables
 {%- endfor %}
 
 # 只生成数据文件
