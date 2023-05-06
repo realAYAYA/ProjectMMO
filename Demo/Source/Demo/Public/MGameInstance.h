@@ -16,4 +16,10 @@ class DEMO_API UMGameInstance : public UGameInstance
 
 public:
 	virtual void Init() override;
+	
+	UPROPERTY()
+	class UMGameTables* GameTables;
+
+	UFUNCTION()
+	UMGameTables* GetMGameTables();
 };

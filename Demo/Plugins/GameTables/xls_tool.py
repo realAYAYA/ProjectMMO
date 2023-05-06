@@ -19,8 +19,13 @@ custom_includes = """
 #include "MGameTypes.h"
 """
 
+# 生成胶水代码的头文件目录
+hpp_dir = 'MGameTables'
+
+# 前缀命名
 custom_prefix = ''
 
+# Category
 custom_category = "ProjectSS"
 
 # ======================================================================================================================
@@ -132,9 +137,8 @@ private:
 """
 
 # xxx.cpp
-CPP_TEMPL = """#include "{{code_file_base_name}}.h"
-#include "MConfigLoadHelper.h"
-#include "MGameTablesPrivate.h"
+CPP_TEMPL = """#include "{{hpp_dir}}/{{code_file_base_name}}.h"
+#include "GameTables/Public/ConfigLoadHelper.h"
 
 
 // =============================================================================
@@ -157,7 +161,7 @@ bool {{class_name}}::Init()
 bool {{manager_name}}::Init()
 {
     FString Path = GetGameDesignDataFullPath() / GetConfigFileName();
-    auto Table = MLoadTableFromJsonFile<{{struct_name}}>(Path, TEXT("{{key_field_name}}"));
+    auto Table = LoadTableFromJsonFile<{{struct_name}}>(Path, TEXT("{{key_field_name}}"));
     if (!Table)
         return false;
     
@@ -331,6 +335,8 @@ def generate_code(args, defines: list):
 
     meta_data['custom_category'] = custom_category
     meta_data['custom_includes'] = custom_includes
+    meta_data['hpp_dir'] = hpp_dir
+
     meta_data['custom_include_begin'] = custom_include_begin
     meta_data['custom_include_end'] = custom_include_end
     meta_data['custom_include_content'] = custom_include_content

@@ -1,5 +1,5 @@
 #include "ConfigLoadHelper.h"
-#include "GameTablesPrivate.h"
+#include "GameTables.h"
 
 const FString& GetGameDesignDataFullPath()
 {

@@ -5,13 +5,21 @@ import argparse
 import jinja2
 
 # 引擎目录
-engine_dir = "D:/UnrealEngine-ToonLit/UnrealEngine/Engine"
+engine_dir = 'D:/UnrealEngine-ToonLit/UnrealEngine/Engine'
+
+# 生成代码目录
+hpp_dst_dir = '../../Source/Demo/Public/MGameTables'
+cpp_dst_dir = '../../Source/Demo/Private/MGameTables'
+
+# API宏名称，根据工程来定
+api_name = 'DEMO_API'
+
 
 # ======================================================================================================================
 
 # 生成代码文件及数据文件的 Excel 文件名
 FullExcelFiles = [
-    
+    'Item'
 ]
 
 # 只生成数据文件的 Excel 文件名
@@ -38,7 +46,7 @@ XLS_TEMPL = """
 
 # 生成代码文件及数据文件
 {%- for xls_name in FullExcelFiles %}
-{{XLS}} -src_file={{EXCEL_DIR}}/{{xls_name}}.xlsx -data_dst_dir={{GDD_DIR}}/ -dllexport_decl=GAMETABLES_API -hpp_dst_dir=Source/GameTables/Public/Tables -cpp_dst_dir=Source/GameTables/Private/Tables
+{{XLS}} -src_file={{EXCEL_DIR}}/{{xls_name}}.xlsx -data_dst_dir={{GDD_DIR}}/ -dllexport_decl={{NAME_API}} -hpp_dst_dir={{hpp_dir}} -cpp_dst_dir={{cpp_dir}}
 {%- endfor %}
 
 # 只生成数据文件
@@ -106,6 +114,10 @@ def main():
         'XLS': f'{py_cmd} xls_tool.py',
         'FullExcelFiles': FullExcelFiles,
         'DataExcelFiles': DataExcelFiles,
+
+        'NAME_API': api_name,
+        'hpp_dir': hpp_dst_dir,
+        'cpp_dir': cpp_dst_dir,
     }
     
     try:
@@ -119,7 +131,7 @@ def main():
     try:
         do_content(xls_content)
     except Exception as run_err:
-        do_content(revert_content)
+        #do_content(revert_content)
         raise run_err
     # do_content(revert_content)
 

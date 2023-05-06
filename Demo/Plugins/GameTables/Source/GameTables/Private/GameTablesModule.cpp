@@ -1,6 +1,6 @@
 #include "GameTablesModule.h"
 
-#include "GameTables.h"
+#define LOCTEXT_NAMESPACE "FGameTablesModule"
 
 void FGameTablesModule::StartupModule()
 {
@@ -10,22 +10,7 @@ void FGameTablesModule::ShutdownModule()
 {
 }
 
-UGameTables* FGameTablesModule::GetGameTables()
-{
-	if (!GameTables)
-	{
-		GameTables = NewObject<UGameTables>();
-		GameTables->AddToRoot();
-		GameTables->Init();
-	}
+#undef LOCTEXT_NAMESPACE
 
-	return GameTables;
-}
+IMPLEMENT_MODULE(FGameTablesModule, GameTables)
 
-void FGameTablesModule::AddReferencedObjects(FReferenceCollector& Collector)
-{
-	if (GameTables)
-	{
-		Collector.AddReferencedObject(GameTables);
-	}
-}
