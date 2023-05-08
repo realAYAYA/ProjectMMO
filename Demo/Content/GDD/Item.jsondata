@@ -1,12 +1,12 @@
 [
     {
         "Id": 888,
-        "Name": "灵石",
+        "Name": "冥币",
         "Type": 100,
         "Quality": 2,
         "MaxNum": 0,
         "SellingPrice": 0,
-        "Description": "修真界的通用货币",
+        "Description": "异世界的通用货币",
         "Icon": "Texture2D'/Game/Assets/UI/Texture/Xian/Icon/T_UI_Icon_Money2.T_UI_Icon_Money2'"
     },
     {

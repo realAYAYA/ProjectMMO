@@ -5,7 +5,7 @@ import argparse
 import jinja2
 
 # 引擎目录
-engine_dir = 'D:/UnrealEngine-ToonLit/UnrealEngine/Engine'
+engine_dir = 'D:/Codes/UnrealEngine51/UnrealEngine/Engine'
 
 # 生成代码目录
 hpp_dst_dir = '../../Source/Demo/Public/MGameTables'
