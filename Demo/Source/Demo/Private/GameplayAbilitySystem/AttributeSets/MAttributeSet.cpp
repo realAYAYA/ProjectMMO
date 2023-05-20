@@ -10,7 +10,7 @@
 #include "Characters/MCharacter.h"
 #include "Characters/Components/MCharacterMovementComponent.h"
 
-void UMAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+void UMAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
 
@@ -28,29 +28,79 @@ void UMAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	}
 }
 
-void UMAttributeSetBase::OnRep_Health(const FGameplayAttributeData& OldHeath)
+void UMAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSetBase, Health, OldHeath);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Strength, OldStrength);
 }
 
-void UMAttributeSetBase::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHeath)
+void UMAttributeSet::OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSetBase, MaxHealth, OldMaxHeath);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Intelligence, OldIntelligence);
 }
 
-void UMAttributeSetBase::OnRep_Stamina(const FGameplayAttributeData& OldStamina)
+void UMAttributeSet::OnRep_Agility(const FGameplayAttributeData& OldAgility)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSetBase, Stamina, OldStamina);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Agility, OldAgility);
 }
 
-void UMAttributeSetBase::OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina)
+void UMAttributeSet::OnRep_Spirit(const FGameplayAttributeData& OldSpirit)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSetBase, MaxStamina, OldMaxStamina);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Spirit, OldSpirit);
 }
 
-void UMAttributeSetBase::OnRep_MaxMoveSpeed(const FGameplayAttributeData& OldMaxMoveSpeed)
+void UMAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana)
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSetBase, MaxMoveSpeed, OldMaxMoveSpeed);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Mana, OldMana);
+}
+
+void UMAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxMana, OldMaxMana);
+}
+
+void UMAttributeSet::OnRep_Energy(const FGameplayAttributeData& OldEnergy)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Energy, OldEnergy);
+}
+
+void UMAttributeSet::OnRep_MaxEnergy(const FGameplayAttributeData& OldMaxEnergy)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxEnergy, OldMaxEnergy);
+}
+
+void UMAttributeSet::OnRep_Rage(const FGameplayAttributeData& OldRage)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Rage, OldRage);
+}
+
+void UMAttributeSet::OnRep_MaxRage(const FGameplayAttributeData& OldMaxRage)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxRage, OldMaxRage);
+}
+
+void UMAttributeSet::OnRep_CastSpeed(const FGameplayAttributeData& OldCastSpeed)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, CastSpeed, OldCastSpeed);
+}
+
+void UMAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHeath)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Health, OldHeath);
+}
+
+void UMAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHeath)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxHealth, OldMaxHeath);
+}
+
+void UMAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldStamina)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Stamina, OldStamina);
+}
+
+void UMAttributeSet::OnRep_MaxMoveSpeed(const FGameplayAttributeData& OldMaxMoveSpeed)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxMoveSpeed, OldMaxMoveSpeed);
 
 	const AMCharacter* OwningCharacter = Cast<AMCharacter>(GetOwningActor());
 	if (UCharacterMovementComponent* CharacterMovement = OwningCharacter->GetCharacterMovement())
@@ -59,13 +109,23 @@ void UMAttributeSetBase::OnRep_MaxMoveSpeed(const FGameplayAttributeData& OldMax
 	}
 }
 
-void UMAttributeSetBase::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+void UMAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSetBase, Health, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSetBase, MaxHealth, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSetBase, Stamina, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSetBase, MaxStamina, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSetBase, MaxMoveSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Health, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Strength, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Agility, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Spirit, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxMoveSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Mana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Energy, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxEnergy, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Rage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxRage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, CastSpeed, COND_None, REPNOTIFY_Always);
 }
