@@ -10,6 +10,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "MCharacter.generated.h"
 
+class USpringArmComponent;
 class UInputComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
@@ -18,7 +19,6 @@ class UAnimMontage;
 class USoundBase;
 
 class UMAbilitySystemComponentBase;
-class UMAttributeSetBase;
 
 class UGameplayAbility;
 class UGameplayEffect;
@@ -28,20 +28,18 @@ class DEMO_API AMCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
-	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	TObjectPtr<USkeletalMeshComponent> Mesh1P;
-
-	/** First person camera */
+	/** Third person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FirstPersonCameraComponent;
+	UCameraComponent* ThirdPersonCameraComponent;
+
+	/** Third person camera arm */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArmComponent;
 
 public:
-	/** Returns Mesh1P subobject **/
-	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	
-	/** Returns FirstPersonCameraComponent subobject **/
-	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	/** Returns FirstPersonCameraComponent sub-object **/
+	UCameraComponent* GetThirdPersonCameraComponent() const { return ThirdPersonCameraComponent; }
 
 	/**
 	 * Input
@@ -122,11 +120,11 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 
-	UPROPERTY(EditDefaultsOnly)
-	UMAbilitySystemComponentBase* AbilitySystemComponent;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UMAbilitySystemComponent* AbilitySystemComponent;
 
 	UPROPERTY(Transient)
-	UMAttributeSetBase* AttributeSet;
+	class UMAttributeSet* AttributeSet;
 
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag JumpEventTag;

@@ -13,6 +13,7 @@
 
 void AMWeaponActor::AttachWeapon(AMCharacter* TargetCharacter)
 {
+	return;
 	Character = TargetCharacter;
 	if (Character == nullptr)
 	{
@@ -21,7 +22,7 @@ void AMWeaponActor::AttachWeapon(AMCharacter* TargetCharacter)
 
 	// Attach the weapon to the First Person Character
 	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-	AttachToComponent(Character->GetMesh1P(), AttachmentRules, AttachSocketName);
+	//AttachToComponent(Character->GetMesh1P(), AttachmentRules, AttachSocketName);
 	
 	// switch bHasRifle so the animation blueprint can switch to another animation set
 	Character->SetHasRifle(true);
@@ -45,6 +46,7 @@ void AMWeaponActor::AttachWeapon(AMCharacter* TargetCharacter)
 
 void AMWeaponActor::Fire()
 {
+	return;
 	if (Character == nullptr || Character->GetController() == nullptr)
 	{
 		return;
@@ -82,10 +84,10 @@ void AMWeaponActor::Fire()
 	if (FireAnimation != nullptr)
 	{
 		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Character->GetMesh1P()->GetAnimInstance();
-		if (AnimInstance != nullptr)
+		//UAnimInstance* AnimInstance = Character->GetMesh1P()->GetAnimInstance();
+		//if (AnimInstance != nullptr)
 		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
+			//AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}
 }

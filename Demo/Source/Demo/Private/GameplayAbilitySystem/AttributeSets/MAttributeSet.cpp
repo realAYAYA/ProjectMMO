@@ -101,12 +101,6 @@ void UMAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldStamina)
 void UMAttributeSet::OnRep_MaxMoveSpeed(const FGameplayAttributeData& OldMaxMoveSpeed)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxMoveSpeed, OldMaxMoveSpeed);
-
-	const AMCharacter* OwningCharacter = Cast<AMCharacter>(GetOwningActor());
-	if (UCharacterMovementComponent* CharacterMovement = OwningCharacter->GetCharacterMovement())
-	{
-		//CharacterMovement->MaxWalkSpeed = GetMaxMoveSpeed();
-	}
 }
 
 void UMAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

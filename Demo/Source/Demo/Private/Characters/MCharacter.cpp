@@ -15,6 +15,7 @@
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
 #include "Components/MCharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 void AMCharacter::SetCharacterData(const FCharacterData& InCharacterData)
 {
@@ -45,28 +46,26 @@ AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
 	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
-		
-	// Create a CameraComponent	
-	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
-	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -89.0f));
+	GetMesh()->SetRelativeRotation(FRotator(0.0f, 270.0f, 0.0f));
 
-	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
-	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
-	Mesh1P->bCastDynamicShadow = false;
-	Mesh1P->CastShadow = false;
-	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
-	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+	// Create a SpringArmComponent
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	SpringArmComponent->SetupAttachment(GetCapsuleComponent());
+	SpringArmComponent->SetRelativeLocation(FVector(0.f, 0.f, 8.5f));
+	SpringArmComponent->TargetArmLength = 400.0f;
+	SpringArmComponent->bUsePawnControlRotation = true;
+	
+	// Create a CameraComponent	
+	ThirdPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("ThirdPersonCamera"));
+	ThirdPersonCameraComponent->SetupAttachment(SpringArmComponent);
 
 	// Gameplay Ability System
-	AbilitySystemComponent = CreateDefaultSubobject<UMAbilitySystemComponentBase>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent = CreateDefaultSubobject<UMAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
-	AttributeSet = CreateDefaultSubobject<UMAttributeSetBase>(TEXT("AttributeSet"));
+	AttributeSet = CreateDefaultSubobject<UMAttributeSet>(TEXT("AttributeSet"));
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxMoveSpeedAttribute()).AddUObject(this, &AMCharacter::OnMaxMovementSpeedChanged);
 }

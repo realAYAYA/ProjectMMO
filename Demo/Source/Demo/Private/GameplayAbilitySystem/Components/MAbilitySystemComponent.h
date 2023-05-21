@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class DEMO_API UMAbilitySystemComponentBase : public UAbilitySystemComponent
+class DEMO_API UMAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 	
