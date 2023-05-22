@@ -5,6 +5,45 @@
 #include "CoreMinimal.h"
 #include "MGameTypes.generated.h"
 
+/** 游戏中Buff数据*/
+USTRUCT(BlueprintType) 
+struct FGameBuffData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 ID = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 RemainingTime = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 Overflow = 0;
+};
+
+/** 游戏中Buff数据*/
+USTRUCT(BlueprintType) 
+struct FCharacterAttribute
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 Level = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 Health = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 Mana = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 Rage = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 Energy = 0;
+};
+
+/** 游戏玩家角色数据*/
 USTRUCT(BlueprintType) 
 struct FGamePlayerData
 {
@@ -12,9 +51,18 @@ struct FGamePlayerData
 
 	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
 	int64 UserID = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	int32 Exp = 0;
+
+	// Todo 装备数据
+	// Todo Buff保存
+	// Todo 天赋数据
+	// Todo 其它功能点数据
 	
 };
 
+/** 用户整体数据*/
 USTRUCT(BlueprintType)
 struct FGameUserData
 {

@@ -179,10 +179,6 @@ void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMCharacter::Look);
 
-		// Crouching
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AMCharacter::BeginCrouch);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AMCharacter::EndCrouch);
-
 		// Sprint
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AMCharacter::BeginSprint);
 		//EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Canceled, this, &AMCharacter::EndSprint);
@@ -235,26 +231,6 @@ void AMCharacter::Landed(const FHitResult& Hit)
 		AbilitySystemComponent->RemoveActiveEffectsWithTags(InAirTags);
 }
 
-void AMCharacter::BeginCrouch(const FInputActionValue& Value)
-{
-	AbilitySystemComponent->TryActivateAbilitiesByTag(CrouchTags, true);
-}
-
-void AMCharacter::EndCrouch(const FInputActionValue& Value)
-{
-	AbilitySystemComponent->CancelAbilities(&CrouchTags);
-}
-
-void AMCharacter::OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust)
-{
-	Super::OnStartCrouch(HalfHeightAdjust, ScaledHalfHeightAdjust);
-}
-
-void AMCharacter::OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust)
-{
-	Super::OnEndCrouch(HalfHeightAdjust, ScaledHalfHeightAdjust);
-}
-
 void AMCharacter::BeginSprint(const FInputActionValue& Value)
 {
 	AbilitySystemComponent->TryActivateAbilitiesByTag(SprintTags, true);
@@ -280,10 +256,21 @@ bool AMCharacter::GetHasRifle() const
 	return bHasRifle;
 }
 
+AMCharacter* AMCharacter::GetCurrentTarget() const
+{
+	return CurrentTarget;
+}
+
+void AMCharacter::SetCurrentTarget(AMCharacter* NewTarget)
+{
+	CurrentTarget = NewTarget;
+}
+
 void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMCharacter, CharacterData);
 	DOREPLIFETIME(AMCharacter, bHasRifle);
+	DOREPLIFETIME(AMCharacter, CurrentTarget);
 }

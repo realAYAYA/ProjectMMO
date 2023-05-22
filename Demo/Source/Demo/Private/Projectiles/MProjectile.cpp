@@ -38,7 +38,7 @@ AMProjectile::AMProjectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 15.0f;
 }
 
 void AMProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -74,6 +74,6 @@ void AMProjectile::BeginPlay()
 void AMProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 

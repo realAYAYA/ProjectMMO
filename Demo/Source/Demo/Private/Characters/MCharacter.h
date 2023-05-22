@@ -61,10 +61,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
-	/** Crouch Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* CrouchAction;
-
 	/** Sprint Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* SprintAction;
@@ -81,6 +77,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle() const;
 
+	/** 玩家当前锁定目标 */
+	UPROPERTY(BlueprintReadOnly, Category = Weapon, Replicated)
+	AMCharacter* CurrentTarget;
+
+	/** 获取玩家当前锁定目标 */
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	AMCharacter* GetCurrentTarget() const;
+
+	/** 获取玩家当前锁定目标 */
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	void SetCurrentTarget(AMCharacter* NewTarget);
+
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
@@ -92,13 +100,6 @@ protected:
 	void TryJump(const FInputActionValue& Value);
 
 	virtual void Landed(const FHitResult& Hit) override;
-
-	/** Called for crouch input */
-	void BeginCrouch(const FInputActionValue& Value);
-	void EndCrouch(const FInputActionValue& Value);
-
-	virtual void OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
-	virtual void OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
 
 	/** Called for sprint input */
 	void BeginSprint(const FInputActionValue& Value);

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "MProjectile.generated.h"
 
+class AMCharacter;
+
 UCLASS()
 class AMProjectile : public AActor
 {
@@ -34,7 +36,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	TArray<TSubclassOf<class UGameplayEffect>> Effects;
 
+private:
+	
+	UPROPERTY()
+	AMCharacter* Caster;
+
+	UPROPERTY()
+	AMCharacter* Target;
+
 protected:
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

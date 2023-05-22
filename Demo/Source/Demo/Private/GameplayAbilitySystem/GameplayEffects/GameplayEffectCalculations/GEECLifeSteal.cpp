@@ -4,6 +4,7 @@
 #include "GEECLifeSteal.h"
 
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
+#include "GameplayAbilitySystem/GameplayEffects/MGameplayEffect.h"
 
 struct FEffectStatics
 {
@@ -43,6 +44,7 @@ void UGEECLifeSteal::Execute_Implementation(
 	AActor* TargetActor = TargetAbilitySystem ? TargetAbilitySystem->GetAvatarActor() : nullptr;
 	AActor* SourceActor = SourceAbilitySystem ? SourceAbilitySystem->GetAvatarActor() : nullptr;
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
+	Cast<UMGameplayEffect>(Spec.Def);
 	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
 	FAggregatorEvaluateParameters EvaluationParameters;
