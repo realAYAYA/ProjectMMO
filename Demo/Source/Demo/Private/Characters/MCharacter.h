@@ -46,15 +46,15 @@ public:
 	 */
 public:
 	/** MappingContext */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta=(AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
 
 	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* JumpAction;
 
 	/** Move Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
 	
 	/** Look Input Action */
@@ -70,23 +70,23 @@ public:
 	bool bHasRifle;
 
 	/** Setter to set the bool */
-	UFUNCTION(BlueprintCallable, Category = Weapon)
+	UFUNCTION(BlueprintCallable, Category = PlayerState)
 	void SetHasRifle(const bool bNewHasRifle);
 
 	/** Getter for the bool */
-	UFUNCTION(BlueprintCallable, Category = Weapon)
+	UFUNCTION(BlueprintCallable, Category = PlayerState)
 	bool GetHasRifle() const;
 
 	/** 玩家当前锁定目标 */
-	UPROPERTY(BlueprintReadOnly, Category = Weapon, Replicated)
+	UPROPERTY(BlueprintReadOnly, Category = PlayerState, Replicated)
 	AMCharacter* CurrentTarget;
 
 	/** 获取玩家当前锁定目标 */
-	UFUNCTION(BlueprintCallable, Category = Weapon)
+	UFUNCTION(BlueprintCallable, Category = PlayerState)
 	AMCharacter* GetCurrentTarget() const;
 
 	/** 获取玩家当前锁定目标 */
-	UFUNCTION(BlueprintCallable, Category = Weapon)
+	UFUNCTION(BlueprintCallable, Category = PlayerState)
 	void SetCurrentTarget(AMCharacter* NewTarget);
 
 protected:
@@ -187,4 +187,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+	// Todo 测试数据，最后要删
+	UPROPERTY(BlueprintReadOnly, Category = PlayerData, Replicated)
+	FString MyName = "None";
+
+public:
+	UFUNCTION(BlueprintCallable, Category = ATest)
+	void SetMyName(const FString& InName) { MyName = InName; }
 };

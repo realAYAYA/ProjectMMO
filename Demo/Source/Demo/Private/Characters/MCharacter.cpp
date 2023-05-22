@@ -12,6 +12,7 @@
 #include "Net/UnrealNetwork.h"
 
 #include "MCharacterDataAsset.h"
+#include "MPlayerState.h"
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
 #include "Components/MCharacterMovementComponent.h"
@@ -273,4 +274,6 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 	DOREPLIFETIME(AMCharacter, CharacterData);
 	DOREPLIFETIME(AMCharacter, bHasRifle);
 	DOREPLIFETIME(AMCharacter, CurrentTarget);
+
+	DOREPLIFETIME(AMCharacter, MyName);
 }
