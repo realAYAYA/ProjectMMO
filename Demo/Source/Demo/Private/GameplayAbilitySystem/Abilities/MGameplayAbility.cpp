@@ -3,9 +3,29 @@
 
 #include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
 
-#include "AbilitySystemComponent.h"
+#include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "AbilitySystemLog.h"
 #include "Characters/MCharacter.h"
+
+bool UMGameplayAbility::CanActivateAbility(
+	const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayTagContainer* SourceTags,
+	const FGameplayTagContainer* TargetTags,
+	FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+		return false;
+
+	// Todo 消耗品
+	UMAbilitySystemComponent* AbilitySystemComponent = Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent);
+	if (!AbilitySystemComponent)
+		return false;
+
+	AbilitySystemComponent->ApplyGameplayEffectToSelf();
+	// Todo 是否是友军
+	return true;
+}
 
 void UMGameplayAbility::ActivateAbility(
 	const FGameplayAbilitySpecHandle Handle,
@@ -16,6 +36,9 @@ void UMGameplayAbility::ActivateAbility(
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
 	
 	UAbilitySystemComponent* AbilitySystemComponent = OwnerInfo->AbilitySystemComponent.Get();
+
+	if (!AbilitySystemComponent)
+		return;
 
 	const FGameplayEffectContextHandle EffectContextHandle = OwnerInfo->AbilitySystemComponent->MakeEffectContext();
 

@@ -39,6 +39,9 @@ void UMGAJump::ActivateAbility(
 	if (!HasAuthorityOrPredictionKey(OwnerInfo, &ActivationInfo))
 		return;
 
+	if (!CommitAbility(Handle, OwnerInfo, ActivationInfo))
+		return;
+
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
 
 	AMCharacter* Character = CastChecked<AMCharacter>(OwnerInfo->AvatarActor.Get());
