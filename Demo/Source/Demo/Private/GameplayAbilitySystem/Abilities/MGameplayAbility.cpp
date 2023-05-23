@@ -16,14 +16,21 @@ bool UMGameplayAbility::CanActivateAbility(
 {
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 		return false;
-
-	// Todo 消耗品
-	UMAbilitySystemComponent* AbilitySystemComponent = Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent);
-	if (!AbilitySystemComponent)
+	
+	UMAbilitySystemComponent* MyASC = Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent);
+	if (!MyASC)
+		return false;
+	AMCharacter* Target = Cast<AMCharacter>(ActorInfo->AvatarActor);
+	if (Target)
+		return false;
+	UMAbilitySystemComponent* TargetASC = Cast<UMAbilitySystemComponent>(Target->GetAbilitySystemComponent());
+	if (!TargetASC)
 		return false;
 
-	AbilitySystemComponent->ApplyGameplayEffectToSelf();
-	// Todo 是否是友军
+	// Todo 消耗品
+
+	// Todo 是否是友军 Friendly，阵营
+	
 	return true;
 }
 
@@ -34,9 +41,13 @@ void UMGameplayAbility::ActivateAbility(
 	const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
+
+	// Todo 对目标施加效果
+	//MyASC->ApplyGameplayEffectToTarget(EffectToEnemy[0], TargetASC)
+	// Todo 对自己施加效果
+	//AbilitySystemComponent->ApplyGameplayEffectToSelf();
 	
 	UAbilitySystemComponent* AbilitySystemComponent = OwnerInfo->AbilitySystemComponent.Get();
-
 	if (!AbilitySystemComponent)
 		return;
 

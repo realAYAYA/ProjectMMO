@@ -36,13 +36,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	TArray<TSubclassOf<class UGameplayEffect>> Effects;
 
-private:
-	
 	UPROPERTY()
 	AMCharacter* Caster;
 
 	UPROPERTY()
 	AMCharacter* Target;
+
+	UPROPERTY()
+	FVector TargetLocation;// 如果目标丢失，则销毁在最后出现的位置
+
+	void ApplyGameplayEffectToTarget();
 
 protected:
 	
