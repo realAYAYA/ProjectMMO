@@ -65,31 +65,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* SprintAction;
 
-	/** Bool for AnimBP to switch to another animation set */
-	UPROPERTY(BlueprintReadOnly, Category = Weapon, Replicated)
-	bool bHasRifle;
-
-	/** Setter to set the bool */
-	UFUNCTION(BlueprintCallable, Category = PlayerState)
-	void SetHasRifle(const bool bNewHasRifle);
-
-	/** Getter for the bool */
-	UFUNCTION(BlueprintCallable, Category = PlayerState)
-	bool GetHasRifle() const;
-
-	/** 玩家当前锁定目标 */
-	UPROPERTY(BlueprintReadOnly, Category = PlayerState, Replicated)
-	AMCharacter* CurrentTarget;
-
-	/** 获取玩家当前锁定目标 */
-	UFUNCTION(BlueprintCallable, Category = PlayerState)
-	AMCharacter* GetCurrentTarget() const;
-
-	/** 获取玩家当前锁定目标 */
-	UFUNCTION(BlueprintCallable, Category = PlayerState)
-	void SetCurrentTarget(AMCharacter* NewTarget);
-
 protected:
+	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
@@ -104,6 +81,10 @@ protected:
 	/** Called for sprint input */
 	void BeginSprint(const FInputActionValue& Value);
 	void EndSprint(const FInputActionValue& Value);
+
+	void ChargeBegin(const FVector InTargetLocation);
+	void ChargeLoop();
+	void ChargeEnd();
 
 	/**
 	 * GameAbilitySystem
@@ -169,8 +150,8 @@ protected:
 	 * Default
 	 */
 public:
+	
 	// Sets default values for this character's properties
-
 	//AMCharacter();
 	AMCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 

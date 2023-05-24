@@ -3,9 +3,11 @@
 
 #include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
 
-#include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "AbilitySystemLog.h"
+
 #include "Characters/MCharacter.h"
+#include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
+#include "GameplayAbilitySystem/GameplayEffects/MGameplayEffect.h"
 
 bool UMGameplayAbility::CanActivateAbility(
 	const FGameplayAbilitySpecHandle Handle,
@@ -17,19 +19,16 @@ bool UMGameplayAbility::CanActivateAbility(
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 		return false;
 	
-	UMAbilitySystemComponent* MyASC = Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent);
-	if (!MyASC)
+	if (!Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent))
 		return false;
-	AMCharacter* Target = Cast<AMCharacter>(ActorInfo->AvatarActor);
-	if (Target)
-		return false;
-	UMAbilitySystemComponent* TargetASC = Cast<UMAbilitySystemComponent>(Target->GetAbilitySystemComponent());
-	if (!TargetASC)
+	
+	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo->AvatarActor);
+	if (Caster->CurrentTarget || !Cast<UMAbilitySystemComponent>(Caster->CurrentTarget->GetAbilitySystemComponent()))
 		return false;
 
 	// Todo 消耗品
 
-	// Todo 是否是友军 Friendly，阵营
+	// Todo 如果目标类型为Hostile，但是当前目标不是敌对，失败
 	
 	return true;
 }
@@ -41,51 +40,74 @@ void UMGameplayAbility::ActivateAbility(
 	const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
-
-	// Todo 对目标施加效果
-	//MyASC->ApplyGameplayEffectToTarget(EffectToEnemy[0], TargetASC)
-	// Todo 对自己施加效果
-	//AbilitySystemComponent->ApplyGameplayEffectToSelf();
 	
 	UAbilitySystemComponent* AbilitySystemComponent = OwnerInfo->AbilitySystemComponent.Get();
 	if (!AbilitySystemComponent)
 		return;
 
-	const FGameplayEffectContextHandle EffectContextHandle = OwnerInfo->AbilitySystemComponent->MakeEffectContext();
+	const FGameplayEffectContextHandle EffectContext = OwnerInfo->AbilitySystemComponent->MakeEffectContext();
 
+	// 根据目标类型选择目标
+	const AMCharacter* Caster = Cast<AMCharacter>(OwnerInfo->AvatarActor);
+	const AMCharacter* Target = nullptr;
+	switch (TargetType)
+	{
+		default:break;
+	case ETargetType::Self: Target = Caster;
+	case ETargetType::Friendly:
+		// Todo 如果目标是敌对的则选择自己
+	case ETargetType::Hostile:
+		Target = Caster->CurrentTarget;
+	}
+
+	// 对目标施加效果
+	if (EffectToTarget.Get() && Target)
+	{
+		if (UAbilitySystemComponent* TargetComponent = Target->CurrentTarget->GetAbilitySystemComponent())
+		{
+			const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(EffectToTarget, Level, EffectContext);
+			if (!SpecHandle.IsValid())
+			{
+				const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+				if (!ActiveGEHandle.WasSuccessfullyApplied())
+					ABILITY_LOG(Log, TEXT("Ability %s faild to apply Effect to Target %s"), *GetName(), *GetNameSafe(EffectToTarget));
+			}
+		}
+	}
+
+	// 处理技能开始时施加效果
 	for (TSubclassOf<UGameplayEffect>& GameplayEffect : OngoingEffectsToJustApplyOnStart)
 	{
 		if (!GameplayEffect.Get())
 			continue;
 		
-		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, 1, EffectContextHandle);
+		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
 		if (!SpecHandle.IsValid())
 			continue;
 
 		FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 		if (!ActiveGEHandle.WasSuccessfullyApplied())
-			ABILITY_LOG(Log, TEXT("Ability %s faild to apply startup effect %s"), *GetName(), *GetNameSafe(GameplayEffect));
+			ABILITY_LOG(Log, TEXT("Ability %s faild to apply Startup Effect %s"), *GetName(), *GetNameSafe(GameplayEffect));
 	}
 
 	if (!this->IsInstantiated())
 		return;
 
+	// 处理技能结束时施加效果
 	for (TSubclassOf<UGameplayEffect>& GameplayEffect : OngoingEffectsToRemoveOnEnd)
 	{
 		if (!GameplayEffect.Get())
 			continue;
 
-		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, 1, EffectContextHandle);
+		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
 		if (!SpecHandle.IsValid())
 			continue;
 		
 		FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
-		if (!ActiveGEHandle.WasSuccessfullyApplied())
-		{
-			ABILITY_LOG(Log, TEXT("Ability %s faild to apply startup effect %s"), *GetName(), *GetNameSafe(GameplayEffect));
-		}
-		else
+		if (ActiveGEHandle.WasSuccessfullyApplied())
 			RemoveOnEndEffectHandles.Add(ActiveGEHandle);
+		else
+			ABILITY_LOG(Log, TEXT("Ability %s faild to apply startup effect %s"), *GetName(), *GetNameSafe(GameplayEffect));
 	}
 }
 
