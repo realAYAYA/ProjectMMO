@@ -45,9 +45,9 @@ protected:
 	void Ack(const int32 InData);
 
 	/** Todo Test*/
-	UFUNCTION(BlueprintCallable, Category = ATest)
-	void SetCharacterName(const FString& InName) {MyName = InName ; };
+	UFUNCTION(BlueprintCallable, Client, Reliable, Category = ATest)
+	void SetCharacterName(const FString& InName);
 	
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	FString MyName = "None";
 };

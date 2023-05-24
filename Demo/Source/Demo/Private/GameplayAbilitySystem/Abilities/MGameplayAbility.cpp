@@ -23,7 +23,7 @@ bool UMGameplayAbility::CanActivateAbility(
 		return false;
 	
 	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo->AvatarActor);
-	if (Caster->CurrentTarget || !Cast<UMAbilitySystemComponent>(Caster->CurrentTarget->GetAbilitySystemComponent()))
+	if (TargetType != ETargetType::Self && !Caster->GetCurrentTarget())
 		return false;
 
 	// Todo 消耗品
@@ -57,13 +57,13 @@ void UMGameplayAbility::ActivateAbility(
 	case ETargetType::Friendly:
 		// Todo 如果目标是敌对的则选择自己
 	case ETargetType::Hostile:
-		Target = Caster->CurrentTarget;
+		Target = Caster->GetCurrentTarget();
 	}
 
 	// 对目标施加效果
 	if (EffectToTarget.Get() && Target)
 	{
-		if (UAbilitySystemComponent* TargetComponent = Target->CurrentTarget->GetAbilitySystemComponent())
+		if (UAbilitySystemComponent* TargetComponent = Target->GetCurrentTarget()->GetAbilitySystemComponent())
 		{
 			const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(EffectToTarget, Level, EffectContext);
 			if (!SpecHandle.IsValid())

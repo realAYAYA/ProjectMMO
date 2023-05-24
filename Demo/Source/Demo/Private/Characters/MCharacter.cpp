@@ -43,7 +43,7 @@ AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
 	PrimaryActorTick.bCanEverTick = false;
 	
 	// Character doesnt have a rifle at start
-	bHasRifle = false;
+	//bHasRifle = false;
 	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
@@ -246,22 +246,12 @@ void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
 	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
 }
 
-void AMCharacter::SetHasRifle(const bool bNewHasRifle)
-{
-	bHasRifle = bNewHasRifle;
-}
-
-bool AMCharacter::GetHasRifle() const
-{
-	return bHasRifle;
-}
-
 AMCharacter* AMCharacter::GetCurrentTarget() const
 {
 	return CurrentTarget;
 }
 
-void AMCharacter::SetCurrentTarget(AMCharacter* NewTarget)
+void AMCharacter::SetCurrentTarget_Implementation(AMCharacter* NewTarget)
 {
 	CurrentTarget = NewTarget;
 }
@@ -271,8 +261,7 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMCharacter, CharacterData);
-	DOREPLIFETIME(AMCharacter, bHasRifle);
+	DOREPLIFETIME(AMCharacter, bHasWeapon);
 	DOREPLIFETIME(AMCharacter, CurrentTarget);
-
 	DOREPLIFETIME(AMCharacter, MyName);
 }

@@ -37,8 +37,9 @@ void AItemActor::OnBeginOverlap(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
+	return;
 	AMCharacter* Character = Cast<AMCharacter>(OtherActor);
-	if(Character != nullptr && !Character->bHasRifle && HasAuthority())
+	//if(Character != nullptr && !Character->bHasRifle && HasAuthority())
 	{
 		// Notify that the actor is being picked up
 		PickComponent->OnPickUp.Broadcast(Character);

@@ -25,7 +25,7 @@ void AMWeaponActor::AttachWeapon(AMCharacter* TargetCharacter)
 	//AttachToComponent(Character->GetMesh1P(), AttachmentRules, AttachSocketName);
 	
 	// switch bHasRifle so the animation blueprint can switch to another animation set
-	Character->SetHasRifle(true);
+	//Character->SetHasRifle(true);
 
 	// Set up action bindings
 	if (const APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))

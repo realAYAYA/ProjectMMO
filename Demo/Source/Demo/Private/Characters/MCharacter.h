@@ -42,7 +42,7 @@ public:
 	UCameraComponent* GetThirdPersonCameraComponent() const { return ThirdPersonCameraComponent; }
 
 	/**
-	 * Input
+	 * Input & Control
 	 */
 public:
 	/** MappingContext */
@@ -86,6 +86,26 @@ protected:
 	void ChargeLoop();
 	void ChargeEnd();
 
+	/**
+	 * Network
+	*/
+
+public:
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	AMCharacter* GetCurrentTarget() const;
+
+	UFUNCTION(Client, Reliable)
+	void SetCurrentTarget(AMCharacter* NewTarget);
+
+protected:
+	/**  */
+	UPROPERTY(Replicated)
+	AMCharacter* CurrentTarget;
+
+	UPROPERTY(Replicated)
+	bool bHasWeapon;
+
+	
 	/**
 	 * GameAbilitySystem
 	 */
@@ -146,6 +166,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class UMCharacterDataAsset* CharacterDataAsset;
 
+	
 	/**
 	 * Default
 	 */
