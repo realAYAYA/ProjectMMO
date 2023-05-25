@@ -6,7 +6,7 @@
 UAbilityTask_Charge* UAbilityTask_Charge::CreateChargeTask(UGameplayAbility* OwningAbility,
 	AMCharacter* InCharacterOwner, FVector InDestination)
 {
-	
+	return nullptr;
 }
 
 void UAbilityTask_Charge::Activate()
