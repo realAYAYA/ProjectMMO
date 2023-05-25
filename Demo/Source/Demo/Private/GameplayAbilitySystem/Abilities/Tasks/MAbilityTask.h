@@ -8,6 +8,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityEnd);
 
+class AMCharacter;
+
 /**
  * 
  */
