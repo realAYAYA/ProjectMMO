@@ -225,8 +225,6 @@ void AMCharacter::Look(const FInputActionValue& Value)
 
 void AMCharacter::TryJump(const FInputActionValue& Value)
 {
-	//Jump();
-
 	FGameplayEventData Payload;
 	Payload.Instigator = this;
 	Payload.EventTag = JumpEventTag;
@@ -313,55 +311,6 @@ void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
 AMCharacter* AMCharacter::GetCurrentTarget() const
 {
 	return CurrentTarget;
-}
-
-bool AMCharacter::CanMove() const
-{
-	TArray<FGameplayTag> StateTags;
-	MovementLimitTag.GetGameplayTagArray(StateTags);
-	for (const FGameplayTag& Tag : StateTags)
-	{
-		if (AbilitySystemComponent->HasMatchingGameplayTag(Tag))
-			return true;
-	}
-
-	return false;
-}
-
-bool AMCharacter::CanCastSpell() const
-{
-	// 被沉默
-	TArray<FGameplayTag> StateTags;
-	SilenceTag.GetGameplayTagArray(StateTags);
-	for (const FGameplayTag& Tag : StateTags)
-	{
-		if (AbilitySystemComponent->HasMatchingGameplayTag(Tag))
-			return true;
-	}
-
-	// 被昏迷
-	StateTags.Empty();
-	StunnedTag.GetGameplayTagArray(StateTags);
-	for (const FGameplayTag& Tag : StateTags)
-	{
-		if (AbilitySystemComponent->HasMatchingGameplayTag(Tag))
-			return true;
-	}
-
-	return false;
-}
-
-bool AMCharacter::CanUseAbility() const
-{
-	TArray<FGameplayTag> StateTags;
-	StunnedTag.GetGameplayTagArray(StateTags);
-	for (const FGameplayTag& Tag : StateTags)
-	{
-		if (AbilitySystemComponent->HasMatchingGameplayTag(Tag))
-			return true;
-	}
-
-	return false;
 }
 
 void AMCharacter::SetCurrentTarget_Implementation(AMCharacter* NewTarget)

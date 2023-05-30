@@ -5,15 +5,50 @@
 
 bool UMAbilitySystemComponent::CanMove() const
 {
-	return false;
+	TArray<FGameplayTag> StateTags;
+	MoveLimitTags.GetGameplayTagArray(StateTags);
+	for (const FGameplayTag& Tag : StateTags)
+	{
+		if (HasMatchingGameplayTag(Tag))
+			return false;
+	}
+
+	return true;
 }
 
 bool UMAbilitySystemComponent::CanCastSpell() const
 {
-	return false;
+	// 被沉默
+	TArray<FGameplayTag> StateTags;
+	SilenceTags.GetGameplayTagArray(StateTags);
+	for (const FGameplayTag& Tag : StateTags)
+	{
+		if (HasMatchingGameplayTag(Tag))
+			return false;
+	}
+
+	// 被昏迷
+	StateTags.Empty();
+	StunnedTags.GetGameplayTagArray(StateTags);
+	for (const FGameplayTag& Tag : StateTags)
+	{
+		if (HasMatchingGameplayTag(Tag))
+			return false;
+	}
+
+	return true;
 }
 
 bool UMAbilitySystemComponent::CanUseAbility() const
 {
-	return false;
+	// 被眩晕
+	TArray<FGameplayTag> StateTags;
+	StunnedTags.GetGameplayTagArray(StateTags);
+	for (const FGameplayTag& Tag : StateTags)
+	{
+		if (HasMatchingGameplayTag(Tag))
+			return false;
+	}
+
+	return true;
 }

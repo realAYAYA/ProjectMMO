@@ -42,6 +42,113 @@ public:
 	UCameraComponent* GetThirdPersonCameraComponent() const { return ThirdPersonCameraComponent; }
 
 	/**
+	 * PlayerState
+	*/
+
+public:
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	AMCharacter* GetCurrentTarget() const;
+
+	UFUNCTION(Client, Reliable, Category = ProjectSS)
+	void SetCurrentTarget(AMCharacter* NewTarget);
+
+protected:
+	/**  */
+	UPROPERTY(Replicated)
+	AMCharacter* CurrentTarget;
+
+	UPROPERTY(Replicated)
+	bool bHasWeapon;
+
+	// Todo 测试数据，最后要删
+	UPROPERTY(BlueprintReadOnly, Category = PlayerData, Replicated)
+	FString MyName = "None";
+
+public:
+	UFUNCTION(BlueprintCallable, Category = ATest)
+	void SetMyName(const FString& InName) { MyName = InName; }
+
+	
+	/**
+	 * GameAbilitySystem
+	 */
+public:
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
+	bool ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext);
+
+protected:
+
+	void GiveAbilities();
+	void ApplyStartupEffects();
+
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UMAbilitySystemComponent* AbilitySystemComponent;
+
+	UPROPERTY(Transient)
+	class UMAttributeSet* AttributeSet;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTag JumpEventTag;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer InAirTags;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer SprintTags;
+
+	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
+	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
+
+public:
+	
+	UFUNCTION(BlueprintCallable)
+	FCharacterData GetCharacterData() const { return CharacterData; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterData(const FCharacterData& InCharacterData);
+
+protected:
+
+	UPROPERTY(ReplicatedUsing = OnRep_CharacterData)
+	FCharacterData CharacterData;
+
+	UFUNCTION()
+	void OnRep_CharacterData();
+
+	virtual void InitFromCharacterData(const FCharacterData& InCharacterData, const bool bFromReplication = false);
+
+	UPROPERTY(EditDefaultsOnly)
+	class UMCharacterDataAsset* CharacterDataAsset;
+
+	
+	/**
+	 * Default
+	 */
+public:
+	
+	// Sets default values for this character's properties
+	//AMCharacter();
+	AMCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	virtual void PostInitializeComponents() override;
+	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	
+	/**
 	 * Input & Control
 	 */
 public:
@@ -108,133 +215,4 @@ protected:
 
 	UPROPERTY()
 	TMap<int32, FGameplayTag> InputSkillMap;
-
-	/**
-	 * PlayerState
-	*/
-
-public:
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
-	AMCharacter* GetCurrentTarget() const;
-
-	UFUNCTION(Client, Reliable, Category = ProjectSS)
-	void SetCurrentTarget(AMCharacter* NewTarget);
-
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
-	bool CanMove() const;
-
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
-	bool CanCastSpell() const;
-
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
-	bool CanUseAbility() const;
-
-protected:
-	/**  */
-	UPROPERTY(Replicated)
-	AMCharacter* CurrentTarget;
-
-	UPROPERTY(Replicated)
-	bool bHasWeapon;
-	/**
-	 * GameAbilitySystem
-	 */
-public:
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	
-	bool ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext);
-
-protected:
-
-	void GiveAbilities();
-	void ApplyStartupEffects();
-
-	virtual void PossessedBy(AController* NewController) override;
-	virtual void OnRep_PlayerState() override;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UMAbilitySystemComponent* AbilitySystemComponent;
-
-	UPROPERTY(Transient)
-	class UMAttributeSet* AttributeSet;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer MovementLimitTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer SilenceTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer StunnedTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer CastingTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer BusyingTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTag JumpEventTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer InAirTags;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer SprintTags;
-
-	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
-	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
-
-public:
-	
-	UFUNCTION(BlueprintCallable)
-	FCharacterData GetCharacterData() const { return CharacterData; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetCharacterData(const FCharacterData& InCharacterData);
-
-protected:
-
-	UPROPERTY(ReplicatedUsing = OnRep_CharacterData)
-	FCharacterData CharacterData;
-
-	UFUNCTION()
-	void OnRep_CharacterData();
-
-	virtual void InitFromCharacterData(const FCharacterData& InCharacterData, const bool bFromReplication = false);
-
-	UPROPERTY(EditDefaultsOnly)
-	class UMCharacterDataAsset* CharacterDataAsset;
-
-	
-	/**
-	 * Default
-	 */
-public:
-	
-	// Sets default values for this character's properties
-	//AMCharacter();
-	AMCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-
-	virtual void PostInitializeComponents() override;
-	
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-
-	// Todo 测试数据，最后要删
-	UPROPERTY(BlueprintReadOnly, Category = PlayerData, Replicated)
-	FString MyName = "None";
-
-public:
-	UFUNCTION(BlueprintCallable, Category = ATest)
-	void SetMyName(const FString& InName) { MyName = InName; }
 };

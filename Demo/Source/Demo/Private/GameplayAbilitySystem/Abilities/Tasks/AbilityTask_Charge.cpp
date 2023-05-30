@@ -4,6 +4,7 @@
 #include "GameplayAbilitySystem/Abilities/Tasks/AbilityTask_Charge.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 
 UAbilityTask_Charge* UAbilityTask_Charge::CreateChargeTask(
 	UGameplayAbility* OwningAbility,
@@ -36,12 +37,22 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 	Super::TickTask(DeltaTime);
 
 	if (!Caster)
+	{
+		EndTask();
 		return;
+	}
+	
+	const UMAbilitySystemComponent* Component = Cast<UMAbilitySystemComponent>(Caster->GetAbilitySystemComponent());
+	if (!Component)
+	{
+		EndTask();
+		return;
+	}
 	
 	// 冲锋超时 | 抵达位置 | 存在任何阻断移动的状态
-	if (FDateTime::Now().GetTicks() - BeginTime >= 1.5 ||
+	if (FDateTime::Now().GetTicks() - BeginTime >= 1.3 ||
 		Caster->GetActorLocation().Equals(Destination) ||
-		!Caster->CanMove())
+		!Component->CanMove())
 	{
 		OnAbilityTaskEnd.Broadcast();
 		EndTask();

@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "Characters/MCharacter.h"
 #include "MAbilitySystemComponent.generated.h"
 
+class AMCharacter;
 /**
  * 
  */
@@ -51,4 +53,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = ProjectSS)
 	bool CanUseAbility() const;
+
+	const AMCharacter* GetOwnerCharacter() const { return Cast<AMCharacter>(GetOwnerActor()); }
 };
