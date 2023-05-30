@@ -13,5 +13,42 @@ UCLASS()
 class DEMO_API UMAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTag MoveEventTag;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTag JumpEventTag;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer MoveLimitTags;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer SilenceTags;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer StunnedTags;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer CastingTags;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer BusyingTag;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer InAirTags;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer SprintTags;
+
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	bool CanMove() const;
+
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	bool CanCastSpell() const;
+
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	bool CanUseAbility() const;
 };

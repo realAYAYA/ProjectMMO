@@ -13,5 +13,8 @@ UCLASS()
 class UMCharacterMovementComponent : public UCharacterMovementComponent
 {
 	GENERATED_BODY()
+
+
+public:
 	
 };

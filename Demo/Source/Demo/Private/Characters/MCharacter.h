@@ -117,7 +117,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = ProjectSS)
 	AMCharacter* GetCurrentTarget() const;
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Client, Reliable, Category = ProjectSS)
 	void SetCurrentTarget(AMCharacter* NewTarget);
 
 	UFUNCTION(BlueprintCallable, Category = ProjectSS)
@@ -158,28 +158,35 @@ protected:
 	UPROPERTY(Transient)
 	class UMAttributeSet* AttributeSet;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	FGameplayTagContainer MovementLimitTag;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	FGameplayTagContainer SilenceTag;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	FGameplayTagContainer StunnedTag;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer CastingTag;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer BusyingTag;
+
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	FGameplayTag JumpEventTag;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	FGameplayTagContainer InAirTags;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	FGameplayTagContainer SprintTags;
 
 	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
 	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
 
 public:
+	
 	UFUNCTION(BlueprintCallable)
 	FCharacterData GetCharacterData() const { return CharacterData; }
 
@@ -190,9 +197,6 @@ protected:
 
 	UPROPERTY(ReplicatedUsing = OnRep_CharacterData)
 	FCharacterData CharacterData;
-
-	UPROPERTY(EditDefaultsOnly)
-	FCharacterData Get;
 
 	UFUNCTION()
 	void OnRep_CharacterData();
