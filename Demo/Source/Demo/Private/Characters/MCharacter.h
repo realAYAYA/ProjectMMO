@@ -18,7 +18,7 @@ class UCameraComponent;
 class UAnimMontage;
 class USoundBase;
 
-class UMAbilitySystemComponentBase;
+class UMAbilitySystemComponent;
 
 class UGameplayAbility;
 class UGameplayEffect;
@@ -65,6 +65,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* SprintAction;
 
+	/** Sprint Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InputAction1;
+
+	/** Sprint Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InputAction2;
+
+	/** Sprint Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InputAction3;
+
+	/** Sprint Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InputAction4;
+
 protected:
 	
 	/** Called for movement input */
@@ -82,12 +98,19 @@ protected:
 	void BeginSprint(const FInputActionValue& Value);
 	void EndSprint(const FInputActionValue& Value);
 
-	void ChargeBegin(const FVector InTargetLocation);
-	void ChargeLoop();
-	void ChargeEnd();
+
+	/** Skill */
+	void TryActiveAbility(const FInputActionValue& Value);
+	void TryActiveAbility1(const FInputActionValue& Value);
+	void TryActiveAbility2(const FInputActionValue& Value);
+	void TryActiveAbility3(const FInputActionValue& Value);
+	void TryActiveAbility4(const FInputActionValue& Value);
+
+	UPROPERTY()
+	TMap<int32, FGameplayTag> InputSkillMap;
 
 	/**
-	 * Network
+	 * PlayerState
 	*/
 
 public:
@@ -97,6 +120,15 @@ public:
 	UFUNCTION(Client, Reliable)
 	void SetCurrentTarget(AMCharacter* NewTarget);
 
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	bool CanMove() const;
+
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	bool CanCastSpell() const;
+
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	bool CanUseAbility() const;
+
 protected:
 	/**  */
 	UPROPERTY(Replicated)
@@ -104,8 +136,6 @@ protected:
 
 	UPROPERTY(Replicated)
 	bool bHasWeapon;
-
-	
 	/**
 	 * GameAbilitySystem
 	 */
@@ -129,19 +159,22 @@ protected:
 	class UMAttributeSet* AttributeSet;
 
 	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer MovementLimitTag;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer SilenceTag;
+
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTagContainer StunnedTag;
+
+	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag JumpEventTag;
 
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer InAirTags;
 
 	UPROPERTY(EditDefaultsOnly)
-	FGameplayTagContainer CrouchTags;
-
-	UPROPERTY(EditDefaultsOnly)
 	FGameplayTagContainer SprintTags;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UGameplayEffect> CrouchStateEffect;
 
 	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
 	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
@@ -157,6 +190,9 @@ protected:
 
 	UPROPERTY(ReplicatedUsing = OnRep_CharacterData)
 	FCharacterData CharacterData;
+
+	UPROPERTY(EditDefaultsOnly)
+	FCharacterData Get;
 
 	UFUNCTION()
 	void OnRep_CharacterData();

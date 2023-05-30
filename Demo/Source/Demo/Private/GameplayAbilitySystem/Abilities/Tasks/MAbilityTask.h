@@ -21,5 +21,5 @@ class UMAbilityTask : public UAbilityTask
 public:
 
 	UPROPERTY(BlueprintAssignable)
-	FOnAbilityEnd OnAbilityEnd;
+	FOnAbilityEnd OnAbilityTaskEnd;
 };

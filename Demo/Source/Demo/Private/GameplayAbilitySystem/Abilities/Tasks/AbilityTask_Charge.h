@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Characters/MCharacter.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "GameplayAbilitySystem/Abilities/Tasks/MAbilityTask.h"
 #include "AbilityTask_Charge.generated.h"
 
@@ -35,5 +34,6 @@ protected:
 	AMCharacter* Caster;
 
 	FVector Destination;
-	
+
+	int64 BeginTime;
 };

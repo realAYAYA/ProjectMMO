@@ -104,9 +104,14 @@ void AMCharacter::GiveAbilities()
 {
 	if (HasAuthority() && AbilitySystemComponent)
 	{
+		int32 i = 0;
 		for (const auto& DefaultAbility : CharacterData.Abilities)
 		{
-			AbilitySystemComponent->GiveAbility( FGameplayAbilitySpec(DefaultAbility));
+			FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(DefaultAbility);
+			AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
+
+			if (GameplayAbilitySpec.Ability->AbilityTags.IsValidIndex(0))
+				InputSkillMap.Add(++i, GameplayAbilitySpec.Ability->AbilityTags.First());
 		}
 	}
 }
@@ -181,8 +186,14 @@ void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		// Sprint
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AMCharacter::BeginSprint);
-		//EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Canceled, this, &AMCharacter::EndSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Canceled, this, &AMCharacter::EndSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AMCharacter::EndSprint);
+
+		// 技能栏映射
+		EnhancedInputComponent->BindAction(InputAction1, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility1);
+		EnhancedInputComponent->BindAction(InputAction2, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility2);
+		EnhancedInputComponent->BindAction(InputAction3, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility3);
+		EnhancedInputComponent->BindAction(InputAction4, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility4);
 	}
 }
 
@@ -241,6 +252,59 @@ void AMCharacter::EndSprint(const FInputActionValue& Value)
 	AbilitySystemComponent->CancelAbilities(&SprintTags);
 }
 
+void AMCharacter::TryActiveAbility(const FInputActionValue& Value)
+{
+	// Todo 按键映射机制
+}
+
+void AMCharacter::TryActiveAbility1(const FInputActionValue& Value)
+{
+	if (const FGameplayTag* Tag = InputSkillMap.Find(1))
+	{
+		FGameplayEventData Payload;
+		Payload.Instigator = this;
+		Payload.EventTag = *Tag;
+
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, *Tag, Payload);
+	}
+}
+
+void AMCharacter::TryActiveAbility2(const FInputActionValue& Value)
+{
+	if (const FGameplayTag* Tag = InputSkillMap.Find(2))
+	{
+		FGameplayEventData Payload;
+		Payload.Instigator = this;
+		Payload.EventTag = *Tag;
+
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, *Tag, Payload);
+	}
+}
+
+void AMCharacter::TryActiveAbility3(const FInputActionValue& Value)
+{
+	if (const FGameplayTag* Tag = InputSkillMap.Find(3))
+	{
+		FGameplayEventData Payload;
+		Payload.Instigator = this;
+		Payload.EventTag = *Tag;
+
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, *Tag, Payload);
+	}
+}
+
+void AMCharacter::TryActiveAbility4(const FInputActionValue& Value)
+{
+	if (const FGameplayTag* Tag = InputSkillMap.Find(4))
+	{
+		FGameplayEventData Payload;
+		Payload.Instigator = this;
+		Payload.EventTag = *Tag;
+
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, *Tag, Payload);
+	}
+}
+
 void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
@@ -249,6 +313,55 @@ void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
 AMCharacter* AMCharacter::GetCurrentTarget() const
 {
 	return CurrentTarget;
+}
+
+bool AMCharacter::CanMove() const
+{
+	TArray<FGameplayTag> StateTags;
+	MovementLimitTag.GetGameplayTagArray(StateTags);
+	for (const FGameplayTag& Tag : StateTags)
+	{
+		if (AbilitySystemComponent->HasMatchingGameplayTag(Tag))
+			return true;
+	}
+
+	return false;
+}
+
+bool AMCharacter::CanCastSpell() const
+{
+	// 被沉默
+	TArray<FGameplayTag> StateTags;
+	SilenceTag.GetGameplayTagArray(StateTags);
+	for (const FGameplayTag& Tag : StateTags)
+	{
+		if (AbilitySystemComponent->HasMatchingGameplayTag(Tag))
+			return true;
+	}
+
+	// 被昏迷
+	StateTags.Empty();
+	StunnedTag.GetGameplayTagArray(StateTags);
+	for (const FGameplayTag& Tag : StateTags)
+	{
+		if (AbilitySystemComponent->HasMatchingGameplayTag(Tag))
+			return true;
+	}
+
+	return false;
+}
+
+bool AMCharacter::CanUseAbility() const
+{
+	TArray<FGameplayTag> StateTags;
+	StunnedTag.GetGameplayTagArray(StateTags);
+	for (const FGameplayTag& Tag : StateTags)
+	{
+		if (AbilitySystemComponent->HasMatchingGameplayTag(Tag))
+			return true;
+	}
+
+	return false;
 }
 
 void AMCharacter::SetCurrentTarget_Implementation(AMCharacter* NewTarget)

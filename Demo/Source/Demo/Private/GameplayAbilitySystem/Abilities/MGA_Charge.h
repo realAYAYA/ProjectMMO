@@ -12,7 +12,7 @@ class UMAbilityTask;
  * 
  */
 UCLASS()
-class UMGA_Charge : public UMGameplayAbility
+class UMGA_Charge : public UGameplayAbility
 {
 	GENERATED_BODY()
 	
