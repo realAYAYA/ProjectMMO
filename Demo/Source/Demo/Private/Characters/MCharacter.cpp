@@ -110,8 +110,8 @@ void AMCharacter::GiveAbilities()
 			FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(DefaultAbility);
 			AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
 
-			if (GameplayAbilitySpec.Ability->AbilityTags.IsValidIndex(0))
-				InputSkillMap.Add(++i, GameplayAbilitySpec.Ability->AbilityTags.First());
+			//if (GameplayAbilitySpec.Ability->AbilityTags.IsValidIndex(0))
+				//InputSkillMap.Add(++i, GameplayAbilitySpec.Ability->AbilityTags.First());
 		}
 	}
 }
