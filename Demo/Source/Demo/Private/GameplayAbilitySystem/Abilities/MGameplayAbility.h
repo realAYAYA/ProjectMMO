@@ -34,11 +34,20 @@ public:
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
+	virtual bool CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const;
 protected:
 
 	/** 技能等级*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
 	int32 Level = 1;
+
+	/** 射程*/
+	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
+	float Range = 20.0f;
+
+	/** 最小射程*/
+	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
+	float MinRange = 0.0f;
 
 	/** 对目标施加效果*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")

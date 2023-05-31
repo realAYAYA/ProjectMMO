@@ -7,6 +7,7 @@
 #include "MAbilityTask.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityEnd);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityCancel);
 
 class AMCharacter;
 
@@ -22,4 +23,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAbilityEnd OnAbilityTaskEnd;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAbilityEnd OnAbilityCancel;
 };

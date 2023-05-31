@@ -19,18 +19,7 @@ bool UMGameplayAbility::CanActivateAbility(
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 		return false;
 	
-	if (!Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent))
-		return false;
-	
-	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo->AvatarActor);
-	if (TargetType != ETargetType::Self && !Caster->GetCurrentTarget())
-		return false;
-
-	// Todo 消耗品
-
-	// Todo 如果目标类型为Hostile，但是当前目标不是敌对，失败
-	
-	return true;
+	return CanActivateCondition(ActorInfo);
 }
 
 void UMGameplayAbility::ActivateAbility(
@@ -130,6 +119,31 @@ void UMGameplayAbility::EndAbility(
 	}
 		
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+bool UMGameplayAbility::CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const
+{
+	if (!Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent))
+		return false;
+	
+	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo->AvatarActor);
+	
+	if (TargetType != ETargetType::Self)
+	{
+		if (TargetType == ETargetType::Hostile && !Caster->GetCurrentTarget())
+			return false;
+		
+		// Out of range
+		const float Distance = (Caster->GetActorLocation() - Caster->GetCurrentTarget()->GetActorLocation()).Length();
+		if (Distance > Range || Distance < MinRange)
+			return false;
+	}
+	
+	// Todo 消耗品
+
+	// Todo 如果目标类型为Hostile，但是当前目标不是敌对，失败
+
+	return true;
 }
 
 AMCharacter* UMGameplayAbility::GetMCharacterFromActorInfo() const

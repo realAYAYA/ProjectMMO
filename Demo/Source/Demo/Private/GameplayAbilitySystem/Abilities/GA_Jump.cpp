@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MGAJump.h"
+#include "GA_Jump.h"
 
 #include "AbilitySystemComponent.h"
 

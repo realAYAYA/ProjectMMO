@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GameplayAbilitySystem/Abilities/MGA_Charge.h"
+#include "GA_Charge.h"
 
 #include "Characters/MCharacter.h"
 #include "Components/CapsuleComponent.h"
@@ -55,8 +55,10 @@ void UMGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const
 	const float Radius = Target->GetCapsuleComponent()->GetScaledCapsuleRadius();
 	const FVector Dir = (Target->GetActorLocation() - Caster->GetActorLocation()).GetSafeNormal();
 	Destination = Destination - Dir * Radius;
+	
 	ChargeTask = UAbilityTask_Charge::CreateChargeTask(this, Caster, Destination);
 	ChargeTask->OnAbilityTaskEnd.AddDynamic(this, &UMGA_Charge::K2_EndAbility);
+	ChargeTask->OnAbilityCancel.AddDynamic(this, &UMGA_Charge::K2_CancelAbility);
 	ChargeTask->ReadyForActivation();// 启动任务
 	
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
@@ -73,3 +75,4 @@ void UMGA_Charge::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGam
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
+

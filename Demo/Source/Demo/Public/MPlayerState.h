@@ -28,26 +28,16 @@ class DEMO_API AMPlayerState : public APlayerState
 	UFUNCTION()
 	void Offline() {}
 
-public:
-	UFUNCTION(BlueprintCallable, Category = Test)
-	const FString& GetCharacterName() const { return MyName; }
-
 protected:
 	UPROPERTY()
 	class UInventory* InventoryModule;
 
 	/** 客户端调用，服务器执行*/
-	UFUNCTION(BlueprintCallable, Category = ATest, Server, Reliable)
+	UFUNCTION(BlueprintCallable, Category = ProjectSS, Server, Reliable)
 	void Req();
 
 	/** 服务器调用，客户端执行*/
 	UFUNCTION(Client, Reliable)
 	void Ack(const int32 InData);
-
-	/** Todo Test*/
-	UFUNCTION(BlueprintCallable, Client, Reliable, Category = ATest)
-	void SetCharacterName(const FString& InName);
 	
-	UPROPERTY(Replicated)
-	FString MyName = "None";
 };

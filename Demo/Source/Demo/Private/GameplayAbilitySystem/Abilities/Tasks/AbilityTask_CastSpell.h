@@ -17,7 +17,7 @@ class UAbilityTask_CastSpell : public UMAbilityTask
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectSS", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility"))
-	static UAbilityTask_CastSpell* CreateChargeTask(UGameplayAbility* OwningAbility, AMCharacter* InCharacterOwner);
+	static UAbilityTask_CastSpell* CreateCastSpellTask(UGameplayAbility* OwningAbility, AMCharacter* InCharacterOwner, const float InCastTime);
 
 	virtual void Activate() override;
 
@@ -32,8 +32,10 @@ protected:
 
 	int64 BeginTime;
 
+	float CastTime;
+
 	bool bCanStopped;
 	bool bCanSilenced;
-	bool bMoveable;
+	bool bMovable;
 	
 };

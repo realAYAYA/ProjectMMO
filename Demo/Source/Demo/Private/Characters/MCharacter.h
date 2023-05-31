@@ -46,10 +46,10 @@ public:
 	*/
 
 public:
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = ProjectSS)
 	AMCharacter* GetCurrentTarget() const;
 
-	UFUNCTION(Client, Reliable, Category = ProjectSS)
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = ProjectSS)
 	void SetCurrentTarget(AMCharacter* NewTarget);
 
 protected:
@@ -61,12 +61,12 @@ protected:
 	bool bHasWeapon;
 
 	// Todo 测试数据，最后要删
-	UPROPERTY(BlueprintReadOnly, Category = PlayerData, Replicated)
-	FString MyName = "None";
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = ProjectSS)
+	FString MyName;
 
 public:
-	UFUNCTION(BlueprintCallable, Category = ATest)
-	void SetMyName(const FString& InName) { MyName = InName; }
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = ProjectSS)
+	void SetMyName(const FString& InName);
 
 	
 	/**

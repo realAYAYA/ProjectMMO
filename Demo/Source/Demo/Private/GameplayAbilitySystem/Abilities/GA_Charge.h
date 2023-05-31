@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
-#include "MGA_Charge.generated.h"
+#include "GA_Charge.generated.h"
 
 class UMAbilityTask;
 

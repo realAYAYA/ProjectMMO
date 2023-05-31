@@ -5,14 +5,17 @@
 
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 
-UAbilityTask_CastSpell* UAbilityTask_CastSpell::CreateChargeTask(
+UAbilityTask_CastSpell* UAbilityTask_CastSpell::CreateCastSpellTask(
 	UGameplayAbility* OwningAbility,
-	AMCharacter* InCharacterOwner)
+	AMCharacter* InCharacterOwner,
+	const float InCastTime
+	)
 {
 	UAbilityTask_CastSpell* Task = NewObject<UAbilityTask_CastSpell>(OwningAbility);
 
 	Task->bTickingTask = true;
 	Task->Caster = InCharacterOwner;
+	Task->CastTime = InCastTime;
 	
 	return Task;
 }
@@ -35,6 +38,7 @@ void UAbilityTask_CastSpell::TickTask(float DeltaTime)
 
 	if (!Caster)
 	{
+		OnAbilityCancel.Broadcast();
 		EndTask();
 		return;
 	}
@@ -42,9 +46,23 @@ void UAbilityTask_CastSpell::TickTask(float DeltaTime)
 	const UMAbilitySystemComponent* Component = Cast<UMAbilitySystemComponent>(Caster->GetAbilitySystemComponent());
 	if (!Component)
 	{
+		OnAbilityCancel.Broadcast();
 		EndTask();
 		return;
 	}
 
-	// Todo 被眩晕、被沉默
+	// Todo 被眩晕、被沉默、角色主动移动，取消，打断施法
+	if (false)
+	{
+		OnAbilityCancel.Broadcast();
+		EndTask();
+		return;
+	}
+	
+	// 施法时间走完，施法成功
+	if (FDateTime::Now().GetTicks() - BeginTime >= CastTime)
+	{
+		OnAbilityTaskEnd.Broadcast();
+		EndTask();
+	}
 }

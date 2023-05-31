@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
-#include "MGAJump.generated.h"
+#include "GA_Jump.generated.h"
 
 /**
  * 

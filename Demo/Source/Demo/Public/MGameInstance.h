@@ -22,4 +22,7 @@ public:
 
 	UFUNCTION()
 	UMGameTables* GetMGameTables();
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString CharacterName;
 };

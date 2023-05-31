@@ -80,6 +80,11 @@ void AMCharacter::PostInitializeComponents()
 		
 }
 
+void AMCharacter::SetMyName_Implementation(const FString& InName)
+{
+	MyName = InName;
+}
+
 UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -107,11 +112,14 @@ void AMCharacter::GiveAbilities()
 		int32 i = 0;
 		for (const auto& DefaultAbility : CharacterData.Abilities)
 		{
+			if (!DefaultAbility)
+				continue;
+			
 			FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(DefaultAbility);
 			AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
 
-			//if (GameplayAbilitySpec.Ability->AbilityTags.IsValidIndex(0))
-				//InputSkillMap.Add(++i, GameplayAbilitySpec.Ability->AbilityTags.First());
+			if (GameplayAbilitySpec.Ability->AbilityTags.IsValidIndex(0))
+				InputSkillMap.Add(++i, GameplayAbilitySpec.Ability->AbilityTags.First());
 		}
 	}
 }

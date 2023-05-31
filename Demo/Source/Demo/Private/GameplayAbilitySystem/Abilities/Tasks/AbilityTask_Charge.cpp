@@ -38,21 +38,21 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 
 	if (!Caster)
 	{
+		OnAbilityCancel.Broadcast();
 		EndTask();
 		return;
 	}
 	
 	const UMAbilitySystemComponent* Component = Cast<UMAbilitySystemComponent>(Caster->GetAbilitySystemComponent());
-	if (!Component)
+	if (!Component && !Component->CanMove() || FDateTime::Now().GetTicks() - BeginTime >= 1.3)
 	{
+		OnAbilityCancel.Broadcast();
 		EndTask();
 		return;
 	}
 	
 	// 冲锋超时 | 抵达位置 | 存在任何阻断移动的状态
-	if (FDateTime::Now().GetTicks() - BeginTime >= 1.3 ||
-		Caster->GetActorLocation().Equals(Destination) ||
-		!Component->CanMove())
+	if (Caster->GetActorLocation().Equals(Destination))
 	{
 		OnAbilityTaskEnd.Broadcast();
 		EndTask();
@@ -63,5 +63,4 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 	const FVector DeltaDirection = (Destination - Caster->GetActorLocation()).GetSafeNormal();
 	Caster->GetCharacterMovement()->Velocity += DeltaDirection * 450.0f;
 	Caster->SetActorRotation(DeltaDirection.Rotation());
-	
 }

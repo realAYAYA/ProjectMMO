@@ -15,15 +15,3 @@ void AMPlayerState::Ack_Implementation(const int32 InData)
 {
 	// print(InData);
 }
-
-void AMPlayerState::SetCharacterName_Implementation(const FString& InName)
-{
-	MyName = InName;
-}
-
-void AMPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
-	DOREPLIFETIME(AMPlayerState, MyName);
-}
