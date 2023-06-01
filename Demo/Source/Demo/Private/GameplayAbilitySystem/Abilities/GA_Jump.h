@@ -10,12 +10,12 @@
  * 
  */
 UCLASS()
-class DEMO_API UMGAJump : public UMGameplayAbility
+class DEMO_API UGA_Jump : public UMGameplayAbility
 {
 	GENERATED_BODY()
 
 public:
-	UMGAJump();
+	UGA_Jump();
 
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 

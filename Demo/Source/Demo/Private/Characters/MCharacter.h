@@ -23,6 +23,10 @@ class UMAbilitySystemComponent;
 class UGameplayAbility;
 class UGameplayEffect;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMoveInput, float, X, float, Y);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLookInput, float, X, float, Y);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnJumpInput, float, V);
+
 UCLASS()
 class DEMO_API AMCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -187,6 +191,15 @@ public:
 	/** Sprint Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InputAction4;
+
+	UPROPERTY()
+	FOnMoveInput OnMoveInput;
+
+	UPROPERTY()
+	FOnLookInput OnLookInput;
+
+	UPROPERTY()
+	FOnJumpInput OnJumpInput;
 
 protected:
 	

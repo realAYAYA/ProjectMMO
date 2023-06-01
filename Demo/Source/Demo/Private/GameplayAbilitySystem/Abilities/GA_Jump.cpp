@@ -7,7 +7,7 @@
 
 #include "Characters/MCharacter.h"
 
-UMGAJump::UMGAJump()
+UGA_Jump::UGA_Jump()
 {
 	// 选择技能网络同步的执行方案：本地预测、仅本地执行、服务器先行、仅服务器
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
@@ -16,7 +16,7 @@ UMGAJump::UMGAJump()
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
 }
 
-bool UMGAJump::CanActivateAbility(
+bool UGA_Jump::CanActivateAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayTagContainer* SourceTags,
@@ -30,7 +30,7 @@ bool UMGAJump::CanActivateAbility(
 	return Character->CanJump();
 }
 
-void UMGAJump::ActivateAbility(
+void UGA_Jump::ActivateAbility(
 	const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* OwnerInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo,

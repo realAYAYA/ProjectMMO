@@ -25,16 +25,7 @@ class UMGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	class AMCharacter* GetMCharacterFromActorInfo() const;
 	
-	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
-	
-	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* OwnerInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
-
-	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
-
-	virtual bool CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const;
 protected:
 
 	/** 技能等级*/
@@ -61,14 +52,27 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
 	TArray<int32> NeedItems;
 
-	/** 技能结束时需要移除效果，配合CancelAbility()，适合“疾跑”这种有时间限制的效果*/
+	/** 技能激活时赋予效果，结束时主动移除，配合CancelAbility()，适合技能及其效果同时存在的情况*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
 	TArray<TSubclassOf<UGameplayEffect>> OngoingEffectsToRemoveOnEnd;
 
-	/** 技能开始时需要移除效果，配合RemoveActiveEffectsWithTags()，比如跳跃*/
+	/** 技能激活时赋予效果，但结束时并不会主动移除*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
 	TArray<TSubclassOf<UGameplayEffect>> OngoingEffectsToJustApplyOnStart;
 
 private:
 	TArray<FActiveGameplayEffectHandle> RemoveOnEndEffectHandles;
+
+	
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	class AMCharacter* GetMCharacterFromActorInfo() const;
+	
+	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
+	
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* OwnerInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
+
+	virtual bool CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const;
 };

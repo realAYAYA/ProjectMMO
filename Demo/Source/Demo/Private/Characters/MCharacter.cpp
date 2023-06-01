@@ -214,7 +214,8 @@ void AMCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		// add movement 
+		// add movement
+		OnMoveInput.Broadcast(MovementVector.X, MovementVector.Y);
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
 	}
@@ -228,6 +229,7 @@ void AMCharacter::Look(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
+		OnLookInput.Broadcast(LookAxisVector.X, LookAxisVector.Y);
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
@@ -235,6 +237,8 @@ void AMCharacter::Look(const FInputActionValue& Value)
 
 void AMCharacter::TryJump(const FInputActionValue& Value)
 {
+	OnJumpInput.Broadcast(Value.Get<float>());
+	
 	FGameplayEventData Payload;
 	Payload.Instigator = this;
 	Payload.EventTag = JumpEventTag;
@@ -246,6 +250,8 @@ void AMCharacter::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
 
+	OnJumpInput.Broadcast(0.0f);
+	
 	if (AbilitySystemComponent)
 		AbilitySystemComponent->RemoveActiveEffectsWithTags(InAirTags);
 }
