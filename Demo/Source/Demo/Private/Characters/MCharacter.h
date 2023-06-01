@@ -204,14 +204,9 @@ protected:
 	/** Called for sprint input */
 	void BeginSprint(const FInputActionValue& Value);
 	void EndSprint(const FInputActionValue& Value);
-
-
+	
 	/** Skill */
 	void TryActiveAbility(const FInputActionValue& Value);
-	void TryActiveAbility1(const FInputActionValue& Value);
-	void TryActiveAbility2(const FInputActionValue& Value);
-	void TryActiveAbility3(const FInputActionValue& Value);
-	void TryActiveAbility4(const FInputActionValue& Value);
 
 	UPROPERTY()
 	TMap<int32, FGameplayTag> InputSkillMap;

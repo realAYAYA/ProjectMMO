@@ -3,7 +3,7 @@
 
 #include "GameplayAbilitySystem/Abilities/Tasks/AbilityTask_Charge.h"
 
-#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 
 UAbilityTask_Charge* UAbilityTask_Charge::CreateChargeTask(
@@ -11,7 +11,7 @@ UAbilityTask_Charge* UAbilityTask_Charge::CreateChargeTask(
 	AMCharacter* InCharacterOwner,
 	const FVector InDestination)
 {
-	UAbilityTask_Charge* Task = NewObject<UAbilityTask_Charge>(OwningAbility);
+	UAbilityTask_Charge* Task = NewAbilityTask<UAbilityTask_Charge>(OwningAbility);
 
 	Task->bTickingTask = true;
 	Task->Caster = InCharacterOwner;
@@ -43,16 +43,16 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 		return;
 	}
 	
-	const UMAbilitySystemComponent* Component = Cast<UMAbilitySystemComponent>(Caster->GetAbilitySystemComponent());
+	/*const UMAbilitySystemComponent* Component = Cast<UMAbilitySystemComponent>(Caster->GetAbilitySystemComponent());
 	if (!Component && !Component->CanMove() || FDateTime::Now().GetTicks() - BeginTime >= 1.3)
 	{
 		OnAbilityCancel.Broadcast();
 		EndTask();
 		return;
-	}
+	}*/
 	
 	// 冲锋超时 | 抵达位置 | 存在任何阻断移动的状态
-	if (Caster->GetActorLocation().Equals(Destination))
+	if ((Caster->GetActorLocation() - Destination).Length() - Caster->GetCapsuleComponent()->GetScaledCapsuleRadius() <= 50.0f)
 	{
 		OnAbilityTaskEnd.Broadcast();
 		EndTask();
@@ -60,7 +60,8 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 	}
 	
 	// 否则，维持冲锋状态
-	const FVector DeltaDirection = (Destination - Caster->GetActorLocation()).GetSafeNormal();
-	Caster->GetCharacterMovement()->Velocity += DeltaDirection * 450.0f;
-	Caster->SetActorRotation(DeltaDirection.Rotation());
+	const FVector Dir = (Destination - Caster->GetActorLocation()).GetSafeNormal();
+	Caster->SetActorRotation(Dir.Rotation());
+	Caster->AddMovementInput(Caster->GetActorForwardVector(), 1.0f);
+	
 }

@@ -52,7 +52,7 @@ void UMGameplayAbility::ActivateAbility(
 	// 对目标施加效果
 	if (EffectToTarget.Get() && Target)
 	{
-		if (UAbilitySystemComponent* TargetComponent = Target->GetCurrentTarget()->GetAbilitySystemComponent())
+		if (UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent())
 		{
 			const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(EffectToTarget, Level, EffectContext);
 			if (!SpecHandle.IsValid())
@@ -132,16 +132,9 @@ bool UMGameplayAbility::CanActivateCondition(const FGameplayAbilityActorInfo* Ac
 	{
 		if (TargetType == ETargetType::Hostile && !Caster->GetCurrentTarget())
 			return false;
-		
-		// Out of range
-		const float Distance = (Caster->GetActorLocation() - Caster->GetCurrentTarget()->GetActorLocation()).Length();
-		if (Distance > Range || Distance < MinRange)
-			return false;
 	}
 	
 	// Todo 消耗品
-
-	// Todo 如果目标类型为Hostile，但是当前目标不是敌对，失败
 
 	return true;
 }

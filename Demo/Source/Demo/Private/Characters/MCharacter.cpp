@@ -118,8 +118,13 @@ void AMCharacter::GiveAbilities()
 			FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(DefaultAbility);
 			AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
 
-			if (GameplayAbilitySpec.Ability->AbilityTags.IsValidIndex(0))
-				InputSkillMap.Add(++i, GameplayAbilitySpec.Ability->AbilityTags.First());
+			const UGameplayAbility* Ability = NewObject<UGameplayAbility>(this, DefaultAbility);
+			if (Ability && Ability->AbilityTags.Num() > 0 && Ability->AbilityTags.IsValidIndex(0))
+			{
+				const FGameplayTag& Tag = Ability->AbilityTags.First();
+				InputSkillMap.Add(++i, Tag);
+			}
+				
 		}
 	}
 }
@@ -198,10 +203,7 @@ void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AMCharacter::EndSprint);
 
 		// 技能栏映射
-		EnhancedInputComponent->BindAction(InputAction1, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility1);
-		EnhancedInputComponent->BindAction(InputAction2, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility2);
-		EnhancedInputComponent->BindAction(InputAction3, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility3);
-		EnhancedInputComponent->BindAction(InputAction4, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility4);
+		//EnhancedInputComponent->BindAction(InputAction1, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility1);
 	}
 }
 
@@ -261,54 +263,6 @@ void AMCharacter::EndSprint(const FInputActionValue& Value)
 void AMCharacter::TryActiveAbility(const FInputActionValue& Value)
 {
 	// Todo 按键映射机制
-}
-
-void AMCharacter::TryActiveAbility1(const FInputActionValue& Value)
-{
-	if (const FGameplayTag* Tag = InputSkillMap.Find(1))
-	{
-		FGameplayEventData Payload;
-		Payload.Instigator = this;
-		Payload.EventTag = *Tag;
-
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, *Tag, Payload);
-	}
-}
-
-void AMCharacter::TryActiveAbility2(const FInputActionValue& Value)
-{
-	if (const FGameplayTag* Tag = InputSkillMap.Find(2))
-	{
-		FGameplayEventData Payload;
-		Payload.Instigator = this;
-		Payload.EventTag = *Tag;
-
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, *Tag, Payload);
-	}
-}
-
-void AMCharacter::TryActiveAbility3(const FInputActionValue& Value)
-{
-	if (const FGameplayTag* Tag = InputSkillMap.Find(3))
-	{
-		FGameplayEventData Payload;
-		Payload.Instigator = this;
-		Payload.EventTag = *Tag;
-
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, *Tag, Payload);
-	}
-}
-
-void AMCharacter::TryActiveAbility4(const FInputActionValue& Value)
-{
-	if (const FGameplayTag* Tag = InputSkillMap.Find(4))
-	{
-		FGameplayEventData Payload;
-		Payload.Instigator = this;
-		Payload.EventTag = *Tag;
-
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, *Tag, Payload);
-	}
 }
 
 void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)

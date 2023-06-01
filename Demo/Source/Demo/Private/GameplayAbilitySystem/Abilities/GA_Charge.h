@@ -12,12 +12,12 @@ class UMAbilityTask;
  * 
  */
 UCLASS()
-class UMGA_Charge : public UGameplayAbility
+class UGA_Charge : public UMGameplayAbility
 {
 	GENERATED_BODY()
 	
 public:
-	UMGA_Charge();
+	UGA_Charge();
 
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 

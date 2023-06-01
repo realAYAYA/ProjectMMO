@@ -11,7 +11,7 @@ UAbilityTask_CastSpell* UAbilityTask_CastSpell::CreateCastSpellTask(
 	const float InCastTime
 	)
 {
-	UAbilityTask_CastSpell* Task = NewObject<UAbilityTask_CastSpell>(OwningAbility);
+	UAbilityTask_CastSpell* Task = NewAbilityTask<UAbilityTask_CastSpell>(OwningAbility);
 
 	Task->bTickingTask = true;
 	Task->Caster = InCharacterOwner;
