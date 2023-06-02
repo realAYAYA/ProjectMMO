@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AbilitySystemComponent.h"
@@ -16,23 +17,6 @@
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
 #include "Components/MCharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
-
-void AMCharacter::SetCharacterData(const FCharacterData& InCharacterData)
-{
-	CharacterData = InCharacterData;
-
-	InitFromCharacterData(InCharacterData);
-}
-
-void AMCharacter::OnRep_CharacterData()
-{
-	InitFromCharacterData(CharacterData, true);
-}
-
-void AMCharacter::InitFromCharacterData(const FCharacterData& InCharacterData, const bool bFromReplication)
-{
-}
 
 // Sets default values
 AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
@@ -76,8 +60,7 @@ void AMCharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	if (IsValid(CharacterDataAsset))
-		SetCharacterData(CharacterDataAsset->CharacterData);
-		
+		CharacterData = CharacterDataAsset->CharacterData;
 }
 
 void AMCharacter::SetMyName_Implementation(const FString& InName)
@@ -193,6 +176,7 @@ void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AMCharacter::MoveEnd);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMCharacter::Look);
@@ -215,9 +199,26 @@ void AMCharacter::Move(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add movement
+		//AddMovementInput(GetActorForwardVector(), MovementVector.Y);
+		//AddMovementInput(GetActorRightVector(), MovementVector.X);
+
+		AbilitySystemComponent->MovementInputX = MovementVector.X;
+		AbilitySystemComponent->MovementInputY = MovementVector.Y;
+
+		AbilitySystemComponent->Move();
+
 		OnMoveInput.Broadcast(MovementVector.X, MovementVector.Y);
-		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
-		AddMovementInput(GetActorRightVector(), MovementVector.X);
+	}
+}
+
+void AMCharacter::MoveEnd(const FInputActionValue& Value)
+{
+	if (Controller != nullptr)
+	{
+		// add movement
+		AbilitySystemComponent->MoveEnd();
+		
+		OnMoveInput.Broadcast(0, 0);
 	}
 }
 
@@ -229,41 +230,40 @@ void AMCharacter::Look(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		OnLookInput.Broadcast(LookAxisVector.X, LookAxisVector.Y);
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+
+		AbilitySystemComponent->LookInputYaw = LookAxisVector.X;
+		AbilitySystemComponent->LookInputPitch = LookAxisVector.Y;
+
+		OnLookInput.Broadcast(LookAxisVector.X, LookAxisVector.Y);
 	}
 }
 
 void AMCharacter::TryJump(const FInputActionValue& Value)
 {
-	OnJumpInput.Broadcast(Value.Get<float>());
-	
-	FGameplayEventData Payload;
-	Payload.Instigator = this;
-	Payload.EventTag = JumpEventTag;
+	AbilitySystemComponent->Jump();
 
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, JumpEventTag, Payload);
+	OnJumpInput.Broadcast(Value.Get<float>());
 }
 
 void AMCharacter::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
-
-	OnJumpInput.Broadcast(0.0f);
 	
-	if (AbilitySystemComponent)
-		AbilitySystemComponent->RemoveActiveEffectsWithTags(InAirTags);
+	AbilitySystemComponent->JumpEnd();
+	
+	OnJumpInput.Broadcast(0.0f);
 }
 
 void AMCharacter::BeginSprint(const FInputActionValue& Value)
 {
-	AbilitySystemComponent->TryActivateAbilitiesByTag(SprintTags, true);
+	AbilitySystemComponent->TryActivateAbilitiesByTag(AbilitySystemComponent->SprintEventTag, true);
 }
 
 void AMCharacter::EndSprint(const FInputActionValue& Value)
 {
-	AbilitySystemComponent->CancelAbilities(&SprintTags);
+	AbilitySystemComponent->CancelAbilities(&AbilitySystemComponent->SprintEventTag);
 }
 
 void AMCharacter::TryActiveAbility(const FInputActionValue& Value)

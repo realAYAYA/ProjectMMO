@@ -19,40 +19,36 @@ class DEMO_API UMAbilitySystemComponent : public UAbilitySystemComponent
 public:
 
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTag MoveEventTag;
+	FGameplayTagContainer MoveEventTag;
+	
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer LookEventTag;
+	
+	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	FGameplayTagContainer JumpEventTag;
 
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTag JumpEventTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer MoveLimitTags;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer SilenceTags;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer StunnedTags;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer CastingTags;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer BusyingTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer InAirTags;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer SprintTags;
-
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
-	bool CanMove() const;
-
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
-	bool CanCastSpell() const;
-
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
-	bool CanUseAbility() const;
+	FGameplayTagContainer SprintEventTag;
 
 	const AMCharacter* GetOwnerCharacter() const { return Cast<AMCharacter>(GetOwnerActor()); }
+
+	/**
+	 * 主动键入触发的技能，这些技能往往有着如下特点，暂时只能手动实现
+	 * 1.键入触发，但不知道何时停止，比如移动，需要侦听键位回调后手动取消
+	 * 2.结束时机由其它模块来决定，比如跳跃，需要依赖移动组件的回调
+	 */
+	
+	void Move();
+	void MoveEnd();
+
+	void Jump();
+	void JumpEnd();
+
+	float MovementInputX;
+	
+	float MovementInputY;
+	
+	float LookInputYaw;
+
+	float LookInputPitch;
 };

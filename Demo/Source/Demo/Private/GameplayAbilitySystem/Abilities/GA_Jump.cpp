@@ -13,7 +13,7 @@ UGA_Jump::UGA_Jump()
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
 
 	// 技能是否进行实例化，方便存储并同步，大概类似于wow中保存身上的buff
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
 bool UGA_Jump::CanActivateAbility(

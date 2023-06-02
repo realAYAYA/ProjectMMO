@@ -48,8 +48,8 @@ public:
 	/**
 	 * PlayerState
 	*/
-
 public:
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = ProjectSS)
 	AMCharacter* GetCurrentTarget() const;
 
@@ -84,9 +84,11 @@ public:
 protected:
 
 	void GiveAbilities();
+	
 	void ApplyStartupEffects();
 
 	virtual void PossessedBy(AController* NewController) override;
+	
 	virtual void OnRep_PlayerState() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -95,35 +97,13 @@ protected:
 	UPROPERTY(Transient)
 	class UMAttributeSet* AttributeSet;
 
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTag JumpEventTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer InAirTags;
-
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
-	FGameplayTagContainer SprintTags;
-
 	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
 	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
 
-public:
-	
-	UFUNCTION(BlueprintCallable)
-	FCharacterData GetCharacterData() const { return CharacterData; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetCharacterData(const FCharacterData& InCharacterData);
-
 protected:
 
-	UPROPERTY(ReplicatedUsing = OnRep_CharacterData)
+	UPROPERTY(Replicated)
 	FCharacterData CharacterData;
-
-	UFUNCTION()
-	void OnRep_CharacterData();
-
-	virtual void InitFromCharacterData(const FCharacterData& InCharacterData, const bool bFromReplication = false);
 
 	UPROPERTY(EditDefaultsOnly)
 	class UMCharacterDataAsset* CharacterDataAsset;
@@ -192,19 +172,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InputAction4;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintAssignable)
 	FOnMoveInput OnMoveInput;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintAssignable)
 	FOnLookInput OnLookInput;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintAssignable)
 	FOnJumpInput OnJumpInput;
 
 protected:
 	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
+	void MoveEnd(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);

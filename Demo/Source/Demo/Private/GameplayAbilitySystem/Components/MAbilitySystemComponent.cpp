@@ -3,52 +3,25 @@
 
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 
-bool UMAbilitySystemComponent::CanMove() const
+void UMAbilitySystemComponent::Move()
 {
-	TArray<FGameplayTag> StateTags;
-	MoveLimitTags.GetGameplayTagArray(StateTags);
-	for (const FGameplayTag& Tag : StateTags)
-	{
-		if (HasMatchingGameplayTag(Tag))
-			return false;
-	}
-
-	return true;
+	TryActivateAbilitiesByTag(MoveEventTag, true);
 }
 
-bool UMAbilitySystemComponent::CanCastSpell() const
+void UMAbilitySystemComponent::MoveEnd()
 {
-	// 被沉默
-	TArray<FGameplayTag> StateTags;
-	SilenceTags.GetGameplayTagArray(StateTags);
-	for (const FGameplayTag& Tag : StateTags)
-	{
-		if (HasMatchingGameplayTag(Tag))
-			return false;
-	}
-
-	// 被昏迷
-	StateTags.Empty();
-	StunnedTags.GetGameplayTagArray(StateTags);
-	for (const FGameplayTag& Tag : StateTags)
-	{
-		if (HasMatchingGameplayTag(Tag))
-			return false;
-	}
-
-	return true;
+	MovementInputX = 0;
+	MovementInputY = 0;
+	
+	CancelAbilities(&MoveEventTag);
 }
 
-bool UMAbilitySystemComponent::CanUseAbility() const
+void UMAbilitySystemComponent::Jump()
 {
-	// 被眩晕
-	TArray<FGameplayTag> StateTags;
-	StunnedTags.GetGameplayTagArray(StateTags);
-	for (const FGameplayTag& Tag : StateTags)
-	{
-		if (HasMatchingGameplayTag(Tag))
-			return false;
-	}
+	TryActivateAbilitiesByTag(JumpEventTag, true);
+}
 
-	return true;
+void UMAbilitySystemComponent::JumpEnd()
+{
+	CancelAbilities(&JumpEventTag);
 }
