@@ -17,8 +17,21 @@ class UGA_CastSpell : public UMGameplayAbility
 
 public:
 
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	/** 施法时间*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
 	float CastTime = 2.5f;
+	
+	/** 射程*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	float Range = 20.0f;
+
+	/** 对目标施加效果*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	TSubclassOf<UMGameplayEffect> EffectToTarget;
+
+	/** 技能目标类型*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	ETargetType TargetType;
 
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 

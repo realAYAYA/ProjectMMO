@@ -19,6 +19,10 @@ class UGA_Charge : public UMGameplayAbility
 public:
 	UGA_Charge();
 
+	/** 技能等级*/
+	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
+	int32 Level = 1;
+
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 
 	virtual void OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;

@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "MGameplayAbility.generated.h"
 
+class UMAbilitySystemComponent;
 class UMGameplayEffect;
 
 UENUM(BlueprintType)
@@ -14,6 +15,21 @@ enum class ETargetType : uint8
 	Self		UMETA(Displayname = "Self"),
 	Hostile		UMETA(Displayname = "Hostile"),
 	Friendly	UMETA(Displayname = "Friendly"),
+};
+
+UENUM(BlueprintType)
+enum class EActivateFailCode : uint8
+{
+	Success		UMETA(Displayname = "成功"),
+	OutOfRange	UMETA(Displayname = "超出距离"),
+	ToClose		UMETA(Displayname = "太近了"),
+	NoMana		UMETA(Displayname = "法力不足"),
+	NoEnergy	UMETA(Displayname = "能量不足"),
+	NoRage		UMETA(Displayname = "怒气不足"),
+	WrongTarget	UMETA(Displayname = "无效的目标"),
+	NoItem		UMETA(Displayname = "道具不足"),
+
+	Error		UMETA(Displayname = "代码错误"),
 };
 
 /**
@@ -30,23 +46,11 @@ protected:
 
 	/** 技能等级*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	int32 Level = 1;
+	int32 Range = 1600;
 
-	/** 射程*/
+	/** 技能等级*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	float Range = 20.0f;
-
-	/** 最小射程*/
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	float MinRange = 0.0f;
-
-	/** 对目标施加效果*/
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	TSubclassOf<UMGameplayEffect> EffectToTarget;
-
-	/** 技能目标类型*/
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	ETargetType TargetType;
+	int32 MinRange = 800;
 
 	/** 消耗品*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
@@ -61,12 +65,16 @@ protected:
 	TArray<TSubclassOf<UGameplayEffect>> OngoingEffectsToJustApplyOnStart;
 
 private:
+	
 	TArray<FActiveGameplayEffectHandle> RemoveOnEndEffectHandles;
 
-	
 public:
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	class AMCharacter* GetMCharacterFromActorInfo() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UMAbilitySystemComponent* GetMAbilitySystemComponent() const;
 	
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 	
@@ -74,5 +82,5 @@ public:
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
-	virtual bool CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const;
+	virtual EActivateFailCode CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const;
 };

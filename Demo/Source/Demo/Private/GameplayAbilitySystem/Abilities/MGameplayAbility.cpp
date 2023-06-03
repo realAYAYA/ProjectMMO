@@ -19,7 +19,7 @@ bool UMGameplayAbility::CanActivateAbility(
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 		return false;
 	
-	return CanActivateCondition(ActorInfo);
+	return CanActivateCondition(ActorInfo) == EActivateFailCode::Success;
 }
 
 void UMGameplayAbility::ActivateAbility(
@@ -35,34 +35,6 @@ void UMGameplayAbility::ActivateAbility(
 		return;
 
 	const FGameplayEffectContextHandle EffectContext = OwnerInfo->AbilitySystemComponent->MakeEffectContext();
-
-	// 根据目标类型选择目标
-	const AMCharacter* Caster = Cast<AMCharacter>(OwnerInfo->AvatarActor);
-	const AMCharacter* Target = nullptr;
-	switch (TargetType)
-	{
-		default:break;
-	case ETargetType::Self: Target = Caster;
-	case ETargetType::Friendly:
-		// Todo 如果目标是敌对的则选择自己
-	case ETargetType::Hostile:
-		Target = Caster->GetCurrentTarget();
-	}
-
-	// 对目标施加效果
-	if (EffectToTarget.Get() && Target)
-	{
-		if (UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent())
-		{
-			const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(EffectToTarget, Level, EffectContext);
-			if (!SpecHandle.IsValid())
-			{
-				const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
-				if (!ActiveGEHandle.WasSuccessfullyApplied())
-					ABILITY_LOG(Log, TEXT("Ability %s faild to apply Effect to Target %s"), *GetName(), *GetNameSafe(EffectToTarget));
-			}
-		}
-	}
 
 	// 处理技能开始时施加效果
 	for (TSubclassOf<UGameplayEffect>& GameplayEffect : OngoingEffectsToJustApplyOnStart)
@@ -121,25 +93,25 @@ void UMGameplayAbility::EndAbility(
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
-bool UMGameplayAbility::CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const
+EActivateFailCode UMGameplayAbility::CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const
 {
 	if (!Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent))
-		return false;
-	
-	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo->AvatarActor);
-	
-	if (TargetType != ETargetType::Self)
-	{
-		if (TargetType == ETargetType::Hostile && !Caster->GetCurrentTarget())
-			return false;
-	}
+		return EActivateFailCode::Error;
 	
 	// Todo 消耗品
 
-	return true;
+	return EActivateFailCode::Error;
 }
 
 AMCharacter* UMGameplayAbility::GetMCharacterFromActorInfo() const
 {
 	return Cast<AMCharacter>(GetAvatarActorFromActorInfo());
+}
+
+UMAbilitySystemComponent* UMGameplayAbility::GetMAbilitySystemComponent() const
+{
+	if (const AMCharacter* Character = Cast<AMCharacter>(GetAvatarActorFromActorInfo()))
+		return Cast<UMAbilitySystemComponent>(Character->GetAbilitySystemComponent());
+
+	return nullptr;
 }

@@ -13,8 +13,7 @@ UGA_Charge::UGA_Charge()
 {
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-
-	TargetType = ETargetType::Hostile;
+	
 	Range = 2000;
 	MinRange = 500;
 }
