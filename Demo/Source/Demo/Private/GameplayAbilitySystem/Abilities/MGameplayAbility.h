@@ -44,13 +44,9 @@ public:
 	
 protected:
 
-	/** 技能等级*/
+	/** 射程*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
 	int32 Range = 1600;
-
-	/** 技能等级*/
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	int32 MinRange = 800;
 
 	/** 消耗品*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")

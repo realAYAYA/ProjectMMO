@@ -21,7 +21,7 @@ public:
 
 	/** 技能等级*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	int32 Level = 1;
+	int32 MinRange = 800;
 
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 

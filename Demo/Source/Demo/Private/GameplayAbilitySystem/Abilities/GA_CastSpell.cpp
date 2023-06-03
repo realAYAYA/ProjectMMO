@@ -70,7 +70,7 @@ void UGA_CastSpell::CancelAbility(const FGameplayAbilitySpecHandle Handle, const
 void UGA_CastSpell::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	if (!CanActivateCondition(ActorInfo))
+	if (CanActivateCondition(ActorInfo) != EActivateFailCode::Success)
 	{
 		bWasCancelled = true;
 	}

@@ -42,7 +42,7 @@ void UMGameplayAbility::ActivateAbility(
 		if (!GameplayEffect.Get())
 			continue;
 		
-		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
+		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, 1, EffectContext);
 		if (!SpecHandle.IsValid())
 			continue;
 
@@ -60,7 +60,7 @@ void UMGameplayAbility::ActivateAbility(
 		if (!GameplayEffect.Get())
 			continue;
 
-		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
+		FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, 1, EffectContext);
 		if (!SpecHandle.IsValid())
 			continue;
 		

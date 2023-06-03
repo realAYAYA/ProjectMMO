@@ -17,13 +17,13 @@ class UGA_CastSpell : public UMGameplayAbility
 
 public:
 
+	/** 技能等级*/
+	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
+	int32 Level = 1;
+
 	/** 施法时间*/
 	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
 	float CastTime = 2.5f;
-	
-	/** 射程*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
-	float Range = 20.0f;
 
 	/** 对目标施加效果*/
 	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
