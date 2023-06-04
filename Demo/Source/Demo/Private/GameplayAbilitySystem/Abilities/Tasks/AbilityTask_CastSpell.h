@@ -30,12 +30,7 @@ protected:
 	UPROPERTY()
 	AMCharacter* Caster;
 
-	int64 BeginTime;
+	float TotalTime;
 
 	float CastTime;
-
-	bool bCanStopped;
-	bool bCanSilenced;
-	bool bMovable;
-	
 };

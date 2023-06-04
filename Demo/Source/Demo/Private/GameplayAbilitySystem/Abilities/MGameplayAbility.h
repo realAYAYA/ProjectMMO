@@ -71,6 +71,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UMAbilitySystemComponent* GetMAbilitySystemComponent() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	virtual EActivateFailCode CanActivateCondition() const;
 	
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 	
@@ -78,5 +81,4 @@ public:
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
-	virtual EActivateFailCode CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const;
 };

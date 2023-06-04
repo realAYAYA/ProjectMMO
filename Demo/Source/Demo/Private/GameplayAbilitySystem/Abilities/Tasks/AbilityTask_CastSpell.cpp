@@ -24,7 +24,7 @@ void UAbilityTask_CastSpell::Activate()
 {
 	Super::Activate();
 
-	BeginTime = FDateTime::Now().GetTicks();
+	TotalTime = 0;
 }
 
 void UAbilityTask_CastSpell::OnDestroy(bool bInOwnerFinished)
@@ -58,9 +58,11 @@ void UAbilityTask_CastSpell::TickTask(float DeltaTime)
 		EndTask();
 		return;
 	}
+
+	TotalTime += DeltaTime;
 	
 	// 施法时间走完，施法成功
-	if (FDateTime::Now().GetTicks() - BeginTime >= CastTime)
+	if (TotalTime >= CastTime)
 	{
 		OnAbilityTaskEnd.Broadcast();
 		EndTask();

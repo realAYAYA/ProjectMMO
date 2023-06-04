@@ -26,6 +26,9 @@ public:
 	// Sets default values for this actor's properties
 	AMProjectile();
 
+	UFUNCTION(BlueprintCallable)
+	void Initlize(AMCharacter* InCaster, AMCharacter* InTarget);
+
 	/** called when projectile hits something */
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
@@ -45,7 +48,7 @@ public:
 	UPROPERTY()
 	FVector TargetLocation;// 如果目标丢失，则销毁在最后出现的位置
 
-	void ApplyGameplayEffectToTarget();
+	//void ApplyGameplayEffectToTarget();
 
 protected:
 	

@@ -33,6 +33,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
 	ETargetType TargetType;
 
+	UGA_CastSpell();
+
 	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 
 	virtual void OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
@@ -45,4 +47,9 @@ public:
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
+private:
+
+	UPROPERTY()
+	class UMAbilityTask* SpellTask;
+	
 };

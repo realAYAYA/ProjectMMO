@@ -199,12 +199,11 @@ void AMCharacter::Move(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add movement
-		//AddMovementInput(GetActorForwardVector(), MovementVector.Y);
-		//AddMovementInput(GetActorRightVector(), MovementVector.X);
+		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
+		AddMovementInput(GetActorRightVector(), MovementVector.X);
 
-		AbilitySystemComponent->MovementInputX = MovementVector.X;
-		AbilitySystemComponent->MovementInputY = MovementVector.Y;
-
+		//AbilitySystemComponent->MovementInputX = MovementVector.X;
+		//AbilitySystemComponent->MovementInputY = MovementVector.Y;
 		AbilitySystemComponent->Move();
 
 		OnMoveInput.Broadcast(MovementVector.X, MovementVector.Y);
@@ -233,8 +232,8 @@ void AMCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 
-		AbilitySystemComponent->LookInputYaw = LookAxisVector.X;
-		AbilitySystemComponent->LookInputPitch = LookAxisVector.Y;
+		//AbilitySystemComponent->LookInputYaw = LookAxisVector.X;
+		//AbilitySystemComponent->LookInputPitch = LookAxisVector.Y;
 
 		OnLookInput.Broadcast(LookAxisVector.X, LookAxisVector.Y);
 	}

@@ -19,7 +19,7 @@ bool UMGameplayAbility::CanActivateAbility(
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 		return false;
 	
-	return CanActivateCondition(ActorInfo) == EActivateFailCode::Success;
+	return CanActivateCondition() == EActivateFailCode::Success;
 }
 
 void UMGameplayAbility::ActivateAbility(
@@ -93,14 +93,15 @@ void UMGameplayAbility::EndAbility(
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
-EActivateFailCode UMGameplayAbility::CanActivateCondition(const FGameplayAbilityActorInfo* ActorInfo) const
+EActivateFailCode UMGameplayAbility::CanActivateCondition() const
 {
-	if (!Cast<UMAbilitySystemComponent>(ActorInfo->AbilitySystemComponent))
+	const AMCharacter* Character = GetMCharacterFromActorInfo();
+	if (!Character || !Cast<UMAbilitySystemComponent>(Character->GetAbilitySystemComponent()))
 		return EActivateFailCode::Error;
 	
 	// Todo 消耗品
 
-	return EActivateFailCode::Error;
+	return EActivateFailCode::Success;
 }
 
 AMCharacter* UMGameplayAbility::GetMCharacterFromActorInfo() const

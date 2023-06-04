@@ -8,6 +8,13 @@
 
 #include "Characters/MCharacter.h"
 #include "GameplayAbilitySystem/GameplayEffects/MGameplayEffect.h"
+#include "Tasks/AbilityTask_CastSpell.h"
+
+UGA_CastSpell::UGA_CastSpell()
+{
+	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
 
 void UGA_CastSpell::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
@@ -32,7 +39,7 @@ void UGA_CastSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
 
 	// 根据目标类型选择目标
-	const AMCharacter* Caster = GetMCharacterFromActorInfo();
+	AMCharacter* Caster = GetMCharacterFromActorInfo();
 	const AMCharacter* Target = nullptr;
 	switch (TargetType)
 	{
@@ -59,21 +66,32 @@ void UGA_CastSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 			}
 		}
 	}
+
+	SpellTask = UAbilityTask_CastSpell::CreateCastSpellTask(this, Caster, CastTime);
+	SpellTask->OnAbilityTaskEnd.AddDynamic(this, &UGA_CastSpell::K2_EndAbility);
+	SpellTask->OnAbilityCancel.AddDynamic(this, &UGA_CastSpell::K2_CancelAbility);
+	SpellTask->ReadyForActivation();// 启动任务
 }
 
 void UGA_CastSpell::CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateCancelAbility)
 {
 	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
+
+	if (SpellTask)
+		SpellTask->EndTask();
 }
 
 void UGA_CastSpell::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	if (CanActivateCondition(ActorInfo) != EActivateFailCode::Success)
+	if (CanActivateCondition() != EActivateFailCode::Success)
 	{
 		bWasCancelled = true;
 	}
+
+	if (SpellTask)
+		SpellTask->EndTask();
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
