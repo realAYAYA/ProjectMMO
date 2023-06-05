@@ -12,7 +12,7 @@
 UGA_Melee::UGA_Melee()
 {
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerExecution;
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
 EActivateFailCode UGA_Melee::CanActivateCondition() const
@@ -28,7 +28,7 @@ EActivateFailCode UGA_Melee::CanActivateCondition() const
 	// 目标类型不对
 	
 	// 太远了
-	if ((Target->GetCurrentTarget()->GetActorLocation() - Caster->GetActorLocation()).Length() > Range)
+	if ((Target->GetActorLocation() - Caster->GetActorLocation()).Length() > Range)
 		return EActivateFailCode::OutOfRange;
 	
 	return EActivateFailCode::Success;
