@@ -12,7 +12,7 @@
 UGA_Melee::UGA_Melee()
 {
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::NonInstanced;
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerExecution;
 }
 
 EActivateFailCode UGA_Melee::CanActivateCondition() const
