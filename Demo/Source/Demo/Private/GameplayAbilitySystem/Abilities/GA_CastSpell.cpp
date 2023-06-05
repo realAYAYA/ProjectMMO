@@ -119,7 +119,7 @@ void UGA_CastSpell::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 			{
 				const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
 				const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, Level, EffectContext);
-				if (!SpecHandle.IsValid())
+				if (SpecHandle.IsValid())
 				{
 					const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 					if (!ActiveGEHandle.WasSuccessfullyApplied())

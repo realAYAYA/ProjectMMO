@@ -77,7 +77,7 @@ void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 			{
 				const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
 				const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, 1, EffectContext);
-				if (!SpecHandle.IsValid())
+				if (SpecHandle.IsValid())
 				{
 					const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 					if (!ActiveGEHandle.WasSuccessfullyApplied())

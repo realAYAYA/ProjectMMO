@@ -52,7 +52,7 @@ void UGA_Melee::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 			{
 				const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
 				const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, Level, EffectContext);
-				if (!SpecHandle.IsValid())
+				if (SpecHandle.IsValid())
 				{
 					const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 					if (!ActiveGEHandle.WasSuccessfullyApplied())
