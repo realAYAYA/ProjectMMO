@@ -4,6 +4,9 @@
 #include "GameplayAbilitySystem/Abilities/Tasks/AbilityTask_Charge.h"
 
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
+
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 
 UAbilityTask_Charge* UAbilityTask_Charge::CreateChargeTask(
@@ -62,6 +65,6 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 	// 否则，维持冲锋状态
 	const FVector Dir = (Destination - Caster->GetActorLocation()).GetSafeNormal();
 	Caster->SetActorRotation(Dir.Rotation());
+	Caster->GetCharacterMovement()->AddImpulse(Dir * Caster->GetAttributeSet()->MaxMoveSpeed.GetCurrentValue());
 	Caster->AddMovementInput(Caster->GetActorForwardVector(), 1.0f);
-	
 }

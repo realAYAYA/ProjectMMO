@@ -16,6 +16,8 @@ UGA_CastSpell::UGA_CastSpell()
 {
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::LocalPredicted;
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
+	TargetType = ETargetType::Hostile;
 }
 
 EActivateFailCode UGA_CastSpell::CanActivateCondition() const
