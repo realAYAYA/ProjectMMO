@@ -68,6 +68,11 @@ void AMCharacter::SetMyName_Implementation(const FString& InName)
 	MyName = InName;
 }
 
+UMAttributeSet* AMCharacter::GetAttributeSet() const
+{
+	return AttributeSet;
+}
+
 UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -290,7 +295,6 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMCharacter, CharacterData);
-	DOREPLIFETIME(AMCharacter, bHasWeapon);
 	DOREPLIFETIME(AMCharacter, CurrentTarget);
 	DOREPLIFETIME(AMCharacter, MyName);
 }

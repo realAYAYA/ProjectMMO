@@ -3,11 +3,14 @@
 
 #include "GA_Charge.h"
 
-#include "VectorUtil.h"
-#include "Characters/MCharacter.h"
+#include "AbilitySystemComponent.h"
+#include "AbilitySystemLog.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Tasks/AbilityTask_Charge.h"
+
+#include "Characters/MCharacter.h"
+#include "GameplayAbilitySystem/GameplayEffects/MGameplayEffect.h"
 
 UGA_Charge::UGA_Charge()
 {
@@ -18,47 +21,33 @@ UGA_Charge::UGA_Charge()
 	MinRange = 500;
 }
 
-void UGA_Charge::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
+EActivateFailCode UGA_Charge::CanActivateCondition() const
 {
-	Super::OnGiveAbility(ActorInfo, Spec);
+	if (EActivateFailCode::Error == Super::CanActivateCondition())
+		return EActivateFailCode::Error;
 
-	AMCharacter* Caster = Cast<AMCharacter>(ActorInfo->AvatarActor);
-}
-
-void UGA_Charge::OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
-{
-	Super::OnRemoveAbility(ActorInfo, Spec);
-}
-
-bool UGA_Charge::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
-	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
-{
-	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo->AvatarActor);
-	if (!Caster || !Caster->GetAbilitySystemComponent())
-		return false;
-
+	const AMCharacter* Caster = GetMCharacterFromActorInfo();
 	const AMCharacter* Target = Caster->GetCurrentTarget();
 	if (!Target || !Target->GetAbilitySystemComponent())
-	{
-		return false;
-	}
+		return EActivateFailCode::Error;
 
 	// Todo 不是敌对目标
 	
 	// Out of range
 	const float Distance = (Caster->GetActorLocation() - Target->GetActorLocation()).Length();
-	if (Distance > Range || Distance < MinRange)
-		return false;
-
+	if (Distance > Range)
+		return EActivateFailCode::OutOfRange;
+	if (Distance < MinRange)
+		return EActivateFailCode::ToClose;
+	
 	// 没有朝向敌人
 	const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
 	if (UKismetMathLibrary::Dot_VectorVector(Dir, Caster->GetActorForwardVector()) < 0.5f)
-		return false;
+		return EActivateFailCode::NoToward;
 	
 	// Todo 不在视野中
-	
-	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+
+	return EActivateFailCode::Success;
 }
 
 void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* OwnerInfo,
@@ -78,6 +67,25 @@ void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 	ChargeTask->OnAbilityTaskEnd.AddDynamic(this, &UGA_Charge::K2_EndAbility);
 	ChargeTask->OnAbilityCancel.AddDynamic(this, &UGA_Charge::K2_CancelAbility);
 	ChargeTask->ReadyForActivation();// 启动任务
+
+	// 对目标施加效果
+	for (const TSubclassOf<UMGameplayEffect>& Effect : EffectsToTarget)
+	{
+		if (Effect.Get() && Target)
+		{
+			if (UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent())
+			{
+				const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
+				const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, 1, EffectContext);
+				if (!SpecHandle.IsValid())
+				{
+					const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+					if (!ActiveGEHandle.WasSuccessfullyApplied())
+						ABILITY_LOG(Log, TEXT("Ability %s faild to apply Effect to Target %s"), *GetName(), *GetNameSafe(Effect));
+				}
+			}
+		}
+	}
 	
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
 }

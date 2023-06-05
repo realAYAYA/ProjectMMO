@@ -59,6 +59,11 @@ public:
 	FGameplayAttributeData HealthRecovery;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, HealthRecovery)
 
+	// 治疗量，比如致死打击可以造成治疗量的减少
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
+	FGameplayAttributeData HealRatio;
+	ATTRIBUTE_ACCESSORS(UMAttributeSet, HealRatio)
+
 	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes", ReplicatedUsing = OnRep_Mana)
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, Mana)

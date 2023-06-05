@@ -25,9 +25,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
 	float CastTime = 2.5f;
 
+	/** 法力消耗*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	int32 Mana = 0;
+
+	/** 怒气消耗*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	int32 Rage = 0;
+
+	/** 能量消耗*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	int32 Energy = 0;
+
 	/** 对目标施加效果*/
 	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
-	TSubclassOf<UMGameplayEffect> EffectToTarget;
+	TArray<TSubclassOf<UMGameplayEffect>> EffectsToTarget;
 
 	/** 技能目标类型*/
 	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
@@ -35,18 +47,14 @@ public:
 
 	UGA_CastSpell();
 
-	virtual void OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
-
-	virtual void OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
+	virtual EActivateFailCode CanActivateCondition() const override;
 	
-	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
-
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* OwnerInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 	virtual void CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateCancelAbility) override;
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
-
+	
 private:
 
 	UPROPERTY()

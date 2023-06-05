@@ -98,8 +98,6 @@ EActivateFailCode UMGameplayAbility::CanActivateCondition() const
 	const AMCharacter* Character = GetMCharacterFromActorInfo();
 	if (!Character || !Cast<UMAbilitySystemComponent>(Character->GetAbilitySystemComponent()))
 		return EActivateFailCode::Error;
-	
-	// Todo 消耗品
 
 	return EActivateFailCode::Success;
 }

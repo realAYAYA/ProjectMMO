@@ -19,6 +19,7 @@ class UAnimMontage;
 class USoundBase;
 
 class UMAbilitySystemComponent;
+class UMAttributeSet;
 
 class UGameplayAbility;
 class UGameplayEffect;
@@ -57,12 +58,10 @@ public:
 	void SetCurrentTarget(AMCharacter* NewTarget);
 
 protected:
-	/**  */
+	
+	/**  当前锁定目标*/
 	UPROPERTY(Replicated)
 	AMCharacter* CurrentTarget;
-
-	UPROPERTY(Replicated)
-	bool bHasWeapon;
 
 	// Todo 测试数据，最后要删
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = ProjectSS)
@@ -77,6 +76,10 @@ public:
 	 * GameAbilitySystem
 	 */
 public:
+
+	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	UMAttributeSet* GetAttributeSet() const;
+	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
 	bool ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext);
@@ -95,7 +98,7 @@ protected:
 	class UMAbilitySystemComponent* AbilitySystemComponent;
 
 	UPROPERTY(Transient)
-	class UMAttributeSet* AttributeSet;
+	UMAttributeSet* AttributeSet;
 
 	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
 	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);

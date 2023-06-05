@@ -20,16 +20,18 @@ enum class ETargetType : uint8
 UENUM(BlueprintType)
 enum class EActivateFailCode : uint8
 {
-	Success		UMETA(Displayname = "成功"),
-	OutOfRange	UMETA(Displayname = "超出距离"),
-	ToClose		UMETA(Displayname = "太近了"),
-	NoMana		UMETA(Displayname = "法力不足"),
-	NoEnergy	UMETA(Displayname = "能量不足"),
-	NoRage		UMETA(Displayname = "怒气不足"),
-	WrongTarget	UMETA(Displayname = "无效的目标"),
-	NoItem		UMETA(Displayname = "道具不足"),
+	Success			UMETA(Displayname = "成功"),
+	OutOfRange		UMETA(Displayname = "超出距离"),
+	ToClose			UMETA(Displayname = "太近了"),
+	NoToward		UMETA(Displayname = "面向对方"),
+	NoMana			UMETA(Displayname = "法力不足"),
+	NoEnergy		UMETA(Displayname = "能量不足"),
+	NoRage			UMETA(Displayname = "怒气不足"),
+	InValidTarget	UMETA(Displayname = "无效的目标"),
+	NoTarget		UMETA(Displayname = "需要一个目标"),
+	NoItem			UMETA(Displayname = "道具不足"),
 
-	Error		UMETA(Displayname = "代码错误"),
+	Error			UMETA(Displayname = "代码错误"),
 };
 
 /**
@@ -72,7 +74,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UMAbilitySystemComponent* GetMAbilitySystemComponent() const;
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UFUNCTION(BlueprintCallable)
 	virtual EActivateFailCode CanActivateCondition() const;
 	
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;

@@ -4,39 +4,38 @@
 
 #include "CoreMinimal.h"
 #include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
-#include "GA_Charge.generated.h"
-
-class UMAbilityTask;
+#include "GA_Melee.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UGA_Charge : public UMGameplayAbility
+class UGA_Melee : public UMGameplayAbility
 {
 	GENERATED_BODY()
-	
-public:
-	UGA_Charge();
 
+public:
+	
 	/** 技能等级*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	int32 MinRange = 800;
+	int32 Level = 1;
+
+	/** 怒气消耗*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastMelee")
+	int32 Rage = 0;
+
+	/** 能量消耗*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastMelee")
+	int32 Energy = 0;
 
 	/** 对目标施加效果*/
 	UPROPERTY(EditDefaultsOnly, Category = "CastMelee")
 	TArray<TSubclassOf<UMGameplayEffect>> EffectsToTarget;
 
+	UGA_Melee();
+
 	virtual EActivateFailCode CanActivateCondition() const override;
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* OwnerInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
-	virtual void CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateCancelAbility) override;
-
-	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
-
-protected:
-
-	UPROPERTY()
-	UMAbilityTask* ChargeTask;
 };
