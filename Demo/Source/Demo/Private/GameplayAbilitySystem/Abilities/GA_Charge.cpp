@@ -56,17 +56,6 @@ void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 	// 根据目标位置，计算冲锋的目的地
 	AMCharacter* Caster = Cast<AMCharacter>(OwnerInfo->AvatarActor);
 	const AMCharacter* Target = Cast<AMCharacter>(OwnerInfo->AvatarActor)->GetCurrentTarget();
-	
-	FVector Destination = Target->GetActorLocation();
-	const float Radius = Target->GetCapsuleComponent()->GetScaledCapsuleRadius() + 5.0f;
-	const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
-	Destination = Destination - Dir * Radius;
-	
-	ChargeTask = UAbilityTask_Charge::CreateChargeTask(this, Caster, Destination);
-	
-	ChargeTask->OnAbilityTaskEnd.AddDynamic(this, &UGA_Charge::K2_EndAbility);
-	ChargeTask->OnAbilityCancel.AddDynamic(this, &UGA_Charge::K2_CancelAbility);
-	ChargeTask->ReadyForActivation();// 启动任务
 
 	// 对目标施加效果
 	for (const TSubclassOf<UMGameplayEffect>& Effect : EffectsToTarget)
@@ -86,6 +75,17 @@ void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 			}
 		}
 	}
+
+	// Task
+	FVector Destination = Target->GetActorLocation();
+	const float Radius = Target->GetCapsuleComponent()->GetScaledCapsuleRadius() + 5.0f;
+	const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
+	Destination = Destination - Dir * Radius;
+
+	ChargeTask = UAbilityTask_Charge::CreateChargeTask(this, Caster, Destination);
+	ChargeTask->OnAbilityTaskEnd.AddDynamic(this, &UGA_Charge::K2_EndAbility);
+	ChargeTask->OnAbilityCancel.AddDynamic(this, &UGA_Charge::K2_CancelAbility);
+	ChargeTask->ReadyForActivation();// 启动任务
 	
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
 }

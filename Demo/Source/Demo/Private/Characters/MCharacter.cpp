@@ -68,7 +68,7 @@ void AMCharacter::SetMyName_Implementation(const FString& InName)
 	MyName = InName;
 }
 
-UMAttributeSet* AMCharacter::GetAttributeSet() const
+const UMAttributeSet* AMCharacter::GetAttributeSet() const
 {
 	return AttributeSet;
 }
@@ -186,11 +186,6 @@ void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMCharacter::Look);
 
-		// Sprint
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AMCharacter::BeginSprint);
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Canceled, this, &AMCharacter::EndSprint);
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AMCharacter::EndSprint);
-
 		// 技能栏映射
 		//EnhancedInputComponent->BindAction(InputAction1, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility1);
 	}
@@ -198,6 +193,12 @@ void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void AMCharacter::Move(const FInputActionValue& Value)
 {
+	// 检测是否可以移动
+	for (const FGameplayTag& Tag : MoveLimitTags)
+	{
+		if (GetAbilitySystemComponent()->HasMatchingGameplayTag(Tag))
+			return;
+	}
 	// input is a Vector2D
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -258,16 +259,6 @@ void AMCharacter::Landed(const FHitResult& Hit)
 	AbilitySystemComponent->JumpEnd();
 	
 	OnJumpInput.Broadcast(0.0f);
-}
-
-void AMCharacter::BeginSprint(const FInputActionValue& Value)
-{
-	AbilitySystemComponent->TryActivateAbilitiesByTag(AbilitySystemComponent->SprintEventTag, true);
-}
-
-void AMCharacter::EndSprint(const FInputActionValue& Value)
-{
-	AbilitySystemComponent->CancelAbilities(&AbilitySystemComponent->SprintEventTag);
 }
 
 void AMCharacter::TryActiveAbility(const FInputActionValue& Value)

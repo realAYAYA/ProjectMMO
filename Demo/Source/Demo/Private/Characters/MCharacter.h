@@ -49,6 +49,7 @@ public:
 	/**
 	 * PlayerState
 	*/
+	
 public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = ProjectSS)
@@ -67,6 +68,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = ProjectSS)
 	FString MyName;
 
+	UPROPERTY(Replicated)
+	FCharacterData CharacterData;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UMCharacterDataAsset* CharacterDataAsset;
+
 public:
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = ProjectSS)
 	void SetMyName(const FString& InName);
@@ -78,7 +85,7 @@ public:
 public:
 
 	UFUNCTION(BlueprintCallable, Category = ProjectSS)
-	UMAttributeSet* GetAttributeSet() const;
+	const UMAttributeSet* GetAttributeSet() const;
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	
@@ -100,16 +107,12 @@ protected:
 	UPROPERTY(Transient)
 	UMAttributeSet* AttributeSet;
 
+	// 移动限制Tags
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ProjectSS)
+	FGameplayTagContainer MoveLimitTags;
+
 	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
 	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
-
-protected:
-
-	UPROPERTY(Replicated)
-	FCharacterData CharacterData;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UMCharacterDataAsset* CharacterDataAsset;
 
 	
 	/**
@@ -197,14 +200,11 @@ protected:
 	void TryJump(const FInputActionValue& Value);
 
 	virtual void Landed(const FHitResult& Hit) override;
-
-	/** Called for sprint input */
-	void BeginSprint(const FInputActionValue& Value);
-	void EndSprint(const FInputActionValue& Value);
 	
 	/** Skill */
 	void TryActiveAbility(const FInputActionValue& Value);
 
 	UPROPERTY()
 	TMap<int32, FGameplayTag> InputSkillMap;
+
 };
