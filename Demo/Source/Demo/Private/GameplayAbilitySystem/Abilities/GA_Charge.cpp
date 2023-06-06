@@ -21,33 +21,40 @@ UGA_Charge::UGA_Charge()
 	MinRange = 500;
 }
 
-EActivateFailCode UGA_Charge::CanActivateCondition() const
+EActivateFailCode UGA_Charge::CanActivateCondition(const FGameplayAbilityActorInfo& ActorInfo) const
 {
-	if (EActivateFailCode::Error == Super::CanActivateCondition())
+	if (EActivateFailCode::Error == Super::CanActivateCondition(ActorInfo))
 		return EActivateFailCode::Error;
 
-	const AMCharacter* Caster = GetMCharacterFromActorInfo();
+	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo.AvatarActor.Get());
 	const AMCharacter* Target = Caster->GetCurrentTarget();
 	if (!Target || !Target->GetAbilitySystemComponent())
-		return EActivateFailCode::Error;
+	{
+		Caster->OnAbilityFailed.Broadcast(EActivateFailCode::NoTarget);
+		return EActivateFailCode::NoTarget;
+	}
 
+	EActivateFailCode FailCode = EActivateFailCode::Success;
+	
 	// Todo 不是敌对目标
 	
 	// Out of range
 	const float Distance = (Caster->GetActorLocation() - Target->GetActorLocation()).Length();
 	if (Distance > Range)
-		return EActivateFailCode::OutOfRange;
+		FailCode = EActivateFailCode::OutOfRange;
 	if (Distance < MinRange)
-		return EActivateFailCode::ToClose;
+		FailCode = EActivateFailCode::ToClose;
 	
 	// 没有朝向敌人
 	const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
 	if (UKismetMathLibrary::Dot_VectorVector(Dir, Caster->GetActorForwardVector()) < 0.5f)
-		return EActivateFailCode::NoToward;
+		FailCode = EActivateFailCode::NoToward;
 	
 	// Todo 不在视野中
 
-	return EActivateFailCode::Success;
+	Caster->OnAbilityFailed.Broadcast(FailCode);
+
+	return FailCode;
 }
 
 void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* OwnerInfo,

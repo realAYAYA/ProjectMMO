@@ -20,47 +20,54 @@ UGA_CastSpell::UGA_CastSpell()
 	TargetType = ETargetType::Hostile;
 }
 
-EActivateFailCode UGA_CastSpell::CanActivateCondition() const
+EActivateFailCode UGA_CastSpell::CanActivateCondition(const FGameplayAbilityActorInfo& ActorInfo) const
 {
-	if (Super::CanActivateCondition() == EActivateFailCode::Error)
+	if (Super::CanActivateCondition(ActorInfo) == EActivateFailCode::Error)
 		return EActivateFailCode::Error;
 
-	const AMCharacter* Caster = GetMCharacterFromActorInfo();
+	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo.AvatarActor.Get());
 	const AMCharacter* Target = Caster->GetCurrentTarget();
 	if (!Target || !Target->GetAbilitySystemComponent())
-		return EActivateFailCode::Error;
+	{
+		Caster->OnAbilityFailed.Broadcast(EActivateFailCode::NoTarget);
+		return EActivateFailCode::NoTarget;
+	}
 
+	EActivateFailCode FailCode = EActivateFailCode::Success;
+	
 	// 目标类型不对
 	
 	// 太远了
 	if ((Target->GetActorLocation() - Caster->GetActorLocation()).Length() > Range)
-		return EActivateFailCode::OutOfRange;
+		FailCode = EActivateFailCode::OutOfRange;
 	
 	// 如果是目标敌对，需要面向对方，友方增益buff则不需要
 	if (TargetType == ETargetType::Hostile)
 	{
 		const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
 		if (UKismetMathLibrary::Dot_VectorVector(Dir, Caster->GetActorForwardVector()) < 0.5f)
-			return EActivateFailCode::NoToward;
+			FailCode = EActivateFailCode::NoToward;
 	}
 	
 	// 消耗条件不足
 	if (Caster->GetAttributeSet()->Mana.GetCurrentValue() < Mana)
 	{
-		return EActivateFailCode::NoMana;
+		FailCode = EActivateFailCode::NoMana;
 	}
 
 	if (Caster->GetAttributeSet()->Rage.GetCurrentValue() < Rage)
 	{
-		return EActivateFailCode::NoRage;
+		FailCode = EActivateFailCode::NoRage;
 	}
 	
 	if (Caster->GetAttributeSet()->Energy.GetCurrentValue() < Energy)
 	{
-		return EActivateFailCode::NoEnergy;
+		FailCode = EActivateFailCode::NoEnergy;
 	}
+
+	Caster->OnAbilityFailed.Broadcast(FailCode);
 	
-	return EActivateFailCode::Success;
+	return FailCode;
 }
 
 void UGA_CastSpell::ActivateAbility(
@@ -78,8 +85,11 @@ void UGA_CastSpell::ActivateAbility(
 	SpellTask->ReadyForActivation();// 启动任务
 }
 
-void UGA_CastSpell::CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateCancelAbility)
+void UGA_CastSpell::CancelAbility(
+	const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo,
+	bool bReplicateCancelAbility)
 {
 	Super::CancelAbility(Handle, ActorInfo, ActivationInfo, bReplicateCancelAbility);
 
@@ -87,10 +97,14 @@ void UGA_CastSpell::CancelAbility(const FGameplayAbilitySpecHandle Handle, const
 		SpellTask->EndTask();
 }
 
-void UGA_CastSpell::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+void UGA_CastSpell::EndAbility(
+	const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo,
+	bool bReplicateEndAbility,
+	bool bWasCancelled)
 {
-	if (CanActivateCondition() != EActivateFailCode::Success)
+	if (CanActivateCondition(*ActorInfo) != EActivateFailCode::Success)
 	{
 		bWasCancelled = true;
 	}

@@ -28,6 +28,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMoveInput, float, X, float, Y);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLookInput, float, X, float, Y);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnJumpInput, float, V);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityFailed, EActivateFailCode, FailCode);
+
 UCLASS()
 class DEMO_API AMCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -86,6 +88,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = ProjectSS)
 	const UMAttributeSet* GetAttributeSet() const;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnAbilityFailed OnAbilityFailed;
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	

@@ -39,10 +39,13 @@ AMProjectile::AMProjectile()
 	ProjectileMovement->bShouldBounce = true;
 }
 
-void AMProjectile::Initlize(AMCharacter* InCaster, AMCharacter* inTarget)
+void AMProjectile::Initialize(AMCharacter* InCaster, AMCharacter* InTarget)
 {
+	if (!HasAuthority())
+		return;
+	
 	Caster = InCaster;
-	Target = inTarget;
+	Target = InTarget;
 
 	if (Caster)
 		CollisionComp->IgnoreActorWhenMoving(InCaster, true);

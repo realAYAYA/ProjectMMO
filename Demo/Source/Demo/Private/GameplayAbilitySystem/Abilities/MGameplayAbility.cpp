@@ -19,7 +19,7 @@ bool UMGameplayAbility::CanActivateAbility(
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 		return false;
 	
-	return CanActivateCondition() == EActivateFailCode::Success;
+	return CanActivateCondition(*ActorInfo) == EActivateFailCode::Success;
 }
 
 void UMGameplayAbility::ActivateAbility(
@@ -93,9 +93,9 @@ void UMGameplayAbility::EndAbility(
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
-EActivateFailCode UMGameplayAbility::CanActivateCondition() const
+EActivateFailCode UMGameplayAbility::CanActivateCondition(const FGameplayAbilityActorInfo& ActorInfo) const
 {
-	const AMCharacter* Character = GetMCharacterFromActorInfo();
+	const AMCharacter* Character = Cast<AMCharacter>(ActorInfo.AvatarActor.Get());
 	if (!Character || !Cast<UMAbilitySystemComponent>(Character->GetAbilitySystemComponent()))
 		return EActivateFailCode::Error;
 

@@ -27,7 +27,7 @@ public:
 	AMProjectile();
 
 	UFUNCTION(BlueprintCallable)
-	void Initlize(AMCharacter* InCaster, AMCharacter* InTarget);
+	void Initialize(AMCharacter* InCaster, AMCharacter* InTarget);
 
 	/** called when projectile hits something */
 	UFUNCTION()
