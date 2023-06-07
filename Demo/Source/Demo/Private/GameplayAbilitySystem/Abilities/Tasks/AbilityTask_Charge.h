@@ -35,5 +35,5 @@ protected:
 
 	FVector Destination;
 
-	int64 BeginTime;
+	float CastTime;
 };

@@ -21,6 +21,7 @@ UENUM(BlueprintType)
 enum class EActivateFailCode : uint8
 {
 	Success			UMETA(Displayname = "成功"),
+	Cooldown		UMETA(Displayname = "冷却中"),
 	OutOfRange		UMETA(Displayname = "超出距离"),
 	ToClose			UMETA(Displayname = "太近了"),
 	NoToward		UMETA(Displayname = "面向对方"),
@@ -30,8 +31,6 @@ enum class EActivateFailCode : uint8
 	InValidTarget	UMETA(Displayname = "无效的目标"),
 	NoTarget		UMETA(Displayname = "需要一个目标"),
 	NoItem			UMETA(Displayname = "道具不足"),
-
-	Error			UMETA(Displayname = "代码错误"),
 };
 
 /**
@@ -48,8 +47,20 @@ protected:
 
 	/** 射程*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	int32 Range = 1600;
+	int32 Range = 1500;
 
+	/** 法力消耗*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	int32 Mana = 0;
+
+	/** 怒气消耗*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	int32 Rage = 0;
+
+	/** 能量消耗*/
+	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	int32 Energy = 0;
+	
 	/** 消耗品*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
 	TArray<int32> NeedItems;

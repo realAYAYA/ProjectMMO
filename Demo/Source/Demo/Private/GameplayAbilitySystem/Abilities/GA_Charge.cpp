@@ -23,10 +23,15 @@ UGA_Charge::UGA_Charge()
 
 EActivateFailCode UGA_Charge::CanActivateCondition(const FGameplayAbilityActorInfo& ActorInfo) const
 {
-	if (EActivateFailCode::Error == Super::CanActivateCondition(ActorInfo))
-		return EActivateFailCode::Error;
-
 	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo.AvatarActor.Get());
+	
+	EActivateFailCode FailCode = Super::CanActivateCondition(ActorInfo);
+	if (FailCode != EActivateFailCode::Success)
+	{
+		Caster->OnAbilityFailed.Broadcast(FailCode);
+		return FailCode;
+	}
+	
 	const AMCharacter* Target = Caster->GetCurrentTarget();
 	if (!Target || !Target->GetAbilitySystemComponent())
 	{
@@ -34,21 +39,34 @@ EActivateFailCode UGA_Charge::CanActivateCondition(const FGameplayAbilityActorIn
 		return EActivateFailCode::NoTarget;
 	}
 
-	EActivateFailCode FailCode = EActivateFailCode::Success;
+	FailCode = EActivateFailCode::Success;
 	
 	// Todo 不是敌对目标
 	
 	// Out of range
 	const float Distance = (Caster->GetActorLocation() - Target->GetActorLocation()).Length();
 	if (Distance > Range)
+	{
 		FailCode = EActivateFailCode::OutOfRange;
+		Caster->OnAbilityFailed.Broadcast(FailCode);
+		return FailCode;
+	}
+		
 	if (Distance < MinRange)
+	{
 		FailCode = EActivateFailCode::ToClose;
+		Caster->OnAbilityFailed.Broadcast(FailCode);
+		return FailCode;
+	}
 	
 	// 没有朝向敌人
 	const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
 	if (UKismetMathLibrary::Dot_VectorVector(Dir, Caster->GetActorForwardVector()) < 0.5f)
+	{
 		FailCode = EActivateFailCode::NoToward;
+		Caster->OnAbilityFailed.Broadcast(FailCode);
+		return FailCode;
+	}
 	
 	// Todo 不在视野中
 
@@ -63,23 +81,21 @@ void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 	// 根据目标位置，计算冲锋的目的地
 	AMCharacter* Caster = Cast<AMCharacter>(OwnerInfo->AvatarActor);
 	const AMCharacter* Target = Cast<AMCharacter>(OwnerInfo->AvatarActor)->GetCurrentTarget();
-
+	UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent();
+	
 	// 对目标施加效果
 	for (const TSubclassOf<UMGameplayEffect>& Effect : EffectsToTarget)
 	{
-		if (Effect.Get() && Target)
+		if (!Effect.Get())
+			continue;
+
+		const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
+		const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, 1, EffectContext);
+		if (SpecHandle.IsValid())
 		{
-			if (UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent())
-			{
-				const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
-				const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, 1, EffectContext);
-				if (SpecHandle.IsValid())
-				{
-					const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
-					if (!ActiveGEHandle.WasSuccessfullyApplied())
-						ABILITY_LOG(Log, TEXT("Ability %s faild to apply Effect to Target %s"), *GetName(), *GetNameSafe(Effect));
-				}
-			}
+			const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			if (!ActiveGEHandle.WasSuccessfullyApplied())
+				ABILITY_LOG(Log, TEXT("Ability %s faild to apply Effect to Target %s"), *GetName(), *GetNameSafe(Effect));
 		}
 	}
 

@@ -18,14 +18,21 @@ UGA_CastSpell::UGA_CastSpell()
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 
 	TargetType = ETargetType::Hostile;
+
+	Range = 1500;
 }
 
 EActivateFailCode UGA_CastSpell::CanActivateCondition(const FGameplayAbilityActorInfo& ActorInfo) const
 {
-	if (Super::CanActivateCondition(ActorInfo) == EActivateFailCode::Error)
-		return EActivateFailCode::Error;
-
 	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo.AvatarActor.Get());
+	
+	EActivateFailCode FailCode = Super::CanActivateCondition(ActorInfo);
+	if (FailCode != EActivateFailCode::Success)
+	{
+		Caster->OnAbilityFailed.Broadcast(FailCode);
+		return FailCode;
+	}
+	
 	const AMCharacter* Target = Caster->GetCurrentTarget();
 	if (!Target || !Target->GetAbilitySystemComponent())
 	{
@@ -33,36 +40,36 @@ EActivateFailCode UGA_CastSpell::CanActivateCondition(const FGameplayAbilityActo
 		return EActivateFailCode::NoTarget;
 	}
 
-	EActivateFailCode FailCode = EActivateFailCode::Success;
+	FailCode = EActivateFailCode::Success;
 	
 	// 目标类型不对
 	
 	// 太远了
 	if ((Target->GetActorLocation() - Caster->GetActorLocation()).Length() > Range)
+	{
 		FailCode = EActivateFailCode::OutOfRange;
+		Caster->OnAbilityFailed.Broadcast(FailCode);
+		return FailCode;
+	}
+
+	// 消耗条件不足
+	if (Caster->GetAttributeSet()->Mana.GetCurrentValue() < Mana)
+	{
+		FailCode = EActivateFailCode::NoMana;
+		Caster->OnAbilityFailed.Broadcast(FailCode);
+		return FailCode;
+	}
 	
 	// 如果是目标敌对，需要面向对方，友方增益buff则不需要
 	if (TargetType == ETargetType::Hostile)
 	{
 		const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
-		if (UKismetMathLibrary::Dot_VectorVector(Dir, Caster->GetActorForwardVector()) < 0.5f)
+		if (UKismetMathLibrary::Dot_VectorVector(Dir, Caster->GetActorForwardVector()) < 0.7f)
+		{
 			FailCode = EActivateFailCode::NoToward;
-	}
-	
-	// 消耗条件不足
-	if (Caster->GetAttributeSet()->Mana.GetCurrentValue() < Mana)
-	{
-		FailCode = EActivateFailCode::NoMana;
-	}
-
-	if (Caster->GetAttributeSet()->Rage.GetCurrentValue() < Rage)
-	{
-		FailCode = EActivateFailCode::NoRage;
-	}
-	
-	if (Caster->GetAttributeSet()->Energy.GetCurrentValue() < Energy)
-	{
-		FailCode = EActivateFailCode::NoEnergy;
+			Caster->OnAbilityFailed.Broadcast(FailCode);
+			return FailCode;
+		}
 	}
 
 	Caster->OnAbilityFailed.Broadcast(FailCode);
@@ -126,22 +133,21 @@ void UGA_CastSpell::EndAbility(
 		Target = Caster->GetCurrentTarget();
 	}
 
+	UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent();
+
 	// 对目标施加效果
 	for (const TSubclassOf<UMGameplayEffect>& Effect : EffectsToTarget)
 	{
-		if (Effect.Get() && Target)
+		if (!Effect.Get())
+			continue;
+		
+		const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
+		const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, Level, EffectContext);
+		if (SpecHandle.IsValid())
 		{
-			if (UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent())
-			{
-				const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
-				const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, Level, EffectContext);
-				if (SpecHandle.IsValid())
-				{
-					const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
-					if (!ActiveGEHandle.WasSuccessfullyApplied())
-						ABILITY_LOG(Log, TEXT("Ability %s faild to apply Effect to Target %s"), *GetName(), *GetNameSafe(Effect));
-				}
-			}
+			const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			if (!ActiveGEHandle.WasSuccessfullyApplied())
+				ABILITY_LOG(Log, TEXT("Ability %s faild to apply Effect to Target %s"), *GetName(), *GetNameSafe(Effect));
 		}
 	}
 	

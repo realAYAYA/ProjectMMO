@@ -27,7 +27,7 @@ void UAbilityTask_Charge::Activate()
 {
 	Super::Activate();
 
-	BeginTime = FDateTime::Now().GetTicks();
+	CastTime = 0;
 }
 
 void UAbilityTask_Charge::OnDestroy(bool bInOwnerFinished)
@@ -45,17 +45,12 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 		EndTask();
 		return;
 	}
+
+	CastTime += DeltaTime;
 	
-	/*const UMAbilitySystemComponent* Component = Cast<UMAbilitySystemComponent>(Caster->GetAbilitySystemComponent());
-	if (!Component && !Component->CanMove() || FDateTime::Now().GetTicks() - BeginTime >= 1.3)
-	{
-		OnAbilityCancel.Broadcast();
-		EndTask();
-		return;
-	}*/
-	
-	// 冲锋超时 | 抵达位置 | 存在任何阻断移动的状态
-	if ((Caster->GetActorLocation() - Destination).Length() - Caster->GetCapsuleComponent()->GetScaledCapsuleRadius() <= 50.0f)
+	// 冲锋超时 | 抵达位置
+	if ((Caster->GetActorLocation() - Destination).Length() - Caster->GetCapsuleComponent()->GetScaledCapsuleRadius() <= 50.0f
+		|| CastTime >= 3)
 	{
 		OnAbilityTaskEnd.Broadcast();
 		EndTask();

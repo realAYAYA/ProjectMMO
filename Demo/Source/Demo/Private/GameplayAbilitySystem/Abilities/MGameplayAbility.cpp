@@ -18,6 +18,10 @@ bool UMGameplayAbility::CanActivateAbility(
 {
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 		return false;
+
+	const AMCharacter* Character = Cast<AMCharacter>(ActorInfo->AvatarActor.Get());
+	if (!Character || !Cast<UMAbilitySystemComponent>(Character->GetAbilitySystemComponent()))
+		return false;
 	
 	return CanActivateCondition(*ActorInfo) == EActivateFailCode::Success;
 }
@@ -95,10 +99,9 @@ void UMGameplayAbility::EndAbility(
 
 EActivateFailCode UMGameplayAbility::CanActivateCondition(const FGameplayAbilityActorInfo& ActorInfo) const
 {
-	const AMCharacter* Character = Cast<AMCharacter>(ActorInfo.AvatarActor.Get());
-	if (!Character || !Cast<UMAbilitySystemComponent>(Character->GetAbilitySystemComponent()))
-		return EActivateFailCode::Error;
-
+	if (!CheckCooldown(this->CurrentSpecHandle, &ActorInfo))
+		return EActivateFailCode::Cooldown;
+	
 	return EActivateFailCode::Success;
 }
 

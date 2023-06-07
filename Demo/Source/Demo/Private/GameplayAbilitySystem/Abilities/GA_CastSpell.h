@@ -25,18 +25,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
 	float CastTime = 2.5f;
 
-	/** 法力消耗*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
-	int32 Mana = 0;
-
-	/** 怒气消耗*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
-	int32 Rage = 0;
-
-	/** 能量消耗*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
-	int32 Energy = 0;
-
 	/** 对目标施加效果*/
 	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
 	TArray<TSubclassOf<UMGameplayEffect>> EffectsToTarget;

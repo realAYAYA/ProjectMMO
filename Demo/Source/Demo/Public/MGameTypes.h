@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "MGameDefine.h"
+
 #include "MGameTypes.generated.h"
 
 /** 游戏中Buff数据*/
@@ -21,7 +24,7 @@ struct FGameBuffData
 	int32 Overflow = 0;
 };
 
-/** 游戏中Buff数据*/
+/** 玩家属性数据*/
 USTRUCT(BlueprintType) 
 struct FCharacterAttribute
 {
@@ -52,13 +55,24 @@ struct FGamePlayerData
 	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
 	int64 UserID = 0;
 
+	// 升级数据
 	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
-	int32 Exp = 0;
+	int32 LevelData = 0;
 
-	// Todo 装备数据
+	// 阵营
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	ECamp Camp;
+
+	// 角色职业
+	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
+	ECharacterClass Class;
+	
+	// Todo 装备数据、背包数据、天赋数据（种族天赋）、外观数据
+	// Todo 其它功能点数据：军衔、副职业
+
+	// Todo 离线缓存
+	// 角色属性值
 	// Todo Buff保存
-	// Todo 天赋数据
-	// Todo 其它功能点数据
 	
 };
 

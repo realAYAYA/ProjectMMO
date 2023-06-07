@@ -20,14 +20,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
 	int32 Level = 1;
 
-	/** 怒气消耗*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastMelee")
-	int32 Rage = 0;
-
-	/** 能量消耗*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastMelee")
-	int32 Energy = 0;
-
 	/** 对目标施加效果*/
 	UPROPERTY(EditDefaultsOnly, Category = "CastMelee")
 	TArray<TSubclassOf<UMGameplayEffect>> EffectsToTarget;

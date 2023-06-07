@@ -28,6 +28,15 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMoveInput, float, X, float, Y);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLookInput, float, X, float, Y);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnJumpInput, float, V);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRageChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxRageChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnergyChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxEnergyChanged, float, V);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityFailed, EActivateFailCode, FailCode);
 
 UCLASS()
@@ -91,6 +100,30 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
 	FOnAbilityFailed OnAbilityFailed;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnHealthChanged OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnMaxHealthChanged OnMaxHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnManaChanged OnManaChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnMaxManaChanged OnMaxManaChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnRageChanged OnRageChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnMaxRageChanged OnMaxRageChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnEnergyChanged OnEnergyChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	FOnMaxEnergyChanged OnMaxEnergyChanged;
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	

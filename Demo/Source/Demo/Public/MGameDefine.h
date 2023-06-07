@@ -3,6 +3,22 @@
 #include "CoreMinimal.h"
 
 UENUM(BlueprintType)
+enum class ECharacterClass : uint8
+{
+	None		UMETA(Displayname = "None"),
+	Warrior		UMETA(Displayname = "Warruir"),
+	Mage		UMETA(Displayname = "Mage"),
+};
+
+UENUM(BlueprintType)
+enum class ECamp : uint8
+{
+	None		UMETA(Displayname = "None"),
+	Alliance 	UMETA(Displayname = "联盟"),
+	Horde		UMETA(Displayname = "部落"),
+};
+
+UENUM(BlueprintType)
 enum class EItemState : uint8
 {
 	None		UMETA(Displayname = "None"),

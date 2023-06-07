@@ -19,9 +19,9 @@ class UGA_Charge : public UMGameplayAbility
 public:
 	UGA_Charge();
 
-	/** 技能等级*/
+	/** 最小距离*/
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
-	int32 MinRange = 800;
+	int32 MinRange = 400;
 
 	/** 对目标施加效果*/
 	UPROPERTY(EditDefaultsOnly, Category = "CastMelee")
