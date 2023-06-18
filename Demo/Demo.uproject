@@ -12,7 +12,8 @@
 				"Engine",
 				"GameplayAbilities",
 				"CoreUObject",
-				"GameTables"
+				"GameTables",
+				"UMG"
 			]
 		}
 	],
