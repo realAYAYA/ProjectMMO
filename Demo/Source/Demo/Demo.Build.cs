@@ -29,7 +29,11 @@ public class Demo : ModuleRules
 		{
 			"GameplayAbilities", 
 			"GameplayTags", 
-			"GameplayTasks"
+			"GameplayTasks",
+			
+			"UMG",
+			"Slate",
+			"SlateCore",
 		});
 	}
 }

@@ -29,8 +29,18 @@ class DEMO_API AMPlayerState : public APlayerState
 	void Offline() {}
 
 protected:
+
+	// Todo 背包
 	UPROPERTY()
 	class UInventory* InventoryModule;
+	
+	
+	// Todo 天赋模块
+	// Todo 任务模块
+	// Todo 邮件模块
+	// Todo 装扮模块
+	// Todo 成就模块 - ToSteam
+	// Todo 聊天模块 - 服务器微服务
 
 	/** 客户端调用，服务器执行*/
 	UFUNCTION(BlueprintCallable, Category = ProjectSS, Server, Reliable)

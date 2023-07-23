@@ -48,7 +48,7 @@ struct FCharacterAttribute
 
 /** 游戏玩家角色数据*/
 USTRUCT(BlueprintType) 
-struct FGamePlayerData
+struct FMPlayerData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -78,7 +78,7 @@ struct FGamePlayerData
 
 /** 用户整体数据*/
 USTRUCT(BlueprintType)
-struct FGameUserData
+struct FMUserData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -86,7 +86,7 @@ struct FGameUserData
 	int64 UserID = 0;
 
 	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
-	FGamePlayerData PlayerData;
+	FMPlayerData PlayerData;
 	
 };
 

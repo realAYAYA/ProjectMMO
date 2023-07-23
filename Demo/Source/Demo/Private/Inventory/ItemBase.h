@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
 #include "ItemBase.generated.h"
 
 /**
@@ -24,6 +23,7 @@ public:
 	FName GetConfigName() const { return TEXT("NullItem"); };
 
 protected:
+	
 	int32 ConfigID = 0;
 
 	int32 UID = 0;
