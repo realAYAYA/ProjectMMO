@@ -28,10 +28,12 @@ void UAbilityTask_Charge::Activate()
 	Super::Activate();
 
 	CastTime = 0;
+	Caster->GetCharacterMovement()->MaxAcceleration = 1500000;
 }
 
 void UAbilityTask_Charge::OnDestroy(bool bInOwnerFinished)
 {
+	Caster->GetCharacterMovement()->MaxAcceleration = 1500;
 	Super::OnDestroy(bInOwnerFinished);
 }
 
@@ -41,6 +43,7 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 
 	if (!Caster)
 	{
+		Caster->GetCharacterMovement()->MaxAcceleration = 1500;
 		OnAbilityCancel.Broadcast();
 		EndTask();
 		return;
@@ -48,10 +51,11 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 
 	CastTime += DeltaTime;
 	
-	// 冲锋超时 | 抵达位置
-	if ((Caster->GetActorLocation() - Destination).Length() - Caster->GetCapsuleComponent()->GetScaledCapsuleRadius() <= 50.0f
+	// 抵达位置 | 冲锋超时
+	if ((Caster->GetActorLocation() - Destination).Length() - Caster->GetCapsuleComponent()->GetScaledCapsuleRadius() <= 60.0f
 		|| CastTime >= 3)
 	{
+		Caster->GetCharacterMovement()->MaxAcceleration = 1500;
 		OnAbilityTaskEnd.Broadcast();
 		EndTask();
 		return;
@@ -60,6 +64,5 @@ void UAbilityTask_Charge::TickTask(float DeltaTime)
 	// 否则，维持冲锋状态
 	const FVector Dir = (Destination - Caster->GetActorLocation()).GetSafeNormal();
 	Caster->SetActorRotation(Dir.Rotation());
-	Caster->GetCharacterMovement()->AddImpulse(Dir * Caster->GetAttributeSet()->MaxMoveSpeed.GetCurrentValue());
 	Caster->AddMovementInput(Caster->GetActorForwardVector(), 1.0f);
 }

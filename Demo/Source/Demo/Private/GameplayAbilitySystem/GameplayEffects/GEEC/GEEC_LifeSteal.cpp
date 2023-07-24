@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GEECLifeSteal.h"
+#include "GEEC_LifeSteal.h"
 
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
 #include "GameplayAbilitySystem/GameplayEffects/MGameplayEffect.h"
@@ -14,13 +14,15 @@ struct FEffectStatics
 	{
 		// Capture the Target's DefensePower attribute. Do not snapshot it,
 		// because we want to use the health value at the moment we apply the execution.
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UMAttributeSet, Health, Target, true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMAttributeSet, Health, Target, false);
 
 		// Capture the Source's AttackPower. We do want to snapshot this at the moment we create the GameplayEffectSpec that will execute the damage.
 		// (imagine we fire a projectile: we create the GE Spec when the projectile is fired. When it hits the target, we want to use the AttackPower at the moment
 		// the projectile was launched, not when it hits).
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMAttributeSet, Health, Source, true);
 
 		// Also capture the source's raw Damage, which is normally passed in directly via the execution
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMAttributeSet, Health, Source, true);
 	}
 };
 
@@ -30,12 +32,12 @@ static const FEffectStatics& EffectStatics()
 	return Statics;
 }
 
-UGEECLifeSteal::UGEECLifeSteal()
+UGEEC_LifeSteal::UGEEC_LifeSteal()
 {
 	RelevantAttributesToCapture.Add(EffectStatics().HealthDef);
 }
 
-void UGEECLifeSteal::Execute_Implementation(
+void UGEEC_LifeSteal::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
@@ -55,9 +57,7 @@ void UGEECLifeSteal::Execute_Implementation(
 	float Damage = 0.0f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(EffectStatics().HealthDef, EvaluationParameters, Damage);
 	
-	float UnmitigatedDamage = Damage;
-	float MitigatedDamage = UnmitigatedDamage - Armor;
-	if (MitigatedDamage > 0.0f)
+	if (const float MitigatedDamage = Damage - Armor > 0.0f)
 	{
 		OutExecutionOutput.AddOutputModifier(
 			FGameplayModifierEvaluatedData(EffectStatics().HealthProperty, EGameplayModOp::Additive, -MitigatedDamage));

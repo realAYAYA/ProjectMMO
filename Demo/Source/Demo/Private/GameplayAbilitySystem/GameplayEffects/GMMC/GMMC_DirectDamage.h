@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameplayModMagnitudeCalculation.h"
-#include "MGameplayModMagnitudeCalculation.generated.h"
+#include "GMMC_DirectDamage.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UMGameplayModMagnitudeCalculation : public UGameplayModMagnitudeCalculation
+class UGMMC_DirectDamage : public UGameplayModMagnitudeCalculation
 {
 	GENERATED_BODY()
 	

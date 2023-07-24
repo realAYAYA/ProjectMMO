@@ -23,6 +23,7 @@ class UMAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 public:
+	
 	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes", ReplicatedUsing = OnRep_Strength)
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, Strength)

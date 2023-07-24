@@ -4,19 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GameplayEffectExecutionCalculation.h"
-#include "GEECLifeSteal.generated.h"
+#include "GEEC_LifeSteal.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UGEECLifeSteal : public UGameplayEffectExecutionCalculation
+class UGEEC_LifeSteal : public UGameplayEffectExecutionCalculation
 {
 	GENERATED_BODY()
 
 public:
 
-	UGEECLifeSteal();
+	UGEEC_LifeSteal();
 
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 };
