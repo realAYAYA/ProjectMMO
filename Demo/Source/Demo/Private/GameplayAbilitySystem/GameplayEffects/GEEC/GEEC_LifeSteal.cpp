@@ -3,6 +3,7 @@
 
 #include "GEEC_LifeSteal.h"
 
+#include "Characters/MCharacter.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
 #include "GameplayAbilitySystem/GameplayEffects/MGameplayEffect.h"
 
@@ -37,14 +38,24 @@ UGEEC_LifeSteal::UGEEC_LifeSteal()
 	RelevantAttributesToCapture.Add(EffectStatics().HealthDef);
 }
 
+AMCharacter* UGEEC_LifeSteal::GetTarget(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
+{
+	const UAbilitySystemComponent* TargetAbilitySystem = ExecutionParams.GetTargetAbilitySystemComponent();
+	AActor* TargetActor = TargetAbilitySystem ? TargetAbilitySystem->GetAvatarActor() : nullptr;
+	return Cast<AMCharacter>(TargetActor);
+}
+
+AMCharacter* UGEEC_LifeSteal::GetSource(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
+{
+	const UAbilitySystemComponent* SourceAbilitySystem = ExecutionParams.GetSourceAbilitySystemComponent();
+	AActor* SourceActor = SourceAbilitySystem ? SourceAbilitySystem->GetAvatarActor() : nullptr;
+	return Cast<AMCharacter>(SourceActor);
+}
+
 void UGEEC_LifeSteal::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
-	UAbilitySystemComponent* TargetAbilitySystem = ExecutionParams.GetTargetAbilitySystemComponent();
-	UAbilitySystemComponent* SourceAbilitySystem = ExecutionParams.GetSourceAbilitySystemComponent();
-	AActor* TargetActor = TargetAbilitySystem ? TargetAbilitySystem->GetAvatarActor() : nullptr;
-	AActor* SourceActor = SourceAbilitySystem ? SourceAbilitySystem->GetAvatarActor() : nullptr;
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 	Cast<UMGameplayEffect>(Spec.Def);
 	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();

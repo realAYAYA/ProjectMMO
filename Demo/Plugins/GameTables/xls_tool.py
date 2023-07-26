@@ -61,11 +61,15 @@ struct {{dllexport_decl}} {{struct_name}} : public FTableRowBase
 {%- for def in defines %}
 
     /** {{def['show_name']}} */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "{{custom_category}}")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
 {%- if def['var_is_array'] %}
     TArray<{{def['var_type']}}> {{def['var_name']}};
 {%- else %}
+{%- if def['var_need_init'] %}
+    {{def['var_type']}} {{def['var_name']}} = {{def['var_type']}}();
+{%- else %}
     {{def['var_type']}} {{def['var_name']}};
+{%- endif %}
 {%- endif %}
 {%- endfor %}
 
@@ -82,11 +86,15 @@ public:
 {%- for def in defines %}
 
     /** {{def['show_name']}} */
-    UPROPERTY(BlueprintReadOnly, Category = "{{custom_category}}")
+    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
 {%- if def['var_is_array'] %}
     TArray<{{def['var_type']}}> {{def['var_name']}};
 {%- else %}
+{%- if def['var_need_init'] %}
+    {{def['var_type']}} {{def['var_name']}} = {{def['var_type']}}();
+{%- else %}
     {{def['var_type']}} {{def['var_name']}};
+{%- endif %}
 {%- endif %}   
 {%- endfor %}
 
@@ -410,11 +418,17 @@ def process_type(data_cell: xlrd.sheet.Cell):
         type_name = 'int32'
     elif type_name == 'double':  # UE 的 BP 只支持 float
         type_name = 'float'
+
+    need_init = False
+    if type_name.startswith('int') or type_name == 'float' or type_name == 'bool' or type_name.startswith('E'):
+        need_init = True
+
     return {
         'raw_name': raw_name,
         'type_name': type_name,
         'is_array': (delimiter_char is not None),
         'delimiter': (delimiter_char or ''), 
+        'need_init': need_init,
     }
 
 
@@ -464,6 +478,7 @@ def parse_header(data_sheet: xlrd.sheet.Sheet) -> list:
             var_type = type_data['type_name']
             var_is_array = type_data['is_array']
             var_delimiter = type_data['delimiter']
+            var_need_init = type_data['need_init']
         except Exception as e:
             raise Exception(f'处理类型错误 col={col_idx+1} {e}')
         show_name = col[XLS_SHOW_NAME_ROW_IDX].value
@@ -475,6 +490,7 @@ def parse_header(data_sheet: xlrd.sheet.Sheet) -> list:
             'var_type': var_type,
             'var_is_array': var_is_array,
             'var_delimiter': var_delimiter,
+            'var_need_init': var_need_init,
             'show_name': show_name,
         })
     return table_define

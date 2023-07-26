@@ -6,6 +6,8 @@
 #include "GameplayEffectExecutionCalculation.h"
 #include "GEEC_LifeSteal.generated.h"
 
+class AMCharacter;
+
 /**
  * 
  */
@@ -17,6 +19,10 @@ class UGEEC_LifeSteal : public UGameplayEffectExecutionCalculation
 public:
 
 	UGEEC_LifeSteal();
+
+	AMCharacter* GetTarget(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const;
+
+	AMCharacter* GetSource(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const;
 
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 };

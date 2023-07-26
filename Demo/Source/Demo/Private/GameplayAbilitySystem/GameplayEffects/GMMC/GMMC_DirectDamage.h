@@ -13,5 +13,6 @@ UCLASS()
 class UGMMC_DirectDamage : public UGameplayModMagnitudeCalculation
 {
 	GENERATED_BODY()
-	
+
+	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 };
