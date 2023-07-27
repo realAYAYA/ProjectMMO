@@ -33,26 +33,26 @@ static const FEffectStatics& EffectStatics()
 	return Statics;
 }
 
-UGEEC_LifeSteal::UGEEC_LifeSteal()
+UMGameplayEffectExecutionCalculation::UMGameplayEffectExecutionCalculation()
 {
 	RelevantAttributesToCapture.Add(EffectStatics().HealthDef);
 }
 
-AMCharacter* UGEEC_LifeSteal::GetTarget(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
+AMCharacter* UMGameplayEffectExecutionCalculation::GetTarget(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
 {
 	const UAbilitySystemComponent* TargetAbilitySystem = ExecutionParams.GetTargetAbilitySystemComponent();
 	AActor* TargetActor = TargetAbilitySystem ? TargetAbilitySystem->GetAvatarActor() : nullptr;
 	return Cast<AMCharacter>(TargetActor);
 }
 
-AMCharacter* UGEEC_LifeSteal::GetSource(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
+AMCharacter* UMGameplayEffectExecutionCalculation::GetSource(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
 {
 	const UAbilitySystemComponent* SourceAbilitySystem = ExecutionParams.GetSourceAbilitySystemComponent();
 	AActor* SourceActor = SourceAbilitySystem ? SourceAbilitySystem->GetAvatarActor() : nullptr;
 	return Cast<AMCharacter>(SourceActor);
 }
 
-void UGEEC_LifeSteal::Execute_Implementation(
+void UMGameplayEffectExecutionCalculation::Execute_Implementation(
 	const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {

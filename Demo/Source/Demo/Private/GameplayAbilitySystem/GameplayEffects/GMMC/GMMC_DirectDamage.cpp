@@ -3,6 +3,24 @@
 
 #include "GameplayAbilitySystem/GameplayEffects/GMMC/GMMC_DirectDamage.h"
 
+#include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
+
+UGMMC_DirectDamage::UGMMC_DirectDamage()
+{
+	//ManaDef defined in header FGameplayEffectAttributeCaptureDefinition ManaDef;
+	ManaDef.AttributeToCapture = UMAttributeSet::GetManaAttribute();
+	ManaDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
+	ManaDef.bSnapshot = false;
+
+	//MaxManaDef defined in header FGameplayEffectAttributeCaptureDefinition MaxManaDef;
+	MaxManaDef.AttributeToCapture = UMAttributeSet::GetMaxManaAttribute();
+	MaxManaDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
+	MaxManaDef.bSnapshot = false;
+
+	RelevantAttributesToCapture.Add(ManaDef);
+	RelevantAttributesToCapture.Add(MaxManaDef);
+}
+
 float UGMMC_DirectDamage::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const
 {
 	// Gather the tags from the source and target as that can affect which buffs should be used
@@ -14,11 +32,11 @@ float UGMMC_DirectDamage::CalculateBaseMagnitude_Implementation(const FGameplayE
 	EvaluationParameters.TargetTags = TargetTags;
 
 	float Mana = 0.f;
-	GetCapturedAttributeMagnitude(ManaDef, Spec, EvaluationParameters, Mana);
+	//GetCapturedAttributeMagnitude(ManaDef, Spec, EvaluationParameters, Mana);
 	Mana = FMath::Max<float>(Mana, 0.0f);
 
 	float MaxMana = 0.f;
-	GetCapturedAttributeMagnitude(MaxManaDef, Spec, EvaluationParameters, MaxMana);
+	//GetCapturedAttributeMagnitude(MaxManaDef, Spec, EvaluationParameters, MaxMana);
 	MaxMana = FMath::Max<float>(MaxMana, 1.0f); // Avoid divide by zero
 
 	float Reduction = -20.0f;
