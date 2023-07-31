@@ -30,6 +30,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	FGameplayTagContainer SprintEventTag;
 
+	
+
 	const AMCharacter* GetOwnerCharacter() const { return Cast<AMCharacter>(GetOwnerActor()); }
 
 	/**

@@ -60,6 +60,10 @@ void UMGameplayEffectExecutionCalculation::Execute_Implementation(
 	Cast<UMGameplayEffect>(Spec.Def);
 	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
+
+	AMCharacter* Target = GetTarget(ExecutionParams);
+	AMCharacter* Source = GetTarget(ExecutionParams);
+	
 	FAggregatorEvaluateParameters EvaluationParameters;
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;

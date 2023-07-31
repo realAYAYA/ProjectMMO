@@ -25,9 +25,6 @@ AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	
-	// Character doesnt have a rifle at start
-	//bHasRifle = false;
-	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
 	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -89.0f));
@@ -113,7 +110,6 @@ void AMCharacter::GiveAbilities()
 				const FGameplayTag& Tag = Ability->AbilityTags.First();
 				InputSkillMap.Add(++i, Tag);
 			}
-				
 		}
 	}
 }
