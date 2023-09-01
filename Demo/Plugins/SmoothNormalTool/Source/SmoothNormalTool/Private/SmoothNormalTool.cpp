@@ -5,21 +5,16 @@
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
 #include "ContentBrowserModule.h"
-#include "SmoothNormalCommand.h"
-static const FName SmoothNormalToolTabName("SmoothNormalTool");
-
 
 #define LOCTEXT_NAMESPACE "FSmoothNormalToolModule"
 
-static FDelegateHandle HookEditorUIContentBrowserEmptyExtenderDelegateHandle;
+//static FDelegateHandle HookEditorUIContentBrowserEmptyExtenderDelegateHandle;
 static FContentBrowserMenuExtender_SelectedAssets HookEditorUIContentBrowserExtenderDelegate;
 static FDelegateHandle HookEditorUIContentBrowserExtenderDelegateHandle;
 
 
 static void CreateActionsMenuForAsset(FMenuBuilder& MenuBuilder, TArray<FAssetData> SelectedAssets)
 {
-
-
 	MenuBuilder.AddMenuEntry(FText::FromName(TEXT("平滑模型法线")), FText::FromName(TEXT("Smooth normal")), FSlateIcon(),
 		FExecuteAction::CreateStatic(&FSmoothNormalCommand::SmoothNormal, SelectedAssets)
 	);
@@ -27,11 +22,9 @@ static void CreateActionsMenuForAsset(FMenuBuilder& MenuBuilder, TArray<FAssetDa
 
 static void CreateSubMenuForAsset(FMenuBuilder& MenuBuilder, TArray<FAssetData> SelectedAssets)
 {
-
 	MenuBuilder.AddSubMenu(FText::FromName(TEXT("ToonTool")), FText::FromName(TEXT("ToonTool")),
 		FNewMenuDelegate::CreateStatic(&CreateActionsMenuForAsset, SelectedAssets)
 	);
-
 }
 
 static TSharedRef<FExtender> OnExtendContentBrowserAssetSelectionMenu(const TArray<FAssetData>& SelectedAssets)
@@ -42,8 +35,7 @@ static TSharedRef<FExtender> OnExtendContentBrowserAssetSelectionMenu(const TArr
 		EExtensionHook::First,
 		nullptr,
 		FMenuExtensionDelegate::CreateStatic(&CreateSubMenuForAsset, SelectedAssets));
-
-
+	
 	return Extender;
 }
 

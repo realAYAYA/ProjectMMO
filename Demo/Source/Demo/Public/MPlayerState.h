@@ -17,23 +17,17 @@ class DEMO_API AMPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 
-	AMPlayerState() {};
+	AMPlayerState();
 
-	UFUNCTION()
-	void RequestRoleData() {}
-
-	UFUNCTION()
-	void SaveData() {}
+public:
 	
-	UFUNCTION()
-	void Offline() {}
+	void LoadData(const FMUserData& InData) { UserData = InData; }
 
 protected:
 
-	// Todo 背包
+	// Todo 背包模块
 	UPROPERTY()
 	class UInventory* InventoryModule;
-	
 	
 	// Todo 天赋模块
 	// Todo 任务模块
@@ -42,12 +36,12 @@ protected:
 	// Todo 成就模块 - ToSteam
 	// Todo 聊天模块 - 服务器微服务
 
-	/** 客户端调用，服务器执行*/
-	UFUNCTION(BlueprintCallable, Category = ProjectSS, Server, Reliable)
-	void Req();
+	virtual void CopyProperties(APlayerState* PlayerState) override;
+	
+	virtual void Reset() override;
 
-	/** 服务器调用，客户端执行*/
-	UFUNCTION(Client, Reliable)
-	void Ack(const int32 InData);
+private:
+
+	FMUserData UserData;
 	
 };

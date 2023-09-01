@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 
 UENUM(BlueprintType)
-enum class ECharacterClass : uint8
+enum class ERoleClass : uint8
 {
 	None		UMETA(Displayname = "None"),
 	Warrior		UMETA(Displayname = "Warruir"),
@@ -34,7 +34,6 @@ enum class EItemType : uint8
 	Weapon				UMETA(Displayname = "MainWeapon"),
 	TacticalEquipment	UMETA(Displayname = "TacticalEquipment"),
 	Armor				UMETA(Displayname = "Armor"),
-	MechPart			UMETA(Displayname = "MechPart"),
 
 	WeaponPart			UMETA(Displayname = "WeaponPart"),
 	Mission				UMETA(Displayname = "Mission"),

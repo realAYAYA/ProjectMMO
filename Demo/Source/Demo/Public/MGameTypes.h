@@ -8,7 +8,7 @@
 
 #include "MGameTypes.generated.h"
 
-/** 游戏中Buff数据*/
+/** 玩家离线后，游戏中角色身上Buff快照数据 */
 USTRUCT(BlueprintType) 
 struct FGameBuffData
 {
@@ -22,6 +22,8 @@ struct FGameBuffData
 
 	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
 	int32 Overflow = 0;
+
+	// Todo 如何从玩家AbilityComponent上读取当前所有效果，及其运行数据
 };
 
 /** 玩家属性数据*/
@@ -65,7 +67,7 @@ struct FMPlayerData
 
 	// 角色职业
 	UPROPERTY(BlueprintReadOnly, Category = ProjectSS)
-	ECharacterClass Class;
+	ERoleClass Class;
 	
 	// Todo 装备数据、背包数据、天赋数据（种族天赋）、外观数据
 	// Todo 其它功能点数据：军衔、副职业
@@ -109,6 +111,7 @@ class UItemData : public UObject
 	GENERATED_BODY()
 
 public:
+	
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = ProjectSS)
 	int32 ID = 0;
 	

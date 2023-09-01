@@ -7,7 +7,9 @@
 #include "Engine/GameInstance.h"
 #include "MGameInstance.generated.h"
 
+class AMPlayerState;
 class UMGameTables;
+class UGameRpc;
 
 /**
  * 
@@ -18,16 +20,13 @@ class DEMO_API UMGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	virtual void Init() override;
+
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	class AMPlayerState* Player;
 	
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
-	void Login(){};
-
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
-	void Offline(){};
-
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
-	void LoginChatServer(){}
+	/** Network */
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
+	const UGameRpc* GetGameRpc() const;
 
 	// Todo 拍卖行服务器
 
@@ -37,17 +36,14 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString CharacterName;
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
-	FMPlayerData GetCharacterData() const { return *PlayerData; }
+public:
+	virtual void Init() override;
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
-	FMUserData GetUserData() const { return UserData; }
-
+	static UMGameInstance* GetMGameInstance(const UWorld* World);
+	
+	static AMPlayerState* GetMPlayerState(const UWorld* World);
+	
 private:
-
-	FMUserData UserData;
-
-	FMPlayerData* PlayerData;
 
 	UPROPERTY()
 	UMGameTables* GameTables;

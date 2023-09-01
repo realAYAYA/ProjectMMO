@@ -30,7 +30,17 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	FGameplayTagContainer SprintEventTag;
 
+	// 受到近战攻击时触发的效果
 	
+	// 受到近战攻击时给对方施加效果
+
+	// 受到法术伤害时给对方施加效果
+
+	// 近战攻击敌人时触发的效果
+
+	// 攻击敌人时给对方施加效果
+
+	// 施放法术时触发的效果
 
 	const AMCharacter* GetOwnerCharacter() const { return Cast<AMCharacter>(GetOwnerActor()); }
 
