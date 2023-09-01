@@ -3,20 +3,23 @@
 
 #include "MySQLBPLibrary.h"
 #include "Misc/FileHelper.h"
+#include "ImageUtils.h"
+//#include "Windows/AllowWindowsPlatformTypes.h"
 
 #include "MySQLPlugin.h"
-#include "codecvt"
+#include "mysql.h"
 #include "fstream"
+//#include "codecvt"
 
-//using namespace std;
+constexpr int OutTime = 3;//连接超时设定
+constexpr int ReConnection = 1;//自动重连
 
-MYSQL mysql;//mysql上下文；
+MYSQL MySQL;//mysql上下文；
 MYSQL_RES *res;//查询结果集变量
 MYSQL_FIELD *field = 0;
 MYSQL_ROW row;//数据行，结构体
 FMySQLDataRow m_row;
 MYSQL_STMT *stmt;
-
 
 const char* Host;    //服务器IP
 const char* DB;      //数据库名称
@@ -32,76 +35,72 @@ int rownum = 0;     //表的行数
 
 //FString转char*
 
-char * UMySQLPluginBPLibrary::GetCharfromFString(FString Query)
+char* FStringToChar(const FString& Query)
 {
-	const TCHAR* queryTChar = *Query;
+	const TCHAR* QueryTChar = *Query;
+	size_t Length;
+	
+	const _locale_t Local = _create_locale(LC_ALL, "Chinese");
+	_wcstombs_s_l(&Length, nullptr, 0, QueryTChar, 0, Local);
 
-	size_t len;
-	_locale_t local = _create_locale(LC_ALL, "Chinese");
+	size_t ConvertedSize = 0;
+	char *CharBuffer = (char*)malloc(Length);
+	_wcstombs_s_l(&ConvertedSize, CharBuffer, Length, QueryTChar, _TRUNCATE, Local);
 
-	_wcstombs_s_l(&len, NULL, 0, queryTChar, 0, local);
-
-	size_t convertedSize = 0;
-
-	char *charBuffer = (char *)malloc(len);
-	_wcstombs_s_l(&convertedSize, charBuffer, len,
-		queryTChar, _TRUNCATE, local);
-
-	return charBuffer;
+	return CharBuffer;
 }
 
 //char* 转FString;
-wchar_t * UMySQLPluginBPLibrary::GetWCharfromChar(const char * Input)
+wchar_t* CharToWChar(const char* Input)
 {
-	const size_t length = 1 + strlen(Input);
-	wchar_t* wcsText = new wchar_t[length];
+	const size_t Length = 1 + strlen(Input);
+	wchar_t* Result = new wchar_t[Length];
 
-	size_t convertedSize = 0;
+	size_t ConvertedSize = 0;
 
-	_locale_t local = _create_locale(LC_ALL, "Chinese");
-	errno_t ret = _mbstowcs_s_l(&convertedSize, wcsText, length, Input, _TRUNCATE, local);
+	const _locale_t Local = _create_locale(LC_ALL, "Chinese");
+	errno_t Ret = _mbstowcs_s_l(&ConvertedSize, Result, Length, Input, _TRUNCATE, Local);
 
-	return wcsText;
+	return Result;
 }
 
 
 /*登录*/
-void UMySQLPluginBPLibrary::Mysql_Connection(FString Server, FString DBName, FString UserID, FString Password, bool & IsSuccess, FString & errorMassage)
+void UMySQLPluginBPLibrary::Connection(
+	const FString& Server,
+	const FString& DBName,
+	const FString& UserID,
+	const FString& Password,
+	bool& IsSuccess,
+	FString& ErrorMassage)
 {
-	Host = GetCharfromFString(Server);
-	DB = GetCharfromFString(DBName);
-	User = GetCharfromFString(UserID);
-	Pass = GetCharfromFString(Password);
+	Host = FStringToChar(Server);
+	DB = FStringToChar(DBName);
+	User = FStringToChar(UserID);
+	Pass = FStringToChar(Password);
 
-	mysql_init(&mysql);  //初始化 mysql 上下文
-
-	const int outTime = 3;
-	mysql_options(&mysql, MYSQL_OPT_CONNECT_TIMEOUT, &outTime);  //连接超时设定
-
-	const int recon = 1;
-	mysql_options(&mysql, MYSQL_OPT_RECONNECT, &recon);         //自动重连
-
-
-	if (!mysql_real_connect(&mysql, Host, User, Pass, DB, 3306, 0, 0))
+	mysql_init(&MySQL);  //初始化 Mysql 上下文
+	mysql_options(&MySQL, MYSQL_OPT_CONNECT_TIMEOUT, &OutTime); //连接超时设定
+	mysql_options(&MySQL, MYSQL_OPT_RECONNECT, &ReConnection); //自动重连
+	
+	if (!mysql_real_connect(&MySQL, Host, User, Pass, DB, 3306, 0, 0))
 	{
 		IsSuccess = false;
-		errorMassage = mysql_error(&mysql);
+		ErrorMassage = mysql_error(&MySQL);
 	}
 	else
 	{
 		IsSuccess = true;
-		errorMassage = NULL;
-
+		ErrorMassage = TEXT("");
 	}
-	mysql_query(&mysql, "SET NAMES GB2312");//解决中文乱码问题
-
+	
+	mysql_query(&MySQL, "SET NAMES GB2312");//解决中文乱码问题
 }
 
-void UMySQLPluginBPLibrary::Mysql_Close()
+void UMySQLPluginBPLibrary::Close()
 {
-	mysql_close(&mysql);
+	mysql_close(&MySQL);
 }
-
 
 /*查询表，返回表的行结构数组*/
 void UMySQLPluginBPLibrary::SelectDataTableRows(FString FeildName, FString TableName,
@@ -109,28 +108,28 @@ void UMySQLPluginBPLibrary::SelectDataTableRows(FString FeildName, FString Table
 {
 	Rows.Empty();
 	TableHead.Empty();
-	mysql_query(&mysql, "SET NAMES GB2312");//解决中文乱码问题
+	mysql_query(&MySQL, "SET NAMES GB2312");//解决中文乱码问题
 
 	//1.执行SQL语句
 	Query = "select " + FeildName + " from " + TableName;//语句，这里要注意空格；
-	sql = GetCharfromFString(Query);
+	sql = FStringToChar(Query);
 
 
-	if (mysql_real_query(&mysql, sql, strlen(sql)) != 0)//执行SQL语句
+	if (mysql_real_query(&MySQL, sql, strlen(sql)) != 0)//执行SQL语句
 	{
 		IsSuccess = false;
-		errorMassage = mysql_error(&mysql);
+		errorMassage = mysql_error(&MySQL);
 	}
 	else
 	{
 		IsSuccess = true;
 		errorMassage = NULL;
 		//2.获取结果集
-		res = mysql_use_result(&mysql);
+		res = mysql_use_result(&MySQL);
 
 		while ((field = mysql_fetch_field(res)) != NULL)//获取表结构
 		{
-			TableHead.Add(GetWCharfromChar(field->name));
+			TableHead.Add(CharToWChar(field->name));
 		}
 
 		fieldnum = mysql_num_fields(res);//获取表列数
@@ -143,7 +142,7 @@ void UMySQLPluginBPLibrary::SelectDataTableRows(FString FeildName, FString Table
 
 			for (int i = 0; i < fieldnum; i++)
 			{
-				m_row.RowData.Add(GetWCharfromChar(row[i]));
+				m_row.RowData.Add(CharToWChar(row[i]));
 			}
 			Rows.Add(m_row);
 		}
@@ -154,22 +153,25 @@ void UMySQLPluginBPLibrary::SelectDataTableRows(FString FeildName, FString Table
 
 }
 
-void UMySQLPluginBPLibrary::insertRow(FString TableName, FString Values,
-	bool & IsSuccess, FString & errorMassage)
+void UMySQLPluginBPLibrary::InsertRow(
+		const FString& TableName,
+		const FString& Values,
+		bool& IsSuccess,
+		FString& ErrorMassage)
 {
-	mysql_query(&mysql, "SET NAMES GB2312");//解决中文乱码问题
+	mysql_query(&MySQL, "SET NAMES GB2312"); //解决中文乱码问题
 	Query = "insert into " + TableName + " values(" + Values + ")";
-	sql = GetCharfromFString(Query);
+	sql = FStringToChar(Query);
 
-	if (mysql_real_query(&mysql, sql, strlen(sql)) != 0)//执行SQL语句
+	if (mysql_real_query(&MySQL, sql, strlen(sql)) != 0) //执行SQL语句
 	{
 		IsSuccess = false;
-		errorMassage = mysql_error(&mysql);
+		ErrorMassage = mysql_error(&MySQL);
 	}
 	else
 	{
 		IsSuccess = true;
-		errorMassage = NULL;
+		ErrorMassage = TEXT("");
 	}
 }
 
@@ -178,7 +180,7 @@ void UMySQLPluginBPLibrary::deleteRow(FString TableName, FString Field, FString 
 {
 	mysql_query(&mysql, "SET NAMES GB2312");//解决中文乱码问题
 	Query = "delete from " + TableName + " where " + Field + "='" + value + "'";
-	sql = GetCharfromFString(Query);
+	sql = FStringToChar(Query);
 
 	if (mysql_real_query(&mysql, sql, strlen(sql)) != 0)//执行SQL语句
 	{
@@ -197,7 +199,7 @@ void UMySQLPluginBPLibrary::UpdateTable(FString TableName, FString Field,
 {
 	mysql_query(&mysql, "SET NAMES GB2312");//解决中文乱码问题
 	Query = "update " + TableName + " set " + Field + "='" + NewValue + "' where " + FormerField + "='" + FormerValue + "'";
-	sql = GetCharfromFString(Query);
+	sql = FStringToChar(Query);
 
 	if (mysql_real_query(&mysql, sql, strlen(sql)) != 0)//执行SQL语句
 	{
@@ -228,13 +230,13 @@ void UMySQLPluginBPLibrary::UpdateBinaryFile(FString TableName, FString FieldNam
 
 		Query = "update " + TableName + " set " + FieldName + "=? where id=" + ID;
 
-		if (mysql_stmt_prepare(stmt, GetCharfromFString(Query), Query.Len()))
+		if (mysql_stmt_prepare(stmt, FStringToChar(Query), Query.Len()))
 		{
 			IsSuccess = false;
 			errorMassage = mysql_stmt_error(stmt);
 		}
 		FString inFilename = inFile;//   例如："D:/Documents/Pictures/Camera Roll/mysql_read.jpg"; 含路径的全名
-		fstream file(GetCharfromFString(inFilename), ios::in | ios::binary);
+		fstream file(FStringToChar(inFilename), ios::in | ios::binary);
 		if (!file.is_open())
 		{
 			IsSuccess = false;
@@ -284,7 +286,7 @@ void UMySQLPluginBPLibrary::Selectimage(FString TableName,FString ID, int Image_
 	mysql_query(&mysql, "SET NAMES GB2312");
 
 	Query = "select * from " + TableName + " where id=" + ID;
-	sql = GetCharfromFString(Query);
+	sql = FStringToChar(Query);
 
 	if (mysql_real_query(&mysql, sql, strlen(sql)) != 0)
 	{
@@ -308,7 +310,7 @@ void UMySQLPluginBPLibrary::Selectimage(FString TableName,FString ID, int Image_
 			unsigned long *lens = mysql_fetch_lengths(res);
 
 			FString outFilename = FPaths::ProjectDir() + "/Content/Temporary";
-			fstream file2(GetCharfromFString(outFilename), ios::out | ios::binary);
+			fstream file2(FStringToChar(outFilename), ios::out | ios::binary);
 			if (!file2.is_open())
 			{
 				IsSuccess = false;

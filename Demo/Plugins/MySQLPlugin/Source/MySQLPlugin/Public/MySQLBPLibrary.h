@@ -6,11 +6,6 @@
 #include "Engine/Texture2D.h"
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-
-//#include "Windows/AllowWindowsPlatformTypes.h"
-//#include "mysql.h"
-//#include "ImageUtils.h"
-
 #include "MySQLBPLibrary.generated.h"
 
 using namespace std;
@@ -44,16 +39,16 @@ class MYSQLPLUGIN_API UMySQLPluginBPLibrary : public UBlueprintFunctionLibrary
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
-	static void Mysql_Connection(
-		FString Server,
-		FString DBName,
-		FString UserID,
-		FString Password,
+	static void Connection(
+		const FString& Server,
+		const FString& DBName,
+		const FString& UserID,
+		const FString& Password,
 		bool& IsSuccess,
 		FString& ErrorMassage);
 
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
-	static void Mysql_Close();
+	static void Close();
 
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
 	static void SelectDataTableRows(
@@ -65,9 +60,9 @@ public:
 		TArray<FMySQLDataRow>& Rows);
 
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
-	static void insertRow(
-		FString TableName,
-		FString Values,
+	static void InsertRow(
+		const FString& TableName,
+		const FString& Values,
 		bool& IsSuccess,
 		FString& ErrorMassage);
 
@@ -112,6 +107,4 @@ public:
 
 private:
 	
-	static char* GetCharfromFString(FString Query);
-	static wchar_t* GetWCharfromChar(const char* Input);
 };
