@@ -3,34 +3,13 @@
 #pragma once
 
 #include "Modules/ModuleManager.h"
-#include "Engine/Texture2D.h"
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MySQLBPLibrary.generated.h"
 
-using namespace std;
-
-USTRUCT(BlueprintType, Category = "MySql|Tables")
-struct FMySQLDataTable
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SQLDataTable")
-	FString ColumnName;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SQLDataTable")
-	TArray<FString> ColumnData;
-};
-
-USTRUCT(BlueprintType, Category = "MySql|Tables")
-struct FMySQLDataRow
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SQLDataRow")
-	TArray<FString> RowData;
-};
-
+/**
+ * 
+ */
 UCLASS()
 class MYSQLPLUGIN_API UMySQLPluginBPLibrary : public UBlueprintFunctionLibrary
 {
@@ -52,8 +31,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
 	static void SelectDataTableRows(
-		FString FieldName,
-		FString TableName,
+		const FString& FieldName,
+		const FString& TableName,
 		bool& IsSuccess,
 		FString& ErrorMassage,
 		TArray<FString>& TableHead,
@@ -67,44 +46,41 @@ public:
 		FString& ErrorMassage);
 
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
-	static void deleteRow(
-		FString TableName,
-		FString Field,
-		FString Value,
+	static void DeleteRow(
+		const FString& TableName,
+		const FString& Field,
+		const FString& Value,
 		bool& IsSuccess,
 		FString& ErrorMassage);
 
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
 	static void UpdateTable(
-		FString TableName,
-		FString Field,
-		FString NewValue,
-		FString FormerField,
-		FString FormerValue,
+		const FString& TableName,
+		const FString& Field,
+		const FString& NewValue,
+		const FString& FormerField,
+		const FString& FormerValue,
 		bool& IsSuccess,
 		FString& ErrorMassage);
 
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
 	static void UpdateBinaryFile(
-	FString TableName,
-		FString FieldName,
-		FString ID,
-		FString InFile, 
+		const FString& TableName,
+		const FString& FieldName,
+		const FString& ID,
+		const FString& InFilePath, 
 		bool& IsSuccess,
 		FString& ErrorMassage);
 
 	UFUNCTION(BlueprintCallable, Category = "MYSQL")
-	static void Selectimage(
-		FString TableName,
-		FString ID,
-		int ImageIndex,
+	static void SelectImage(
+		const FString& TableName,
+		const FString& ID,
+		const int ImageIndex,
 		bool& IsSuccess,
 		FString& ErrorMassage,
 		UTexture2D*& Texture);
 
 	UFUNCTION(BlueprintCallable, Category = "Paths")
-	static void GetFiles(FString InPath, FString FileForm, TArray<FString>& FileList);
-
-private:
-	
+	static void GetFiles(const FString& InPath, const FString& FileForm, TArray<FString>& FileList);
 };
