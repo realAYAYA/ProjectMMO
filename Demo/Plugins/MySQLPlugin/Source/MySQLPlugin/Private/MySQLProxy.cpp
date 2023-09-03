@@ -2,7 +2,6 @@
 #pragma once
 
 #include "MySQLProxy.h"
-#include "Misc/FileHelper.h"
 #include "ImageUtils.h"
 //#include "Windows/AllowWindowsPlatformTypes.h"
 

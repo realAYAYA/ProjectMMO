@@ -1,6 +1,6 @@
 {
-	"FileVersion": 3,
-	"Version": 2,
+	"FileVersion": 1,
+	"Version": 1,
 	"VersionName": "1.0",
 	"FriendlyName": "MySQLPlugin",
 	"Description": "",
@@ -13,12 +13,13 @@
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
-	"Installed": false,
+	"Installed": true,
 	"Modules": [
 		{
 			"Name": "MySQLPlugin",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": ["Win64"]
 		}
 	]
 }

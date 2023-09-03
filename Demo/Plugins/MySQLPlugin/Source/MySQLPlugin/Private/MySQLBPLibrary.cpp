@@ -2,14 +2,6 @@
 #pragma once
 
 #include "MySQLBPLibrary.h"
-#include "Misc/FileHelper.h"
-#include "ImageUtils.h"
-//#include "Windows/AllowWindowsPlatformTypes.h"
-
-#include "MySQLPlugin.h"
-#include "mysql.h"
-#include "fstream"
-//#include "codecvt"
 
 /*登录*/
 void UMySQLPluginBPLibrary::Connection(
