@@ -23,13 +23,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static class UMGameInstance* GetMGameInstance(const UObject* WorldContextObject);
 
-	/** Client网络接口 */
+	/** Client Rpc网络接口 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static const UGameRpc* GetGameRpc(const UObject* WorldContextObject);
-
-	/** 主角数据 */
-	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
-	static AMPlayerState* GetMPlayerState(const UObject* WorldContextObject);
 	
 	/** Excel配置 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))

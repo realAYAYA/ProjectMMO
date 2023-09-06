@@ -6,7 +6,7 @@
 #include "AbilitySystemGlobals.h"
 
 #include "MGameTables/MGameTables.h"
-#include "Net/MNetworkSubsystem.h"
+#include "Net\GameClientNetSubsystem.h"
 
 void UMGameInstance::Init()
 {
@@ -22,19 +22,9 @@ UMGameInstance* UMGameInstance::GetMGameInstance(const UWorld* World)
 	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
 }
 
-AMPlayerState* UMGameInstance::GetMPlayerState(const UWorld* World)
-{
-	if (const UMGameInstance* GameInstance = GetMGameInstance(World))
-	{
-		return GameInstance->Player;
-	}
-	
-	return nullptr;
-}
-
 const UGameRpc* UMGameInstance::GetGameRpc() const
 {
-	return GetSubsystem<UGameNetSubsystem>()->GetGameRpc();
+	return GetSubsystem<UGameClientNetSubsystem>()->GetGameRpc();
 }
 
 UMGameTables* UMGameInstance::GetMGameTables()

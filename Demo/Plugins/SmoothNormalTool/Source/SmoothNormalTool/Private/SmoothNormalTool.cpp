@@ -12,17 +12,21 @@
 static FContentBrowserMenuExtender_SelectedAssets HookEditorUIContentBrowserExtenderDelegate;
 static FDelegateHandle HookEditorUIContentBrowserExtenderDelegateHandle;
 
-
 static void CreateActionsMenuForAsset(FMenuBuilder& MenuBuilder, TArray<FAssetData> SelectedAssets)
 {
-	MenuBuilder.AddMenuEntry(FText::FromName(TEXT("平滑模型法线")), FText::FromName(TEXT("Smooth normal")), FSlateIcon(),
+	MenuBuilder.AddMenuEntry(
+		FText::FromName(TEXT("平滑模型法线")),
+		FText::FromName(TEXT("Smooth normal")),
+		FSlateIcon(),
 		FExecuteAction::CreateStatic(&FSmoothNormalCommand::SmoothNormal, SelectedAssets)
 	);
 }
 
 static void CreateSubMenuForAsset(FMenuBuilder& MenuBuilder, TArray<FAssetData> SelectedAssets)
 {
-	MenuBuilder.AddSubMenu(FText::FromName(TEXT("ToonTool")), FText::FromName(TEXT("ToonTool")),
+	MenuBuilder.AddSubMenu(
+		FText::FromName(TEXT("ToonTool")),
+		FText::FromName(TEXT("ToonTool")),
 		FNewMenuDelegate::CreateStatic(&CreateActionsMenuForAsset, SelectedAssets)
 	);
 }
@@ -30,6 +34,23 @@ static void CreateSubMenuForAsset(FMenuBuilder& MenuBuilder, TArray<FAssetData> 
 static TSharedRef<FExtender> OnExtendContentBrowserAssetSelectionMenu(const TArray<FAssetData>& SelectedAssets)
 {
 	TSharedRef<FExtender> Extender(new FExtender());
+	
+	// 过滤资产类型
+	bool NeedShow = false;
+
+	for (const FAssetData& Asset : SelectedAssets)
+	{
+		const FString& ClassName = Asset.AssetClassPath.ToString();
+		if (ClassName.Contains("StaticMesh") || ClassName.Contains("SkeletalMesh"))
+		{
+			NeedShow = true;
+			break;
+		}
+	}
+
+	if (!NeedShow)
+		return Extender;
+	
 	Extender->AddMenuExtension(
 		"CommonAssetActions",
 		EExtensionHook::First,
@@ -41,17 +62,15 @@ static TSharedRef<FExtender> OnExtendContentBrowserAssetSelectionMenu(const TArr
 
 void FSmoothNormalToolModule::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
-	FContentBrowserModule& ContentBrowserModule = FModuleManager::LoadModuleChecked<FContentBrowserModule>("ContentBrowser");
 	{
+		// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+		FContentBrowserModule& ContentBrowserModule = FModuleManager::LoadModuleChecked<FContentBrowserModule>("ContentBrowser");
 		HookEditorUIContentBrowserExtenderDelegate = FContentBrowserMenuExtender_SelectedAssets::CreateStatic(&OnExtendContentBrowserAssetSelectionMenu);
 		TArray<FContentBrowserMenuExtender_SelectedAssets>& CBMenuExtenderDelegates = ContentBrowserModule.GetAllAssetViewContextMenuExtenders();
 		CBMenuExtenderDelegates.Add(HookEditorUIContentBrowserExtenderDelegate);
 		HookEditorUIContentBrowserExtenderDelegateHandle = CBMenuExtenderDelegates.Last().GetHandle();
 	}
-	
 }
-
 
 void FSmoothNormalToolModule::ShutdownModule()
 {
@@ -67,11 +86,11 @@ void FSmoothNormalToolModule::ShutdownModule()
 void FSmoothNormalToolModule::PluginButtonClicked()
 {
 	// Put your "OnButtonClicked" stuff here
-	FText DialogText = FText::Format(
-							LOCTEXT("PluginButtonDialogText", "Add code to {0} in {1} to override this button's actions"),
-							FText::FromString(TEXT("FSmoothNormalToolModule::PluginButtonClicked()")),
-							FText::FromString(TEXT("SmoothNormalTool.cpp"))
-					   );
+	const FText DialogText = FText::Format(
+		LOCTEXT("PluginButtonDialogText", "Add code to {0} in {1} to override this button's actions"),
+		FText::FromString(TEXT("FSmoothNormalToolModule::PluginButtonClicked()")),
+		FText::FromString(TEXT("SmoothNormalTool.cpp"))
+		);
 	FMessageDialog::Open(EAppMsgType::Ok, DialogText);
 }
 

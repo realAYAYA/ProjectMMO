@@ -20,9 +20,6 @@ class DEMO_API UMGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-
-	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	class AMPlayerState* Player;
 	
 	/** Network */
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
@@ -41,10 +38,7 @@ public:
 
 	static UMGameInstance* GetMGameInstance(const UWorld* World);
 	
-	static AMPlayerState* GetMPlayerState(const UWorld* World);
-	
 private:
-
 	UPROPERTY()
 	UMGameTables* GameTables;
 };

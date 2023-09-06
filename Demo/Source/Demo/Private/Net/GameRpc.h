@@ -22,7 +22,6 @@ class DEMO_API UGameRpc : public UObject
 	GENERATED_BODY()
 
 public:
-	
 	/**
 	 * 登录游戏
 	*/
@@ -44,13 +43,12 @@ public:
 	void K2_EnterWorld(const int32 InRoleID);
 
 	UFUNCTION(Client, Reliable)
-	void EnterWorld(const ERpcErrorCode ErrorCode, const bool bOk);
+	void EnterWorldResult(const ERpcErrorCode ErrorCode, const bool bOk);
 
 	UFUNCTION(Client, Reliable)
 	void TransportPosition(const ERpcErrorCode ErrorCode, const bool bOk);
 
 private:
-
 	// Rpc回调池，将来自蓝图的回调逻辑缓存，在UE-DS-Rpc函数执行后触发，之后自动销毁，适合那些单次触发的Rpc
 	TMap<FString, const FOnRpcResult*> RpcCallbackPool;
 };

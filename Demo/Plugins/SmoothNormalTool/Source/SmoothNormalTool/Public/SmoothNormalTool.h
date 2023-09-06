@@ -17,11 +17,11 @@ public:
 	virtual void ShutdownModule() override;
 	
 	/** This function will be bound to Command. */
-	void PluginButtonClicked();
+	static void PluginButtonClicked();
 	
 private:
 
-	void RegisterMenus();
+	static void RegisterMenus();
 
 
 private:

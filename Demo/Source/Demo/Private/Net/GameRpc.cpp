@@ -29,8 +29,9 @@ void UGameRpc::K2_EnterWorld_Implementation(const int32 InRoleID)
 	
 }
 
-void UGameRpc::EnterWorld_Implementation(const ERpcErrorCode ErrorCode, const bool bOk)
+void UGameRpc::EnterWorldResult_Implementation(const ERpcErrorCode ErrorCode, const bool bOk)
 {
+	
 }
 
 void UGameRpc::TransportPosition_Implementation(const ERpcErrorCode ErrorCode, const bool bOk)
