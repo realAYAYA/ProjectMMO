@@ -26,8 +26,6 @@ public class MySQL : ModuleRules
 			new string[]
 			{
 				"Core",
-				"MySQLLibrary",
-				"Projects"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

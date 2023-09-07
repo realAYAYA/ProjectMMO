@@ -4,6 +4,9 @@
 
 #include "Modules/ModuleManager.h"
 
+/** Declares a log category for this module. */
+DECLARE_LOG_CATEGORY_EXTERN(LogMySQL, Log, All);
+
 class FMySQLModule : public IModuleInterface
 {
 public:
@@ -13,6 +16,5 @@ public:
 	virtual void ShutdownModule() override;
 
 private:
-	/** Handle to the test dll we will load */
-	void*	ExampleLibraryHandle;
+	
 };

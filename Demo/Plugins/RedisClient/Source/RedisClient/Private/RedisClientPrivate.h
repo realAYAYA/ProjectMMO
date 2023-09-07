@@ -5,7 +5,7 @@
 #include "Modules/ModuleManager.h"
 
 /** Declares a log category for this module. */
-DECLARE_LOG_CATEGORY_EXTERN(LogZRedis, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogRedisClient, Log, All);
 
 class FRedisClientModule : public IModuleInterface
 {
