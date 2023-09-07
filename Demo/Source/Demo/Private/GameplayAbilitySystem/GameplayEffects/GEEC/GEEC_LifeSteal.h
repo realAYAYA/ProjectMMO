@@ -20,12 +20,11 @@ public:
 
 	UMGameplayEffectExecutionCalculation();
 
-	AMCharacter* GetTarget(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const;
-
-	AMCharacter* GetSource(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const;
-
 	virtual void Execute_Implementation(
 		const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 		FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 
+	static AMCharacter* GetTarget(const FGameplayEffectCustomExecutionParameters& ExecutionParams);
+
+	static AMCharacter* GetSource(const FGameplayEffectCustomExecutionParameters& ExecutionParams);
 };

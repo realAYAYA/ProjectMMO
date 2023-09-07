@@ -38,14 +38,14 @@ UMGameplayEffectExecutionCalculation::UMGameplayEffectExecutionCalculation()
 	RelevantAttributesToCapture.Add(EffectStatics().HealthDef);
 }
 
-AMCharacter* UMGameplayEffectExecutionCalculation::GetTarget(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
+AMCharacter* UMGameplayEffectExecutionCalculation::GetTarget(const FGameplayEffectCustomExecutionParameters& ExecutionParams)
 {
 	const UAbilitySystemComponent* TargetAbilitySystem = ExecutionParams.GetTargetAbilitySystemComponent();
 	AActor* TargetActor = TargetAbilitySystem ? TargetAbilitySystem->GetAvatarActor() : nullptr;
 	return Cast<AMCharacter>(TargetActor);
 }
 
-AMCharacter* UMGameplayEffectExecutionCalculation::GetSource(const FGameplayEffectCustomExecutionParameters& ExecutionParams) const
+AMCharacter* UMGameplayEffectExecutionCalculation::GetSource(const FGameplayEffectCustomExecutionParameters& ExecutionParams)
 {
 	const UAbilitySystemComponent* SourceAbilitySystem = ExecutionParams.GetSourceAbilitySystemComponent();
 	AActor* SourceActor = SourceAbilitySystem ? SourceAbilitySystem->GetAvatarActor() : nullptr;
