@@ -18,7 +18,8 @@
 		{
 			"Name": "MySQL",
 			"Type": "RuntimeAndProgram",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "PreLoadingScreen",
+			"Platform": ["Win64"]
 		}
 	]
 }

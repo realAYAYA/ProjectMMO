@@ -1,12 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MySQLPrivate.h"
-#include "Core.h"
-#include "Modules/ModuleManager.h"
-
-DEFINE_LOG_CATEGORY(LogMySQL);
 
 #define LOCTEXT_NAMESPACE "FMySQLModule"
+
+DEFINE_LOG_CATEGORY(LogMySQL);
 
 void FMySQLModule::StartupModule()
 {
