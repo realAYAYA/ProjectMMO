@@ -903,8 +903,11 @@ URedisProxy::URedisProxy()
 	LastTime = FDateTime::Now();
 }
 
-bool URedisProxy::Connect()
+bool URedisProxy::Connect(const FString& InIP, const FString& InPassword, const int32 InPort)
 {
+	IP = InIP;
+	Password = InPassword;
+	Port = InPort;
 	RedisClient->ConnectToRedis(IP, Port, Password);
 	return false;
 }

@@ -27,7 +27,7 @@ public:
 	URedisProxy();
 
 	UFUNCTION(BlueprintCallable, Category = "Redis")
-	bool Connect();
+	bool Connect(const FString& InIP, const FString& InPassword, const int32 InPort);
 
 	UFUNCTION(BlueprintCallable, Category = "Redis")
 	bool Disconnect();
