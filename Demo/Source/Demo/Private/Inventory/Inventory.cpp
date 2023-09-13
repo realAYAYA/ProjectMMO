@@ -3,7 +3,7 @@
 
 #include "Inventory/InventoryBase.h"
 
-UInventoryBase::UInventoryBase()
+UInventory::UInventory()
 {
 	
 }

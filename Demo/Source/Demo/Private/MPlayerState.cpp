@@ -3,8 +3,11 @@
 
 #include "MPlayerState.h"
 
+#include "Inventory\Inventory.h"
+
 AMPlayerState::AMPlayerState()
 {
+	InventoryModule = NewObject<UInventory>(this);
 }
 
 void AMPlayerState::CopyProperties(APlayerState* PlayerState)

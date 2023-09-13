@@ -174,6 +174,10 @@ public:
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, BlockRate)
 
 	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
+	FGameplayAttributeData PhyResist;
+	ATTRIBUTE_ACCESSORS(UMAttributeSet, PhyResist)
+
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
 	FGameplayAttributeData ArcaneResist;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, ArcaneResist)
 

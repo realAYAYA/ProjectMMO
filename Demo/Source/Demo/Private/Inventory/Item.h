@@ -3,19 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ItemBase.generated.h"
+#include "Item.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UItemBase : public UObject
+class UItem : public UObject
 {
 	GENERATED_BODY()
 
-	UItemBase() {};
+	UItem() {};
 
 public:
+	
 	UFUNCTION(BlueprintCallable, Category = ProjectSS)
 	int32 GetConfigID() const {return 0;};
 

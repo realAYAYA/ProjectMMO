@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 
 #include "MGameDefine.h"
-#include "Inventory/ItemBase.h"
+#include "..\Item.h"
 
 #include "ItemActor.generated.h"
 
@@ -58,7 +58,7 @@ private:
 	AActor* ItemOwner = nullptr;
 
 	UPROPERTY()
-	UItemBase* ItemConfig;
+	UItem* Item;
 
 	/**
 	 * @Netwrok Replicated

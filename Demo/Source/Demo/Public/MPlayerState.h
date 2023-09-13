@@ -34,7 +34,7 @@ protected:
 	// Todo 邮件模块
 	// Todo 装扮模块
 	// Todo 成就模块 - ToSteam
-	// Todo 聊天模块 - 服务器微服务
+	// Todo 聊天模块 - 服务器微服务，可以不在这
 
 	virtual void CopyProperties(APlayerState* PlayerState) override;
 	
@@ -42,6 +42,6 @@ protected:
 
 private:
 
-	FMUserData UserData;
 	
+	FMUserData UserData;
 };

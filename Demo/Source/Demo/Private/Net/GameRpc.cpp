@@ -14,7 +14,7 @@ void UGameRpc::LoginGame_Implementation(const FLoginGameReq& Req)
 {
 	// 执行在服务器
 	// Todo 请求数据库
-	// Todo LoginGame(); // 网络请求客户端执行
+	// Todo LoginGameResult(); // 网络请求客户端执行
 }
 
 void UGameRpc::LoginGameResult_Implementation(const ERpcErrorCode ErrorCode, const FLoginGameAck& Ack)
