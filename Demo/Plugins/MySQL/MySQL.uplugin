@@ -4,7 +4,7 @@
 	"VersionName": "1.0",
 	"FriendlyName": "MySQL",
 	"Description": "",
-	"Category": "Other",
+	"Category": "Network Server",
 	"CreatedBy": "",
 	"CreatedByURL": "",
 	"DocsURL": "",
@@ -18,7 +18,7 @@
 		{
 			"Name": "MySQL",
 			"Type": "RuntimeAndProgram",
-			"LoadingPhase": "PreLoadingScreen",
+			"LoadingPhase": "Default",
 			"Platform": ["Win64"]
 		}
 	]

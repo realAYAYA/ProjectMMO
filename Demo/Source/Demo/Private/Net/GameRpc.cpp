@@ -3,6 +3,10 @@
 void UGameRpc::K2_LoginGame(const FLoginGameReq& Req, const FOnRpcResult& InCallback)
 {
 	LoginGame(Req);
+
+	if (RpcCallbackPool.Find(TEXT("Login")))
+		return;
+	
 	RpcCallbackPool.Add(TEXT("Login"), &InCallback);
 }
 

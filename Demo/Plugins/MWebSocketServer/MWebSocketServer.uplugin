@@ -2,10 +2,10 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "GameTables",
+	"FriendlyName": "MWebSocketServer",
 	"Description": "",
-	"Category": "Game Data Designer",
-	"CreatedBy": "",
+	"Category": "Network Server",
+	"CreatedBy": "LiuD",
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
@@ -16,7 +16,7 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "GameTables",
+			"Name": "MWebSocketServer",
 			"Type": "RuntimeAndProgram",
 			"LoadingPhase": "Default"
 		}
