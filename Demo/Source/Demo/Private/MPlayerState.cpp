@@ -7,7 +7,16 @@
 
 AMPlayerState::AMPlayerState()
 {
-	InventoryModule = NewObject<UInventory>(this);
+	InventoryModule = NewObject<UInventory>();
+}
+
+void AMPlayerState::LoadData(const FMUserData& InData)
+{
+	UserData = InData;
+}
+
+void AMPlayerState::SaveData()
+{
 }
 
 void AMPlayerState::CopyProperties(APlayerState* PlayerState)

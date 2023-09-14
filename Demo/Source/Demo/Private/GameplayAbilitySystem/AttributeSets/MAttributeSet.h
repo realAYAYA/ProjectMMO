@@ -24,23 +24,23 @@ class UMAttributeSet : public UAttributeSet
 
 public:
 	
-	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes", ReplicatedUsing = OnRep_Strength)
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, Strength)
 
-	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes", ReplicatedUsing = OnRep_Intelligence)
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
 	FGameplayAttributeData Intelligence;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, Intelligence)
 
-	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes", ReplicatedUsing = OnRep_Agility)
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
 	FGameplayAttributeData Agility;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, Agility)
 
-	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes", ReplicatedUsing = OnRep_Spirit)
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
 	FGameplayAttributeData Spirit;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, Spirit)
 
-	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes", ReplicatedUsing = OnRep_Stamina)
+	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
 	FGameplayAttributeData Stamina;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, Stamina)
 
@@ -204,21 +204,6 @@ public:
 protected:
 
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
-
-	UFUNCTION()
-	virtual void OnRep_Strength(const FGameplayAttributeData& OldStrength);
-
-	UFUNCTION()
-	virtual void OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence);
-
-	UFUNCTION()
-	virtual void OnRep_Agility(const FGameplayAttributeData& OldAgility);
-
-	UFUNCTION()
-	virtual void OnRep_Spirit(const FGameplayAttributeData& OldSpirit);
-
-	UFUNCTION()
-	virtual void OnRep_Stamina(const FGameplayAttributeData& OldStamina);
 
 	UFUNCTION()
 	virtual void OnRep_Health(const FGameplayAttributeData& OldHeath);

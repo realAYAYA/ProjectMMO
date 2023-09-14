@@ -11,16 +11,6 @@ UMGameInstance* UMBlueprintLibrary::GetMGameInstance(const UObject* WorldContext
 	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
 }
 
-const UGameRpc* UMBlueprintLibrary::GetGameRpc(const UObject* WorldContextObject)
-{
-	if (const UMGameInstance* GameInstance = GetMGameInstance(WorldContextObject))
-	{
-		return GameInstance->GetGameRpc();
-	}
-	
-	return nullptr;
-}
-
 UMGameTables* UMBlueprintLibrary::GetMGameTables(const UObject* WorldContextObject)
 {
 	if (UMGameInstance* GameInstance = GetMGameInstance(WorldContextObject))

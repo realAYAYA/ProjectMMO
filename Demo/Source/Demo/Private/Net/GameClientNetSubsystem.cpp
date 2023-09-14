@@ -2,15 +2,3 @@
 
 
 #include "GameClientNetSubsystem.h"
-
-#include "GameRpc.h"
-
-UGameRpc* UGameClientNetSubsystem::GetGameRpc()
-{
-	if (!GameRpc)
-	{
-		GameRpc = NewObject<UGameRpc>(this);
-	}
-
-	return GameRpc;
-}

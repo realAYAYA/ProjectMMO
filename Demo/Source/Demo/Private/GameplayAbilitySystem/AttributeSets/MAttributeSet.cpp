@@ -28,26 +28,6 @@ void UMAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackD
 	}
 }
 
-void UMAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Strength, OldStrength);
-}
-
-void UMAttributeSet::OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Intelligence, OldIntelligence);
-}
-
-void UMAttributeSet::OnRep_Agility(const FGameplayAttributeData& OldAgility)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Agility, OldAgility);
-}
-
-void UMAttributeSet::OnRep_Spirit(const FGameplayAttributeData& OldSpirit)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Spirit, OldSpirit);
-}
-
 void UMAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Mana, OldMana);
@@ -93,11 +73,6 @@ void UMAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHeath)
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxHealth, OldMaxHeath);
 }
 
-void UMAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldStamina)
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Stamina, OldStamina);
-}
-
 void UMAttributeSet::OnRep_MaxMoveSpeed(const FGameplayAttributeData& OldMaxMoveSpeed)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxMoveSpeed, OldMaxMoveSpeed);
@@ -107,19 +82,14 @@ void UMAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>&
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Health, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Strength, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Intelligence, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Agility, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Spirit, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxMoveSpeed, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Mana, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Energy, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxEnergy, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Rage, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxRage, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, CastSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Health, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxHealth, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxMoveSpeed, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Mana, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxMana, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Energy, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxEnergy, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, Rage, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, MaxRage, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMAttributeSet, CastSpeed, COND_None, REPNOTIFY_OnChanged);
 }

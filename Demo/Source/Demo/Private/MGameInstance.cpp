@@ -22,11 +22,6 @@ UMGameInstance* UMGameInstance::GetMGameInstance(const UWorld* World)
 	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
 }
 
-const UGameRpc* UMGameInstance::GetGameRpc() const
-{
-	return GetSubsystem<UGameClientNetSubsystem>()->GetGameRpc();
-}
-
 UMGameTables* UMGameInstance::GetMGameTables()
 {
 	if (!GameTables)

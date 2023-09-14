@@ -9,7 +9,6 @@
 
 class AMPlayerState;
 class UMGameTables;
-class UGameRpc;
 
 /**
  * 
@@ -20,25 +19,19 @@ class DEMO_API UMGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	
-	/** Network */
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
-	const UGameRpc* GetGameRpc() const;
 
-	// Todo 拍卖行服务器
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString CharacterName;
 
 	UFUNCTION()
 	UMGameTables* GetMGameTables();
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString CharacterName;
-
-public:
 	virtual void Init() override;
 
 	static UMGameInstance* GetMGameInstance(const UWorld* World);
 	
 private:
+	
 	UPROPERTY()
 	UMGameTables* GameTables;
 };

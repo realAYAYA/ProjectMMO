@@ -6,7 +6,11 @@
 #include "Net/Subsystems/NetworkSubsystem.h"
 #include "GameClientNetSubsystem.generated.h"
 
-class UGameRpc;
+/**
+ * Network Client Callback
+ */
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnWebSocketResult, ERpcErrorCode, ErrorCode, bool, bOk);
+
 /**
  * 
  */
@@ -24,13 +28,7 @@ public:
 	/** 从服务器单发消息给本机玩家 */
 	//UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	//void SendToMe(const PlayerIndex);
-	
-	/** Rpc */
-	UFUNCTION(BlueprintPure, Category = "ProjectM")
-	UGameRpc* GetGameRpc();
 
 private:
 	
-	UPROPERTY()
-	UGameRpc* GameRpc;
 };

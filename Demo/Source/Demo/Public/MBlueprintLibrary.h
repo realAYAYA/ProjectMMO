@@ -7,7 +7,6 @@
 #include "MBlueprintLibrary.generated.h"
 
 class AMPlayerState;
-class UGameRpc;
 
 /**
  * 
@@ -22,10 +21,6 @@ public:
 	/** 游戏实例 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static class UMGameInstance* GetMGameInstance(const UObject* WorldContextObject);
-
-	/** Client Rpc网络接口 */
-	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
-	static const UGameRpc* GetGameRpc(const UObject* WorldContextObject);
 	
 	/** Excel配置 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
