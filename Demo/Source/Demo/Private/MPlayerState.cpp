@@ -10,6 +10,16 @@ AMPlayerState::AMPlayerState()
 	InventoryModule = NewObject<UInventory>();
 }
 
+int64 AMPlayerState::GetUserID() const
+{
+	return UserData.UserID;
+}
+
+FString AMPlayerState::GetUserName() const
+{
+	return UserData.UserName;
+}
+
 void AMPlayerState::LoadData(const FMUserData& InData)
 {
 	UserData = InData;

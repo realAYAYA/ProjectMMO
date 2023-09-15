@@ -6,11 +6,20 @@
 #include "GameFramework/GameModeBase.h"
 #include "DemoGameMode.generated.h"
 
+class AMPlayerState;
+
 UCLASS(minimalapi)
-class ADemoGameMode : public AGameModeBase
+class AMGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
-	ADemoGameMode();
+	
+	AMGameMode();
+
+	UFUNCTION(BlueprintCallable, Category = "ProjecetM")
+	const AMPlayerState* FindOnlinePlayerByID(const int64 InID) const;
+
+	UFUNCTION(BlueprintCallable, Category = "ProjecetM")
+	const AMPlayerState* FindOnlinePlayerByName(const FString& InName) const;
 };

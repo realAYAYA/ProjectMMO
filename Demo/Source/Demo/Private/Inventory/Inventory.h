@@ -18,14 +18,17 @@ class DEMO_API UInventory : public UObject
 public:
 	UInventory();
 
-	UFUNCTION(BlueprintCallable, Category = ProjectM)
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	const UItem* GetItemByConfigID(const int32 ID) { return nullptr; };
 
-	UFUNCTION(BlueprintCallable, Category = ProjectM)
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	const UItem* GetItemByUID(const int32 ID) { return nullptr; };
 
 private:
 
 	UPROPERTY()
 	TMap<int32, UItem*> AllItems;
+
+	UPROPERTY()
+	TArray<UItem*> Equipments;
 };

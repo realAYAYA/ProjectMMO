@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 
 #include "MGameDefine.h"
-#include "..\Item.h"
+#include "Inventory/Item.h"
 
 #include "ItemActor.generated.h"
 
@@ -20,14 +20,18 @@ class AItemActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AItemActor();
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ItemID, Category = "ProjectM")
+	int32 CfgID = 0;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ItemState, Category = "ProjectM")
+	EItemState ItemState = EItemState::None;
 	
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	TObjectPtr<UMeshComponent> MeshComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
 	TObjectPtr<UPickUpComponent> PickComponent;
-
-	virtual void Init();
 
 	UFUNCTION()
 	virtual void OnPickUp(class AMCharacter* InOwner);
@@ -67,18 +71,10 @@ public:
 	
 	virtual bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
 	
-protected:
-	
-	UPROPERTY(ReplicatedUsing = OnRep_ItemState)
-	TEnumAsByte<EItemState> ItemState = EItemState::None;
-	
 private:
 
 	UFUNCTION()
 	void OnRep_ItemState();
-
-	UPROPERTY(Replicated, ReplicatedUsing = OnRep_ItemID)
-	int32 ItemID = 0;
 
 	UFUNCTION()
 	void OnRep_ItemID();

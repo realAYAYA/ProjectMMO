@@ -4,6 +4,8 @@
 
 #include "Modules/ModuleManager.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogMWebSocketServer, Log, All);
+
 class FMWebSocketServerModule : public IModuleInterface
 {
 public:

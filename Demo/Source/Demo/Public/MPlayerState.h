@@ -26,8 +26,11 @@ public:
 	
 	AMPlayerState();
 
-	UPROPERTY(BlueprintReadOnly, Category = "PorjectM")
-	FMUserData UserData;
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	int64 GetUserID() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	FString GetUserName() const;
 	
 	void LoadData(const FMUserData& InData);
 
@@ -52,5 +55,7 @@ protected:
 	virtual void Reset() override;
 
 private:
-	
+
+	UPROPERTY()
+	FMUserData UserData;
 };

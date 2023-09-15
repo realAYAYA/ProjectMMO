@@ -4,6 +4,8 @@
 
 #define LOCTEXT_NAMESPACE "FMWebSocketServerModule"
 
+DEFINE_LOG_CATEGORY(LogMWebSocketServer);
+
 void FMWebSocketServerModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module

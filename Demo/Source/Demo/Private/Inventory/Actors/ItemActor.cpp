@@ -24,11 +24,6 @@ AItemActor::AItemActor()
 	InitInternal();
 }
 
-void AItemActor::Init()
-{
-	InitInternal();
-}
-
 void AItemActor::OnBeginOverlap(
 	UPrimitiveComponent* OverlappedComponent,
 	AActor* OtherActor,
@@ -181,7 +176,7 @@ void AItemActor::OnRep_ItemID()
 void AItemActor::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(AItemActor, ItemState);
-	DOREPLIFETIME(AItemActor, ItemID);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(AItemActor, ItemState, COND_None, REPNOTIFY_OnChanged);
+	DOREPLIFETIME_CONDITION_NOTIFY(AItemActor, CfgID, COND_None, REPNOTIFY_OnChanged);
 }
