@@ -36,7 +36,8 @@ public class MWebSocketServer : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"WebSocketNetworking",
+				"WebSocketNetworking", 
+				"WebSockets",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

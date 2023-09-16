@@ -3,9 +3,8 @@
 #include "CoreMinimal.h"
 
 #include "INetworkingWebSocket.h"
+#include "IWebSocketServer.h"
 #include "MWebSocketServerSubsystem.generated.h"
-
-class IWebSocketServer;
 
 struct FMWebSocketConnection
 {
@@ -38,6 +37,9 @@ struct FMWebSocketConnection
 	FGuid ID;
 };
 
+DECLARE_DELEGATE_OneParam(FMWebSocketClientClosedCallBack, const FGuid);
+DECLARE_DELEGATE_TwoParams(FMWebSocketReceiveCallBack, const FGuid, FString);
+
 UCLASS()
 class UMWebSocketServerSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
 {
@@ -59,27 +61,31 @@ public:
 	bool StartWebSocketServer(const int32 ServerPort);
 
 	UFUNCTION(BlueprintCallable, Category = "MWebSocketServer")
-	void StopWebSocketServer(const int32 ServerPort);
+	void StopWebSocketServer();
 
 	UFUNCTION(BlueprintCallable, Category = "MWebSocketServer")
-	void SendToAll(const int32 InMessage);
+	void SendToAll(const FString& InMessage);
+
+	void SendToAll(const TArray<uint8>& InData);
 	
-	void SendTo(const FGuid InID, const int32 InMessage);
+	void SendTo(const FGuid InID, const TArray<uint8>& InData);
 	
 	bool CheckConnectionValid(const FGuid InID);
+
+	FMWebSocketClientClosedCallBack WebSocketClientClosedCallBack;
+	FMWebSocketReceiveCallBack WebSocketReceiveCallBack;
 
 protected:
 
 	void OnClientConnected(INetworkingWebSocket* InWebSocket);
 	bool IsServerRunning() const;
 
-	void OnConnected(const FGuid InID);
-	void OnReceive(const FGuid InID, void* Data);
+	void OnConnected(const FGuid InID) const;
+	void OnReceive(void* InData, const int32 DataSize, const FGuid InID);
 	void OnError(const FGuid InID);
 	void OnClosed(const FGuid InID);
-
-	void SendToPointedClient(const FGuid& InClientID, const TArray<uint8>& InUTF8Payload);
-	void ProcessAllClientInfo(const FGuid ClientID, const int32 Info);
+	
+	void ProcessAllClientInfo(const FGuid ClientID, const FString& Info);
 
 private:
 

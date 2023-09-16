@@ -5,6 +5,7 @@
 #define LOCTEXT_NAMESPACE "FMWebSocketServerModule"
 
 DEFINE_LOG_CATEGORY(LogMWebSocketServer);
+DEFINE_LOG_CATEGORY(LogMWebSocketClient);
 
 void FMWebSocketServerModule::StartupModule()
 {
