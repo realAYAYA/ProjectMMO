@@ -39,6 +39,7 @@ public class MySQL : ModuleRules
 			CopyToProjectBinaries(DllPath, Target);
 			
 			RuntimeDependencies.Add(DllPath);
+			//PublicDelayLoadDLLs.Add(DllPath);
 			PublicAdditionalLibraries.Add(Path.Combine(ModuleDirectory, "../../ThirdParty/lib", "libmysql.lib"));
 		}
 		
