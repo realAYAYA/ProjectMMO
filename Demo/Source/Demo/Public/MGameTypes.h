@@ -71,13 +71,13 @@ struct FMInventoryData
 
 /** 玩家属性数据*/
 USTRUCT(BlueprintType) 
-struct FMCharacterData
+struct FRoleData
 {
 	GENERATED_USTRUCT_BODY()
 	
 	// 用户名
 	UPROPERTY(BlueprintReadOnly, Category = ProjectM)
-	FString CharacterName;
+	FString RoleName;
 
 	// 阵营
 	UPROPERTY(BlueprintReadOnly, Category = ProjectM)
@@ -124,7 +124,7 @@ struct FMUserData
 
 	// 用户角色数据
 	UPROPERTY(BlueprintReadOnly, Category = ProjectM)
-	TArray<FMCharacterData> CharacterData;
+	TArray<FRoleData> RoleData;
 
 	// 账户创建时间
 	UPROPERTY(BlueprintReadOnly, Category = ProjectM)

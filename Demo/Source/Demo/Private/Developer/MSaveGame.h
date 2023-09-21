@@ -9,13 +9,11 @@
 
 #include "MSaveGame.generated.h"
 
-
-
 /**
  * 
  */
 UCLASS(BlueprintType, Blueprintable)
-class DEMO_API USaveGameMain : public USaveGame
+class DEMO_API UMSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 
@@ -30,27 +28,34 @@ public:
 	 */
 	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	bool CreateUser(const FString& InUserID, const FString& InName);
+	bool CreateUser(const int64 InID, const FString& InName);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FMUserData RemoveUser(const FString& InUserID);
+	void RemoveUser(const int64 InID);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FMUserData GetUserData(const FString& InUserID);
+	FMUserData GetUserData(const int64 InID);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FMCharacterData GetCharacter(const FString& InUserID, const FString& InName);
+	FRoleData GetRoleData(const int64 InID, const FString& InName);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	bool UpdateCharacterName(const FString& InUserID, const FString& OldName, const FString& NewName);
+	bool UpdateRoleName(const int64 InID, const FString& OldName, const FString& NewName);
 	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	bool UpdateCharacter(const FString& InUserID, const FString& InName, const FMCharacterData& InData);
+	bool UpdateRole(const int64 InID, const FString& InName, const FRoleData& InData);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void RemoveCharacter(const FString& InUserID, const FString& InName);
+	void RemoveRole(const int64 InID, const FString& InName);
 
+	
 private:
+	
+	int32 FindUser(const int64 InID);
+	int32 FindUser(const FString& InName);
+	
+	int32 FindRole(const int64 InID, const FString& InName);
+	int32 FindRole(const int32 Index, const FString& InName);
 	
 	UPROPERTY()
 	TArray<FMUserData> UserData;// SteamID, SteamName

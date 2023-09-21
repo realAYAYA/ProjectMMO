@@ -9,10 +9,7 @@
 
 #include "MPlayerState.generated.h"
 
-/**
- * Network Client Callback
- */
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnRpcResult, ERpcErrorCode, ErrorCode, bool, bOk);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FOnLoginResult, ELoginCode, ErrorCode);
 
 /**
  * 
@@ -29,9 +26,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	int64 GetUserID() const;
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	UFUNCTION()
 	FString GetUserName() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	void K2_Login(const int64 ID, const FOnLoginResult& InCallback);
+
+	UFUNCTION(Server, Reliable)
+	void Login(const int64 ID);
 	
+	UFUNCTION(Client, Reliable)
 	void LoadData(const FMUserData& InData);
 
 	void SaveData();
@@ -58,4 +62,9 @@ private:
 
 	UPROPERTY()
 	FMUserData UserData;
+	
+	FRoleData* CurrentRoleData;
+
+	UPROPERTY()
+	FOnLoginResult OnLoginResult;
 };
