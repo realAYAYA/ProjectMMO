@@ -74,6 +74,10 @@ USTRUCT(BlueprintType)
 struct FMCharacterData
 {
 	GENERATED_USTRUCT_BODY()
+	
+	// 用户名
+	UPROPERTY(BlueprintReadOnly, Category = ProjectM)
+	FString CharacterName;
 
 	// 阵营
 	UPROPERTY(BlueprintReadOnly, Category = ProjectM)
@@ -111,8 +115,8 @@ struct FMUserData
 	GENERATED_USTRUCT_BODY()
 
 	// 用户ID
-	UPROPERTY(BlueprintReadOnly, Category = ProjectM)
-	int64 UserID = 0;
+	UPROPERTY()
+	uint64 UserID = 0;
 
 	// 用户名
 	UPROPERTY(BlueprintReadOnly, Category = ProjectM)
