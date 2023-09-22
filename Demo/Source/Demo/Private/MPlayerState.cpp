@@ -58,8 +58,8 @@ void AMPlayerState::K2_CreateRole(const FCreateUserParams& InParam, const FOnRpc
 
 void AMPlayerState::CreateRole_Implementation(const FCreateUserParams& InParam)
 {
-	
-	CreateRoleResult(true);
+	// Todo 创建角色存档
+	CreateRoleResult(FMUserData());// 返回玩家存档
 }
 
 void AMPlayerState::CreateRoleResult_Implementation(const FMUserData& InData)

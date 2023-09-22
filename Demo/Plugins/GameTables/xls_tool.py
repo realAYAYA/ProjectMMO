@@ -26,7 +26,7 @@ hpp_dir = 'MGameTables'
 custom_prefix = ''
 
 # Category
-custom_category = "ProjectSS"
+custom_category = "ProjectM"
 
 # ======================================================================================================================
 
@@ -61,7 +61,7 @@ struct {{dllexport_decl}} {{struct_name}} : public FTableRowBase
 {%- for def in defines %}
 
     /** {{def['show_name']}} */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "{{custom_category}}")
 {%- if def['var_is_array'] %}
     TArray<{{def['var_type']}}> {{def['var_name']}};
 {%- else %}
@@ -86,7 +86,7 @@ public:
 {%- for def in defines %}
 
     /** {{def['show_name']}} */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "{{custom_category}}")
 {%- if def['var_is_array'] %}
     TArray<{{def['var_type']}}> {{def['var_name']}};
 {%- else %}

@@ -24,35 +24,35 @@ struct DEMO_API FItemRow : public FTableRowBase
     GENERATED_BODY()
 
     /** 道具Id */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
     int32 Id = int32();
 
     /** 道具名称 */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
     FString Name;
 
     /** 分类 */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
     int32 Type = int32();
 
     /** 品质 */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
     int32 Quality = int32();
 
     /** 叠加上限 */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
     int32 MaxNum = int32();
 
     /** 售价 */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
     int32 SellingPrice = int32();
 
     /** 道具描述 */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
     FString Description;
 
     /** 道具图标 */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="IdleZ")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
     TSoftObjectPtr<UTexture2D> Icon;
 
 };
@@ -66,35 +66,35 @@ public:
     bool Init();
 
     /** 道具Id */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
     int32 Id = int32();
 
     /** 道具名称 */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
     FString Name;
 
     /** 分类 */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
     int32 Type = int32();
 
     /** 品质 */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
     int32 Quality = int32();
 
     /** 叠加上限 */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
     int32 MaxNum = int32();
 
     /** 售价 */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
     int32 SellingPrice = int32();
 
     /** 道具描述 */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
     FString Description;
 
     /** 道具图标 */
-    UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+    UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
     TSoftObjectPtr<UTexture2D> Icon;
 
     // =========================================================
