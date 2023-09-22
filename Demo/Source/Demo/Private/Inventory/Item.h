@@ -17,10 +17,10 @@ class UItem : public UObject
 
 public:
 	
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	UFUNCTION(BlueprintCallable, Category = ProjectM)
 	int32 GetConfigID() const {return 0;};
 
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	UFUNCTION(BlueprintCallable, Category = ProjectM)
 	FName GetConfigName() const { return TEXT("NullItem"); };
 
 protected:

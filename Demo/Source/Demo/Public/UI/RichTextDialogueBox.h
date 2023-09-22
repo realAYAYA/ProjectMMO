@@ -28,31 +28,31 @@ public:
 	TObjectPtr<class URichTextBlock> LineText;
 
 	// The amount of time between printing individual letters (for the "typewriter" effect).
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectSS")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	float LetterPlayTime = 0.025f;
 
 	// The amount of time to wait after finishing the line before actually marking it completed.
 	// This helps prevent accidentally progressing dialogue on short lines.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectSS")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	float EndHoldTime = 0.15f;
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void PlayLine(const FText& InLine);
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void GetCurrentLine(FText& OutLine) const { OutLine = CurrentLine; }
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	bool HasFinishedPlayingLine() const { return bHasFinishedPlaying; }
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS")
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void SkipToLineEnd();
 
 protected:
-	UFUNCTION(BlueprintImplementableEvent, Category = "ProjectSS")
+	UFUNCTION(BlueprintImplementableEvent, Category = "ProjectM")
 	void OnPlayLetter();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "ProjectSS")
+	UFUNCTION(BlueprintImplementableEvent, Category = "ProjectM")
 	void OnLineFinishedPlaying();
 
 private:

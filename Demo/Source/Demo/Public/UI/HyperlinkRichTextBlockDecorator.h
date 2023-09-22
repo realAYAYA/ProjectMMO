@@ -56,13 +56,13 @@ public:
 
 	virtual TSharedPtr<ITextDecorator> CreateDecorator(URichTextBlock* InOwner) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectSS")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FHyperlinkStyle Style;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "ProjectSS")
+	UFUNCTION(BlueprintNativeEvent, Category = "ProjectM")
 	void OnClick(const TMap<FString, FString>& MetaData);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "ProjectSS")
+	UFUNCTION(BlueprintNativeEvent, Category = "ProjectM")
 	void PreStyle(const TMap<FString, FString>& MetaData);
 
 public:

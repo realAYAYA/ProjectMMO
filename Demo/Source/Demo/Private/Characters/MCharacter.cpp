@@ -10,9 +10,12 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AbilitySystemComponent.h"
+#include "Demo.h"
+#include "MBlueprintLibrary.h"
 #include "Net/UnrealNetwork.h"
 
 #include "MCharacterDataAsset.h"
+#include "MGameInstance.h"
 #include "MPlayerState.h"
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
@@ -76,7 +79,9 @@ UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-bool AMCharacter::ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext)
+bool AMCharacter::ApplyGameplayEffectToSelf(
+	const TSubclassOf<UGameplayEffect> Effect,
+	const FGameplayEffectContextHandle& InEffectContext)
 {
 	if (!Effect.Get())
 		return false;
@@ -131,6 +136,15 @@ void AMCharacter::ApplyStartupEffects()
 void AMCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+
+	// Todo
+	const AMPlayerState* MPlayerState = GetMPlayerState();
+	if (!MPlayerState)
+	{
+		UE_LOG(LogProjectM, Log, TEXT("%s: Failed"), *FString(__FUNCTION__));
+	}
+
+	LoadData();
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	GiveAbilities();
@@ -266,6 +280,26 @@ void AMCharacter::TryActiveAbility(const FInputActionValue& Value)
 void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
+}
+
+AMPlayerState* AMCharacter::GetMPlayerState() const
+{
+	return Cast<AMPlayerState>(GetPlayerState());
+}
+
+void AMCharacter::LoadData()
+{
+	{
+		// 部署角色数据
+		//AMPlayerState* PlayerState = GetMPlayerState();
+		//PlayerState->GetUserData();
+		return;
+	}
+	
+	{
+		// Todo 创建角色流程
+		return;
+	}
 }
 
 AMCharacter* AMCharacter::GetCurrentTarget() const

@@ -18,7 +18,7 @@ class UGA_CastSpell : public UMGameplayAbility
 public:
 
 	/** 技能等级*/
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
+	UPROPERTY(EditDefaultsOnly, Category = "ProjectM")
 	int32 Level = 1;
 
 	/** 施法时间*/

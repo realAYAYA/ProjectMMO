@@ -20,7 +20,7 @@ public:
 	class USphereComponent* CollisionComp;
 	
 	/** Projectile movement component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ProjectSS, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ProjectM, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileMovement;
 	
 	// Sets default values for this actor's properties
@@ -36,7 +36,7 @@ public:
 	/**
 	 * GAS
 	 */
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
 	TArray<TSubclassOf<class UGameplayEffect>> Effects;
 
 	UPROPERTY()

@@ -57,7 +57,7 @@ public:
 public:
 	AMWeaponActor();
 
-	UFUNCTION(BlueprintPure, Category = ProjectSS)
+	UFUNCTION(BlueprintPure, Category = ProjectM)
 	USkeletalMeshComponent* GetSkeletalMeshComponent() const;
 
 	virtual void OnPickUp(AMCharacter* InOwner) override;

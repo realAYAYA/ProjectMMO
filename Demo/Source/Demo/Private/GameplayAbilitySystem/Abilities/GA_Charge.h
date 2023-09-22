@@ -20,7 +20,7 @@ public:
 	UGA_Charge();
 
 	/** 最小距离*/
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectSS")
+	UPROPERTY(EditDefaultsOnly, Category = "ProjectM")
 	int32 MinRange = 400;
 
 	/** 对目标施加效果*/

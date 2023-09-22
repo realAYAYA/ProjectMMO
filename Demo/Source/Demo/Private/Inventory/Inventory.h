@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MGameTypes.h"
 #include "Inventory.generated.h"
 
 class UItem;
@@ -23,6 +24,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	const UItem* GetItemByUID(const int32 ID) { return nullptr; };
+
+	void LoadData(const FMInventoryData& InData);
 
 private:
 

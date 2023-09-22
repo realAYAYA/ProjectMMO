@@ -9,6 +9,7 @@
 
 class AMPlayerState;
 class UMGameTables;
+class UMSaveGame;
 
 /**
  * 
@@ -34,4 +35,7 @@ private:
 	
 	UPROPERTY()
 	UMGameTables* GameTables;
+
+	UPROPERTY()
+	UMSaveGame* SaveGame;
 };

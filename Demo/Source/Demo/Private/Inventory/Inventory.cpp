@@ -8,3 +8,8 @@ UInventory::UInventory()
 	
 }
 
+void UInventory::LoadData(const FMInventoryData& InData)
+{
+	//UE_LOG();
+}
+

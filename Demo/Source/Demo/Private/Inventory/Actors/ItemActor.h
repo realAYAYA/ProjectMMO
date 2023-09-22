@@ -27,10 +27,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ItemState, Category = "ProjectM")
 	EItemState ItemState = EItemState::None;
 	
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
 	TObjectPtr<UMeshComponent> MeshComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
 	TObjectPtr<UPickUpComponent> PickComponent;
 
 	UFUNCTION()

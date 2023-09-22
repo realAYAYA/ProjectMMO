@@ -10,6 +10,7 @@
 #include "MPlayerState.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnLoginResult, ELoginCode, ErrorCode);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FOnRpcResult, bool, bOk);
 
 /**
  * 
@@ -23,23 +24,49 @@ public:
 	
 	AMPlayerState();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
+	bool IsOnline() const { return UserData.UserID > 0; }
+
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	int64 GetUserID() const;
 
 	UFUNCTION()
 	FString GetUserName() const;
 
+	/** Login*/
+public:
+	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void K2_Login(const int64 ID, const FOnLoginResult& InCallback);
 
 	UFUNCTION(Server, Reliable)
 	void Login(const int64 ID);
-	
+
 	UFUNCTION(Client, Reliable)
-	void LoadData(const FMUserData& InData);
+	void LoginResult(const FMUserData& InData);
+
+private:
+	
+	UPROPERTY()
+	FOnLoginResult OnLoginResult;
+
+	/** Create Role*/
+public:
+	
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	void K2_CreateRole(const FCreateUserParams& InParam, const FOnRpcResult& InCallback);
+
+	UFUNCTION(Server, Reliable)
+	void CreateRole(const FCreateUserParams& InParam);
+
+	UFUNCTION(Client, Reliable)
+	void CreateRoleResult(const FMUserData& InData);
+	
 
 	void SaveData();
 
+	const FMUserData& GetUserData() const { return UserData; }
+	
 protected:
 
 	// Todo 背包模块
@@ -66,5 +93,5 @@ private:
 	FRoleData* CurrentRoleData;
 
 	UPROPERTY()
-	FOnLoginResult OnLoginResult;
+	TMap<FString, FOnRpcResult> RpcManager;
 };

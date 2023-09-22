@@ -18,16 +18,16 @@ class DEMO_API UMAbilitySystemComponent : public UAbilitySystemComponent
 
 public:
 
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
 	FGameplayTagContainer MoveEventTag;
 	
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
 	FGameplayTagContainer LookEventTag;
 	
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
 	FGameplayTagContainer JumpEventTag;
 
-	UPROPERTY(EditDefaultsOnly, Category = ProjectSS)
+	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
 	FGameplayTagContainer SprintEventTag;
 
 	// 受到近战攻击时触发的效果

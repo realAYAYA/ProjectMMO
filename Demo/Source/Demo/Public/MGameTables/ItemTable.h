@@ -117,15 +117,15 @@ public:
     void Foreach(const TFunction<bool(const UItemConfig*)>& Func);
 
     /** 查找 */
-    UFUNCTION(BlueprintPure, Category = "ProjectSS") 
+    UFUNCTION(BlueprintPure, Category = "ProjectM") 
     const UItemConfig* Get(const int32& InKey) const; 
 
     /** 遍历 */
-    UFUNCTION(BlueprintCallable, Category = "ProjectSS", DisplayName = "Foreach")
+    UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "Foreach")
     void K2_Foreach(const FOnForeachItemConfig& InCallback); 
 
     /** 配置文件名称 */
-    UFUNCTION(BlueprintPure, Category = "ProjectSS")
+    UFUNCTION(BlueprintPure, Category = "ProjectM")
     FString GetConfigFileName() const;
 
     // =========================================================

@@ -16,7 +16,7 @@ class UAbilityTask_CastSpell : public UMAbilityTask
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility"))
+	UFUNCTION(BlueprintCallable, Category = "ProjectM", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility"))
 	static UAbilityTask_CastSpell* CreateCastSpellTask(UGameplayAbility* OwningAbility, AMCharacter* InCharacterOwner, const float InCastTime);
 
 	virtual void Activate() override;

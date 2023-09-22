@@ -8,8 +8,10 @@
 #include "AbilitySystemInterface.h"
 #include "MGameTypes.h"
 #include "Abilities/GameplayAbility.h"
+#include "Net/MGameMessage.h"
 #include "MCharacter.generated.h"
 
+class AMPlayerState;
 class USpringArmComponent;
 class UInputComponent;
 class USkeletalMeshComponent;
@@ -60,13 +62,19 @@ public:
 	/**
 	 * PlayerState
 	*/
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
+	AMPlayerState* GetMPlayerState() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	void LoadData();
 	
 public:
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = ProjectSS)
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
 	AMCharacter* GetCurrentTarget() const;
 
-	UFUNCTION(BlueprintCallable, Server, Reliable, Category = ProjectSS)
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "ProjectM")
 	void SetCurrentTarget(AMCharacter* NewTarget);
 
 protected:
@@ -76,7 +84,7 @@ protected:
 	AMCharacter* CurrentTarget;
 
 	// Todo 测试数据，最后要删
-	UPROPERTY(BlueprintReadOnly, Replicated, Category = ProjectSS)
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
 	FString MyName;
 
 	UPROPERTY(Replicated)
@@ -86,7 +94,7 @@ protected:
 	class UMCharacterDataAsset* CharacterDataAsset;
 
 public:
-	UFUNCTION(BlueprintCallable, Server, Reliable, Category = ProjectSS)
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "ProjectM")
 	void SetMyName(const FString& InName);
 
 	
@@ -95,34 +103,34 @@ public:
 	 */
 public:
 
-	UFUNCTION(BlueprintCallable, Category = ProjectSS)
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	const UMAttributeSet* GetAttributeSet() const;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnAbilityFailed OnAbilityFailed;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnHealthChanged OnHealthChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnMaxHealthChanged OnMaxHealthChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnManaChanged OnManaChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnMaxManaChanged OnMaxManaChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnRageChanged OnRageChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnMaxRageChanged OnMaxRageChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnEnergyChanged OnEnergyChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "ProjectSS")
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnMaxEnergyChanged OnMaxEnergyChanged;
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
@@ -146,7 +154,7 @@ protected:
 	UMAttributeSet* AttributeSet;
 
 	// 移动限制Tags
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ProjectSS)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ProjectM")
 	FGameplayTagContainer MoveLimitTags;
 
 	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;

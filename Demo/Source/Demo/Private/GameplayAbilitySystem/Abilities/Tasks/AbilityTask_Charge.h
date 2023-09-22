@@ -19,7 +19,7 @@ class UAbilityTask_Charge : public UMAbilityTask
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectSS", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility"))
+	UFUNCTION(BlueprintCallable, Category = "ProjectM", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility"))
 	static UAbilityTask_Charge* CreateChargeTask(UGameplayAbility* OwningAbility, AMCharacter* InCharacterOwner, FVector InDestination);
 
 	virtual void Activate() override;
