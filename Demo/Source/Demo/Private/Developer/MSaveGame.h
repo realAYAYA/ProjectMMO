@@ -30,17 +30,24 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	bool CreateUser(const int64 InID, const FString& InName);
 
+	bool CreateUser(const FMUserData& InData);
+
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void RemoveUser(const int64 InID);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FMUserData GetUserData(const int64 InID);
+	FMUserData FindUserData(const int64 InID);
+	
+	FMUserData* FindUserDataRef(const int64 InID);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	FRoleData GetRoleData(const int64 InID, const FString& InName);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	bool UpdateRoleName(const int64 InID, const FString& OldName, const FString& NewName);
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	bool CreateRole(const int64 InID, const FCreateRoleParams& InParams);
 	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	bool UpdateRole(const int64 InID, const FString& InName, const FRoleData& InData);
@@ -51,11 +58,11 @@ public:
 	
 private:
 	
-	int32 FindUser(const int64 InID);
-	int32 FindUser(const FString& InName);
+	int32 FindUserIndex(const int64 InID);
+	int32 FindUserIndex(const FString& InName);
 	
-	int32 FindRole(const int64 InID, const FString& InName);
-	int32 FindRole(const int32 Index, const FString& InName);
+	int32 FindRoleIndex(const int64 InID, const FString& InName);
+	int32 FindRoleIndex(const int32 Index, const FString& InName);
 	
 	UPROPERTY()
 	TArray<FMUserData> UserData;// SteamID, SteamName

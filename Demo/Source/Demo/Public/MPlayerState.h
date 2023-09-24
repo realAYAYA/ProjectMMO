@@ -24,23 +24,26 @@ public:
 	
 	AMPlayerState();
 
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
+	FString RoleName;
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
 	bool IsOnline() const { return UserData.UserID > 0; }
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	int64 GetUserID() const;
 
-	UFUNCTION()
-	FString GetUserName() const;
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	FString GetRoleName() const;
 
 	/** Login*/
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void K2_Login(const int64 ID, const FOnLoginResult& InCallback);
+	void K2_Login(const int64 ID, const FString& Name, const FOnLoginResult& InCallback);
 
 	UFUNCTION(Server, Reliable)
-	void Login(const int64 ID);
+	void Login(const int64 ID, const FString& Name);
 
 	UFUNCTION(Client, Reliable)
 	void LoginResult(const FMUserData& InData);
@@ -54,15 +57,28 @@ private:
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void K2_CreateRole(const FCreateUserParams& InParam, const FOnRpcResult& InCallback);
+	void K2_CreateRole(const FCreateRoleParams& InParam, const FOnRpcResult& InCallback);
 
 	UFUNCTION(Server, Reliable)
-	void CreateRole(const FCreateUserParams& InParam);
+	void CreateRole(const int32 UserID, const FCreateRoleParams& InParam);
 
 	UFUNCTION(Client, Reliable)
 	void CreateRoleResult(const FMUserData& InData);
-	
 
+	/** Change Role*/
+public:
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	void K2_ChangeRole(const FString& InName, const FOnRpcResult& InCallback);
+
+	UFUNCTION(Server, Reliable)
+	void ChangeRole(const int32 UserID, const FString& InName);
+
+	UFUNCTION(Client, Reliable)
+	void ChangeRoleResult(const bool bOk);
+
+	
+	
 	void SaveData();
 
 	const FMUserData& GetUserData() const { return UserData; }

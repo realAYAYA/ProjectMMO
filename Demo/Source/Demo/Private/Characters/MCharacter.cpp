@@ -10,20 +10,20 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AbilitySystemComponent.h"
-#include "Demo.h"
-#include "MBlueprintLibrary.h"
-#include "Net/UnrealNetwork.h"
-
-#include "MCharacterDataAsset.h"
-#include "MGameInstance.h"
-#include "MPlayerState.h"
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
 #include "Components/MCharacterMovementComponent.h"
+#include "Net/UnrealNetwork.h"
+
+#include "Demo.h"
+#include "MCharacterDataAsset.h"
+#include "MPlayerController.h"
+#include "MPlayerState.h"
+
 
 // Sets default values
 AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer.SetDefaultSubobjectClass<UMCharacterMovementComponent>(AMCharacter::CharacterMovementComponentName))
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UMCharacterMovementComponent>(CharacterMovementComponentName))
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -62,11 +62,6 @@ void AMCharacter::PostInitializeComponents()
 
 	if (IsValid(CharacterDataAsset))
 		CharacterData = CharacterDataAsset->CharacterData;
-}
-
-void AMCharacter::SetMyName_Implementation(const FString& InName)
-{
-	MyName = InName;
 }
 
 const UMAttributeSet* AMCharacter::GetAttributeSet() const
@@ -136,13 +131,6 @@ void AMCharacter::ApplyStartupEffects()
 void AMCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
-	// Todo
-	const AMPlayerState* MPlayerState = GetMPlayerState();
-	if (!MPlayerState)
-	{
-		UE_LOG(LogProjectM, Log, TEXT("%s: Failed"), *FString(__FUNCTION__));
-	}
 
 	LoadData();
 
@@ -287,6 +275,11 @@ AMPlayerState* AMCharacter::GetMPlayerState() const
 	return Cast<AMPlayerState>(GetPlayerState());
 }
 
+AMPlayerController* AMCharacter::GetMPlayerController() const
+{
+	return Cast<AMPlayerController>(Controller);
+}
+
 void AMCharacter::LoadData()
 {
 	{
@@ -318,5 +311,4 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 
 	DOREPLIFETIME(AMCharacter, CharacterData);
 	DOREPLIFETIME(AMCharacter, CurrentTarget);
-	DOREPLIFETIME(AMCharacter, MyName);
 }

@@ -24,10 +24,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString CharacterName;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProjectM")
+	UMSaveGame* SaveGame;
+
 	UFUNCTION()
 	UMGameTables* GetMGameTables();
 	
 	virtual void Init() override;
+
+	virtual void BeginDestroy() override;
 
 	static UMGameInstance* GetMGameInstance(const UWorld* World);
 	
@@ -35,7 +40,4 @@ private:
 	
 	UPROPERTY()
 	UMGameTables* GameTables;
-
-	UPROPERTY()
-	UMSaveGame* SaveGame;
 };

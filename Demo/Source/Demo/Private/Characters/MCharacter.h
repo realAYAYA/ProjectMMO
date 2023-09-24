@@ -11,6 +11,7 @@
 #include "Net/MGameMessage.h"
 #include "MCharacter.generated.h"
 
+class AMPlayerController;
 class AMPlayerState;
 class USpringArmComponent;
 class UInputComponent;
@@ -45,7 +46,7 @@ UCLASS()
 class DEMO_API AMCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
-
+	
 	/** Third person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* ThirdPersonCameraComponent;
@@ -54,21 +55,47 @@ class DEMO_API AMCharacter : public ACharacter, public IAbilitySystemInterface
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComponent;
 
+	/**
+	 * Default
+	 */
 public:
 	
-	/** Returns FirstPersonCameraComponent sub-object **/
+	// Sets default values for this character's properties
+	AMCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	virtual void PostInitializeComponents() override;
+
 	UCameraComponent* GetThirdPersonCameraComponent() const { return ThirdPersonCameraComponent; }
+	
+protected:
+	
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 	/**
 	 * PlayerState
 	*/
-
+public:
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
 	AMPlayerState* GetMPlayerState() const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
+	AMPlayerController* GetMPlayerController() const;
+
+protected:
+	
+	virtual void PossessedBy(AController* NewController) override;
+	
+	virtual void OnRep_PlayerState() override;
+	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void LoadData();
 	
+
 public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
@@ -83,25 +110,18 @@ protected:
 	UPROPERTY(Replicated)
 	AMCharacter* CurrentTarget;
 
-	// Todo 测试数据，最后要删
-	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
-	FString MyName;
-
-	UPROPERTY(Replicated)
-	FCharacterData CharacterData;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UMCharacterDataAsset* CharacterDataAsset;
-
-public:
-	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "ProjectM")
-	void SetMyName(const FString& InName);
-
 	
 	/**
 	 * GameAbilitySystem
 	 */
 public:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UMAbilitySystemComponent* AbilitySystemComponent;
+
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	bool ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	const UMAttributeSet* GetAttributeSet() const;
@@ -132,26 +152,18 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnMaxEnergyChanged OnMaxEnergyChanged;
-	
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	
-	bool ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext);
 
 protected:
+
+	UPROPERTY(Replicated)
+	FCharacterData CharacterData;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UMCharacterDataAsset* CharacterDataAsset;
 
 	void GiveAbilities();
 	
 	void ApplyStartupEffects();
-
-	virtual void PossessedBy(AController* NewController) override;
-	
-	virtual void OnRep_PlayerState() override;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UMAbilitySystemComponent* AbilitySystemComponent;
-
-	UPROPERTY(Transient)
-	UMAttributeSet* AttributeSet;
 
 	// 移动限制Tags
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ProjectM")
@@ -160,35 +172,16 @@ protected:
 	FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
 	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
 
-	
-	/**
-	 * Default
-	 */
-public:
-	
-	// Sets default values for this character's properties
-	//AMCharacter();
-	AMCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+private:
 
-	virtual void PostInitializeComponents() override;
-	
-protected:
-	
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	UPROPERTY(Transient)
+	UMAttributeSet* AttributeSet;
 	
 	/**
 	 * Input & Control
 	 */
 public:
+	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta=(AllowPrivateAccess = "true"))
 	class UInputMappingContext* DefaultMappingContext;
@@ -235,6 +228,9 @@ public:
 	FOnJumpInput OnJumpInput;
 
 protected:
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

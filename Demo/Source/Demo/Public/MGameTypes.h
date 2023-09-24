@@ -83,6 +83,10 @@ struct FRoleData
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	FString RoleName;
 
+	// 性别
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	int32 Gender = 0;
+
 	// 阵营
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	ECamp Camp = ECamp::None;
@@ -137,28 +141,22 @@ struct FMUserData
 
 /** 创建角色参数*/
 USTRUCT(BlueprintType)
-struct FCreateUserParams
+struct FCreateRoleParams
 {
 	GENERATED_USTRUCT_BODY()
-
-	// 用户ID
-	UPROPERTY()
-	int64 UserID = 0;
-
-	// 用户名
-	UPROPERTY(EditAnywhere, Category = "ProjectM")
-	FString UserName;
-
+	
 	// 角色名
-	UPROPERTY(EditAnywhere, Category = "ProjectM")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FString RoleName;
+
+	// 性别
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	int32 Gender = 0;
 	
 	// 角色职业
-	UPROPERTY(EditAnywhere, Category = "ProjectM")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	ERoleClass Class = ERoleClass::None;
 };
-
-
 
 // Todo Delete
 USTRUCT(BlueprintType)
