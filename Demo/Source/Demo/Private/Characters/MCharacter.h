@@ -8,7 +8,6 @@
 #include "AbilitySystemInterface.h"
 #include "MGameTypes.h"
 #include "Abilities/GameplayAbility.h"
-#include "Net/MGameMessage.h"
 #include "MCharacter.generated.h"
 
 class AMPlayerController;
@@ -76,7 +75,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 	/**
-	 * PlayerState
+	 * PlayerState and Network
 	*/
 public:
 	
@@ -85,19 +84,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
 	AMPlayerController* GetMPlayerController() const;
-
-protected:
 	
 	virtual void PossessedBy(AController* NewController) override;
 	
 	virtual void OnRep_PlayerState() override;
-	
-	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void LoadData();
-	
 
-public:
-	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "ProjectM")
+	void ReadyToDeploy();
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
 	AMCharacter* GetCurrentTarget() const;
 
@@ -110,6 +104,7 @@ protected:
 	UPROPERTY(Replicated)
 	AMCharacter* CurrentTarget;
 
+private:
 	
 	/**
 	 * GameAbilitySystem
@@ -121,7 +116,9 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
-	bool ApplyGameplayEffectToSelf(const TSubclassOf<UGameplayEffect> Effect, const FGameplayEffectContextHandle& InEffectContext);
+	bool ApplyGameplayEffectToSelf(
+		const TSubclassOf<UGameplayEffect> Effect,
+		const FGameplayEffectContextHandle& InEffectContext) const;
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	const UMAttributeSet* GetAttributeSet() const;

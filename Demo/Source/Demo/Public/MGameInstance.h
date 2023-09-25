@@ -21,8 +21,16 @@ class DEMO_API UMGameInstance : public UGameInstance
 
 public:
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString CharacterName;
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	void SetLoginInfo(const int64 InUserID, const FString& InUserName);
+
+	// Steam, Epic, PS4 : ID
+	UPROPERTY()
+	uint64 UserID;
+	
+	// Steam, Epic, PS4 : USerName
+	UPROPERTY()
+	FString UserName;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProjectM")
 	UMSaveGame* SaveGame;

@@ -9,7 +9,6 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "MGameTables/MGameTables.h"
-#include "Net\GameClientNetSubsystem.h"
 
 void UMGameInstance::Init()
 {
@@ -42,6 +41,13 @@ void UMGameInstance::BeginDestroy()
 UMGameInstance* UMGameInstance::GetMGameInstance(const UWorld* World)
 {
 	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
+}
+
+void UMGameInstance::SetLoginInfo(const int64 InUserID, const FString& InUserName)
+{
+	// Todo 从Steam获取信息
+	UserID = InUserID;
+	UserName = InUserName;
 }
 
 UMGameTables* UMGameInstance::GetMGameTables()

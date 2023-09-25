@@ -17,6 +17,7 @@
 
 #include "Demo.h"
 #include "MCharacterDataAsset.h"
+#include "MGameInstance.h"
 #include "MPlayerController.h"
 #include "MPlayerState.h"
 
@@ -76,7 +77,7 @@ UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
 
 bool AMCharacter::ApplyGameplayEffectToSelf(
 	const TSubclassOf<UGameplayEffect> Effect,
-	const FGameplayEffectContextHandle& InEffectContext)
+	const FGameplayEffectContextHandle& InEffectContext) const
 {
 	if (!Effect.Get())
 		return false;
@@ -84,8 +85,8 @@ bool AMCharacter::ApplyGameplayEffectToSelf(
 	const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(Effect, 1, InEffectContext);
 	if (SpecHandle.IsValid())
 	{
-		const FActiveGameplayEffectHandle ActiveGameplayEffectHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
-		return ActiveGameplayEffectHandle.WasSuccessfullyApplied();
+		const FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		return ActiveGEHandle.WasSuccessfullyApplied();
 	}
 
 	return false;
@@ -93,38 +94,38 @@ bool AMCharacter::ApplyGameplayEffectToSelf(
 
 void AMCharacter::GiveAbilities()
 {
-	if (HasAuthority() && AbilitySystemComponent)
-	{
-		int32 i = 0;
-		for (const auto& DefaultAbility : CharacterData.Abilities)
-		{
-			if (!DefaultAbility)
-				continue;
-			
-			FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(DefaultAbility);
-			AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
+	if (!HasAuthority() || !AbilitySystemComponent)
+		return;
 
-			const UGameplayAbility* Ability = NewObject<UGameplayAbility>(this, DefaultAbility);
-			if (Ability && Ability->AbilityTags.Num() > 0 && Ability->AbilityTags.IsValidIndex(0))
-			{
-				const FGameplayTag& Tag = Ability->AbilityTags.First();
-				InputSkillMap.Add(++i, Tag);
-			}
+	int32 i = 0;
+	for (const auto& DefaultAbility : CharacterData.Abilities)
+	{
+		if (!DefaultAbility)
+			continue;
+			
+		FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(DefaultAbility);
+		AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
+
+		const UGameplayAbility* Ability = NewObject<UGameplayAbility>(this, DefaultAbility);
+		if (Ability && Ability->AbilityTags.Num() > 0 && Ability->AbilityTags.IsValidIndex(0))
+		{
+			const FGameplayTag& Tag = Ability->AbilityTags.First();
+			InputSkillMap.Add(++i, Tag);
 		}
 	}
 }
 
 void AMCharacter::ApplyStartupEffects()
 {
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
-		EffectContextHandle.AddSourceObject(this);
+	if (!HasAuthority())
+		return;
 
-		for (const auto& CharacterEffect : CharacterData.Effects)
-		{
-			ApplyGameplayEffectToSelf(CharacterEffect, EffectContextHandle);
-		}
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
+
+	for (const auto& CharacterEffect : CharacterData.Effects)
+	{
+		ApplyGameplayEffectToSelf(CharacterEffect, EffectContextHandle);
 	}
 }
 
@@ -132,7 +133,12 @@ void AMCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	LoadData();
+	const AMPlayerState* PS = GetMPlayerState();
+	const UMGameInstance* GameInstance = Cast<UMGameInstance>(GetGameInstance());
+	if (PS && GameInstance)
+	{
+		ReadyToDeploy();
+	}
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	GiveAbilities();
@@ -142,7 +148,7 @@ void AMCharacter::PossessedBy(AController* NewController)
 void AMCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
-
+	
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	ApplyStartupEffects();
 }
@@ -278,21 +284,6 @@ AMPlayerState* AMCharacter::GetMPlayerState() const
 AMPlayerController* AMCharacter::GetMPlayerController() const
 {
 	return Cast<AMPlayerController>(Controller);
-}
-
-void AMCharacter::LoadData()
-{
-	{
-		// 部署角色数据
-		//AMPlayerState* PlayerState = GetMPlayerState();
-		//PlayerState->GetUserData();
-		return;
-	}
-	
-	{
-		// Todo 创建角色流程
-		return;
-	}
 }
 
 AMCharacter* AMCharacter::GetCurrentTarget() const

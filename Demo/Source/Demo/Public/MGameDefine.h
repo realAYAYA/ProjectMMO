@@ -2,6 +2,31 @@
 
 #include "CoreMinimal.h"
 
+/**
+ * Game Network "Message, Rpc" Defined here
+*/
+UENUM(BlueprintType)
+enum class ERpcErrorCode : uint8
+{
+	Ok				UMETA(DisplayName = "正常"),
+	NotEnough		UMETA(DisplayName = "数量不足"),
+	IllegalParam	UMETA(DisplayName = "参数非法"),
+	
+	NeedReq			UMETA(DisplayName = "需要重新请求"),
+	InValidConfig	UMETA(DisplayName = "无效配置"),
+	Unknown			UMETA(DisplayName = "未知错误"),
+};
+
+UENUM(BlueprintType)
+enum class ELoginCode : uint8
+{
+	Ok				UMETA(DisplayName = "正常登陆"),
+	DuplicateLogin 	UMETA(DisplayName = "已经在线"),
+	Unknown			UMETA(DisplayName = "未知错误"),
+};
+
+/** Rpc*/
+
 UENUM(BlueprintType)
 enum class ERoleClass : uint8
 {

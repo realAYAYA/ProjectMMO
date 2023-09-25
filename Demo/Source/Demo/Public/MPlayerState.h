@@ -9,7 +9,6 @@
 
 #include "MPlayerState.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FOnLoginResult, ELoginCode, ErrorCode);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnRpcResult, bool, bOk);
 
 /**
@@ -24,34 +23,39 @@ public:
 	
 	AMPlayerState();
 
-	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
-	FString RoleName;
-
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
 	bool IsOnline() const { return UserData.UserID > 0; }
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	int64 GetUserID() const;
+	int64 GetUserID() const { return UserID; }
+
+	// Steam, Epic, PS4 : ID, to show
+	UPROPERTY(Replicated)
+	uint64 UserID;
+
+	// Steam, Epic, PS4 : Name, to show
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
+	FString UserName;
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FString GetRoleName() const;
+	int32 GetRoleNum() const;
 
 	/** Login*/
 public:
-	
+
+	//typedef TFunction<void(const ELoginCode Code)> FOnLoginResult;
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void K2_Login(const int64 ID, const FString& Name, const FOnLoginResult& InCallback);
+	void Login(const FOnRpcResult& InCallback);
 
 	UFUNCTION(Server, Reliable)
-	void Login(const int64 ID, const FString& Name);
+	void LoginReq(const uint64 ID, const FString& Name);
 
 	UFUNCTION(Client, Reliable)
-	void LoginResult(const FMUserData& InData);
+	void LoginAck(const FMUserData& InData);
 
 private:
 	
-	UPROPERTY()
-	FOnLoginResult OnLoginResult;
+	//FOnLoginResult OnLoginResult;
 
 	/** Create Role*/
 public:
@@ -60,24 +64,22 @@ public:
 	void K2_CreateRole(const FCreateRoleParams& InParam, const FOnRpcResult& InCallback);
 
 	UFUNCTION(Server, Reliable)
-	void CreateRole(const int32 UserID, const FCreateRoleParams& InParam);
+	void CreateRoleReq(const int32 InID, const FCreateRoleParams& InParam);
 
 	UFUNCTION(Client, Reliable)
-	void CreateRoleResult(const FMUserData& InData);
+	void CreateRoleAck(const FMUserData& InData);
 
 	/** Change Role*/
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "ChangeRole")
 	void K2_ChangeRole(const FString& InName, const FOnRpcResult& InCallback);
 
 	UFUNCTION(Server, Reliable)
-	void ChangeRole(const int32 UserID, const FString& InName);
+	void ChangeRole(const int32 InID, const FString& InName);
 
 	UFUNCTION(Client, Reliable)
 	void ChangeRoleResult(const bool bOk);
-
-	
 	
 	void SaveData();
 
@@ -106,8 +108,6 @@ private:
 	UPROPERTY()
 	FMUserData UserData;
 	
-	FRoleData* CurrentRoleData;
-
 	UPROPERTY()
 	TMap<FString, FOnRpcResult> RpcManager;
 };
