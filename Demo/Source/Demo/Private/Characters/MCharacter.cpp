@@ -299,7 +299,7 @@ void AMCharacter::SetCurrentTarget_Implementation(AMCharacter* NewTarget)
 void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
+	
 	DOREPLIFETIME(AMCharacter, CharacterData);
 	DOREPLIFETIME(AMCharacter, CurrentTarget);
 }
