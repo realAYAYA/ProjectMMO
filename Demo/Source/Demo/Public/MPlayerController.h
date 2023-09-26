@@ -33,8 +33,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjecetM")
 	AMPlayerState* GetMPlayerState() const;
 
-	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	int64 GetUserID() const { return UserID; }
+	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "GetUserID")
+	int64 K2_GetUserID() const { return UserID; }
 
 	// Steam, Epic, PS4 : ID, to show
 	UPROPERTY(Replicated)
@@ -51,19 +51,6 @@ protected:
 	virtual void OnRep_PlayerState() override;
 
 private:
-
-	// Todo 背包模块
-	UPROPERTY()
-	class UInventory* InventoryModule;
-	
-	// Todo 天赋模块
-	// Todo 任务模块
-	// Todo 邮件模块
-	// Todo 装扮模块
-	// Todo 成就模块 - ToSteam
-	// Todo 聊天模块 - 服务器微服务
-	// Todo 拍卖行 - 服务器微服务
-
 	
 	/** Rpc*/
 public:

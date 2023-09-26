@@ -33,7 +33,7 @@ EActivateFailCode UGA_CastSpell::CanActivateCondition(const FGameplayAbilityActo
 		return FailCode;
 	}
 	
-	const AMCharacter* Target = Caster->GetCurrentTarget();
+	const AMCharacter* Target = Caster->CurrentTarget;
 	if (!Target || !Target->GetAbilitySystemComponent())
 	{
 		Caster->OnAbilityFailed.Broadcast(EActivateFailCode::NoTarget);
@@ -128,9 +128,9 @@ void UGA_CastSpell::EndAbility(
 	case ETargetType::Self: Target = Caster;
 	case ETargetType::Friendly:
 		// Todo 如果目标是敌对的则选择自己
-		Target = Caster->GetCurrentTarget();
+		Target = Caster->CurrentTarget;
 	case ETargetType::Hostile:
-		Target = Caster->GetCurrentTarget();
+		Target = Caster->CurrentTarget;
 	}
 
 	UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent();

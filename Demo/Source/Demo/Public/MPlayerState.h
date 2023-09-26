@@ -21,11 +21,20 @@ public:
 	
 	AMPlayerState();
 
+	// Todo 背包模块
+	UPROPERTY()
+	class UInventory* InventoryModule;
+	
+	// Todo 天赋模块
+	// Todo 任务模块
+	// Todo 邮件模块
+	// Todo 装扮模块
+	// Todo 成就模块 - ToSteam
+	// Todo 聊天模块 - 服务器微服务
+	// Todo 拍卖行 - 服务器微服务
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
 	bool IsOnline() const { return UserData.UserID > 0; }
-
-	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "GetUserID")
-	int64 K2_GetUserID() const { return UserData.UserID; }
 
 	uint64 GetUserID() const { return UserData.UserID; }
 	

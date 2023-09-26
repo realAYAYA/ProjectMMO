@@ -16,8 +16,8 @@
 #include "Net/UnrealNetwork.h"
 
 #include "Demo.h"
-#include "MCharacterDataAsset.h"
 #include "MGameInstance.h"
+#include "MCharacterDataAsset.h"
 #include "MPlayerController.h"
 #include "MPlayerState.h"
 
@@ -68,6 +68,16 @@ void AMCharacter::PostInitializeComponents()
 const UMAttributeSet* AMCharacter::GetAttributeSet() const
 {
 	return AttributeSet;
+}
+
+void AMCharacter::OnRep_RoleName() const
+{
+	OnRoleNameChanged.Broadcast(RoleName);
+}
+
+void AMCharacter::OnRep_CurrentTarget() const
+{
+	OnCurrentChanged.Broadcast(CurrentTarget);
 }
 
 UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
@@ -123,23 +133,19 @@ void AMCharacter::ApplyStartupEffects()
 	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
 
-	for (const auto& CharacterEffect : CharacterData.Effects)
+	for (const auto& Effect : CharacterData.Effects)
 	{
-		ApplyGameplayEffectToSelf(CharacterEffect, EffectContextHandle);
+		if (ApplyGameplayEffectToSelf(Effect, EffectContextHandle))
+		{
+			UE_LOG(LogProjectM, Error, TEXT("%s : %s Failed"), *FString(__FUNCTION__), *FString(Effect->GetName()));
+		}
 	}
 }
 
 void AMCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
-	const AMPlayerState* PS = GetMPlayerState();
-	const UMGameInstance* GameInstance = Cast<UMGameInstance>(GetGameInstance());
-	if (PS && GameInstance)
-	{
-		ReadyToDeploy();
-	}
-
+	
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	GiveAbilities();
 	ApplyStartupEffects();
@@ -150,7 +156,6 @@ void AMCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 	
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	ApplyStartupEffects();
 }
 
 // Called when the game starts or when spawned
@@ -286,11 +291,6 @@ AMPlayerController* AMCharacter::GetMPlayerController() const
 	return Cast<AMPlayerController>(Controller);
 }
 
-AMCharacter* AMCharacter::GetCurrentTarget() const
-{
-	return CurrentTarget;
-}
-
 void AMCharacter::SetCurrentTarget_Implementation(AMCharacter* NewTarget)
 {
 	CurrentTarget = NewTarget;
@@ -301,5 +301,11 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME(AMCharacter, CharacterData);
-	DOREPLIFETIME(AMCharacter, CurrentTarget);
+
+	FDoRepLifetimeParams SharedParams;
+	SharedParams.bIsPushBased = true;
+
+	SharedParams.RepNotifyCondition = REPNOTIFY_Always;
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, RoleName, SharedParams);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, CurrentTarget, SharedParams);
 }

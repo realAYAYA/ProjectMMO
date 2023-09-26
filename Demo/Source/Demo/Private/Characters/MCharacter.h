@@ -26,6 +26,9 @@ class UMAttributeSet;
 class UGameplayAbility;
 class UGameplayEffect;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleNameChanged, FString, InName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCurrentChanged, AMCharacter*, Target);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMoveInput, float, X, float, Y);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLookInput, float, X, float, Y);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnJumpInput, float, V);
@@ -62,6 +65,16 @@ public:
 	// Sets default values for this character's properties
 	AMCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
+	AMPlayerState* GetMPlayerState() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
+	AMPlayerController* GetMPlayerController() const;
+	
+	virtual void PossessedBy(AController* NewController) override;
+	
+	virtual void OnRep_PlayerState() override;
+
 	virtual void PostInitializeComponents() override;
 
 	UCameraComponent* GetThirdPersonCameraComponent() const { return ThirdPersonCameraComponent; }
@@ -75,34 +88,34 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 	/**
-	 * PlayerState and Network
+	 * Network
 	*/
 public:
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
-	AMPlayerState* GetMPlayerState() const;
+	// Steam, Epic, PS4 : Name, to show
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_RoleName, Category = "ProjectM")
+	FString RoleName;
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
-	AMPlayerController* GetMPlayerController() const;
-	
-	virtual void PossessedBy(AController* NewController) override;
-	
-	virtual void OnRep_PlayerState() override;
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnRoleNameChanged OnRoleNameChanged;
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "ProjectM")
-	void ReadyToDeploy();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
-	AMCharacter* GetCurrentTarget() const;
+	/** 当前锁定目标*/
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CurrentTarget, Category = "ProjectM")
+	AMCharacter* CurrentTarget;
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "ProjectM")
 	void SetCurrentTarget(AMCharacter* NewTarget);
 
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnCurrentChanged OnCurrentChanged;
+
 protected:
-	
-	/**  当前锁定目标*/
-	UPROPERTY(Replicated)
-	AMCharacter* CurrentTarget;
+
+	UFUNCTION()
+	void OnRep_RoleName() const;
+
+	UFUNCTION()
+	void OnRep_CurrentTarget() const;
 
 private:
 	

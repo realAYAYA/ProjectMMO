@@ -32,7 +32,7 @@ EActivateFailCode UGA_Charge::CanActivateCondition(const FGameplayAbilityActorIn
 		return FailCode;
 	}
 	
-	const AMCharacter* Target = Caster->GetCurrentTarget();
+	const AMCharacter* Target = Caster->CurrentTarget;
 	if (!Target || !Target->GetAbilitySystemComponent())
 	{
 		Caster->OnAbilityFailed.Broadcast(EActivateFailCode::NoTarget);
@@ -80,7 +80,7 @@ void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 {
 	// 根据目标位置，计算冲锋的目的地
 	AMCharacter* Caster = Cast<AMCharacter>(OwnerInfo->AvatarActor);
-	const AMCharacter* Target = Cast<AMCharacter>(OwnerInfo->AvatarActor)->GetCurrentTarget();
+	const AMCharacter* Target = Cast<AMCharacter>(OwnerInfo->AvatarActor)->CurrentTarget;
 	UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent();
 	
 	// 对目标施加效果

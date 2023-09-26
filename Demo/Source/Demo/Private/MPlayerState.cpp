@@ -4,9 +4,11 @@
 #include "MPlayerState.h"
 #include "MGameInstance.h"
 
+#include "Inventory/Inventory.h"
+
 AMPlayerState::AMPlayerState()
 {
-	
+	InventoryModule = NewObject<UInventory>();
 }
 
 int32 AMPlayerState::GetRoleNum() const

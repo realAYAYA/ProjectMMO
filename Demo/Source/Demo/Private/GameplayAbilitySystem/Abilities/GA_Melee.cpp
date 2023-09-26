@@ -29,7 +29,7 @@ EActivateFailCode UGA_Melee::CanActivateCondition(const FGameplayAbilityActorInf
 		return FailCode;
 	}
 	
-	const AMCharacter* Target = Caster->GetCurrentTarget();
+	const AMCharacter* Target = Caster->CurrentTarget;
 	if (!Target || !Target->GetAbilitySystemComponent())
 	{
 		Caster->OnAbilityFailed.Broadcast(EActivateFailCode::NoTarget);
@@ -87,7 +87,7 @@ void UGA_Melee::ActivateAbility(
 
 	// 根据目标类型选择目标
 	const AMCharacter* Caster = Cast<AMCharacter>(OwnerInfo->AvatarActor.Get());
-	const AMCharacter* Target = Caster->GetCurrentTarget();
+	const AMCharacter* Target = Caster->CurrentTarget;
 	UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent();
 
 	// 对目标施加效果

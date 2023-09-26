@@ -43,3 +43,17 @@ const AMPlayerState* AMGameMode::FindOnlinePlayerByName(const FString& InName) c
 
 	return nullptr;
 }
+
+TArray<AMPlayerState*> AMGameMode::GetAllPlayerStates() const
+{
+	TArray<AMPlayerState*> Array;
+	for (const auto PlayerState : GameState.Get()->PlayerArray)
+	{
+		if (AMPlayerState* MPlayerState = Cast<AMPlayerState>(PlayerState.Get()))
+		{
+			Array.Add(MPlayerState);
+		}
+	}
+
+	return Array;
+}

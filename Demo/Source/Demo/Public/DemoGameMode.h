@@ -22,4 +22,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ProjecetM")
 	const AMPlayerState* FindOnlinePlayerByName(const FString& InName) const;
+
+	UFUNCTION(BlueprintCallable, Category = "ProjecetM")
+	TArray<AMPlayerState*> GetAllPlayerStates() const;
 };

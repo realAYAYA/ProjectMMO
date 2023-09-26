@@ -21,7 +21,7 @@ public:
 	virtual bool Init() override;
 
 	/** 道具表 */
-	UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	class UItemConfigManager* Item;
 
 	/** Json常量配置 */

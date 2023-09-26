@@ -6,16 +6,12 @@
 #include "Demo.h"
 #include "MGameInstance.h"
 #include "MPlayerState.h"
+#include "Characters/MCharacter.h"
 #include "Developer/MSaveGame.h"
-#include "Inventory/Inventory.h"
 #include "Net/UnrealNetwork.h"
-
 
 AMPlayerController::AMPlayerController(const FObjectInitializer& ObjectInitializer)
 {
-	UserID = 0;
-	
-	InventoryModule = NewObject<UInventory>();
 }
 
 bool AMPlayerController::IsOnline() const
@@ -114,9 +110,15 @@ void AMPlayerController::LoginReq_Implementation(const uint64 ID, const FString&
 				LoginAck(FMUserData());
 			}
 		}
-		
-		UserID = ID;
-		UserName = Name;
+	}
+
+	UserID = ID;
+	UserName = Name;
+
+	// 为角色改名
+	if (AMCharacter* MCharacter = Cast<AMCharacter>(GetPawn()))
+	{
+		MCharacter->RoleName = Name;
 	}
 
 	UE_LOG(LogProjectM, Log, TEXT("Server: User: %s enter the game"), *Name);
@@ -160,7 +162,7 @@ void AMPlayerController::CreateRoleAck_Implementation(const FRoleData& InData)
 {
 	if (const FOnRpcResult* Callback = RpcManager.Find(TEXT("CreateRole")))
 	{
-		bool bOk = InData.CreateDate != 0;
+		const bool bOk = InData.CreateDate != 0;
 		if (bOk)
 		{
 			// Todo AddToData
@@ -190,10 +192,7 @@ void AMPlayerController::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >&
 	FDoRepLifetimeParams SharedParams;
 	SharedParams.bIsPushBased = true;
 	SharedParams.Condition = COND_InitialOnly;
-
-	DOREPLIFETIME(AMPlayerController, UserName);
-	DOREPLIFETIME(AMPlayerController, UserID);
-
-	//DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerController, UserID, SharedParams);
-	//DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerController, UserName, SharedParams);
+	
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerController, UserID, SharedParams);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerController, UserName, SharedParams);
 }
