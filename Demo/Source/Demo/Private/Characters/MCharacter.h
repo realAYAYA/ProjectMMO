@@ -92,7 +92,6 @@ protected:
 	*/
 public:
 	
-	// Steam, Epic, PS4 : Name, to show
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_RoleName, Category = "ProjectM")
 	FString RoleName;
 

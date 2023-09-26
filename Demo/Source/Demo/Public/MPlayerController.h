@@ -9,7 +9,7 @@
 
 #include "MPlayerController.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinishedLogin, bool, bOk);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinishedLogin, const ELoginCode, Code);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnRpcResult, bool, bOk);
 
 class AMPlayerState;
@@ -28,21 +28,13 @@ public:
 	/** */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjecetM")
 	bool IsOnline() const;
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "GetUserID")
+	int64 K2_GetUserID() const;
 	
 	/** 不保证在游戏开始（网络同步完成前）时，可以拿到非空的PlayerState*/
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjecetM")
 	AMPlayerState* GetMPlayerState() const;
-
-	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "GetUserID")
-	int64 K2_GetUserID() const { return UserID; }
-
-	// Steam, Epic, PS4 : ID, to show
-	UPROPERTY(Replicated)
-	uint64 UserID;
-
-	// Steam, Epic, PS4 : Name, to show
-	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
-	FString UserName;
 
 protected:
 
@@ -81,7 +73,7 @@ private:
 	void LoginReq(const uint64 ID, const FString& Name);
 
 	UFUNCTION(Client, Reliable)
-	void LoginAck(const FMUserData& InData);
+	void LoginAck(const ELoginCode Code, const FMUserData& InData);
 
 	UFUNCTION(Server, Reliable)
 	void CreateRoleReq(const uint64 InID, const FCreateRoleParams& InParam);

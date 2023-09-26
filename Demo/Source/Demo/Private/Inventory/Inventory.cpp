@@ -3,7 +3,8 @@
 
 #include "Inventory/Inventory.h"
 
-UInventory::UInventory()
+UInventory::UInventory(const FObjectInitializer& ObjectInitializer)
+: Super(ObjectInitializer)
 {
 	
 }

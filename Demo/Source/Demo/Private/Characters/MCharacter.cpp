@@ -304,8 +304,8 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 
 	FDoRepLifetimeParams SharedParams;
 	SharedParams.bIsPushBased = true;
-
 	SharedParams.RepNotifyCondition = REPNOTIFY_Always;
+	
 	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, RoleName, SharedParams);
 	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, CurrentTarget, SharedParams);
 }

@@ -4,6 +4,7 @@
 #include "MPlayerController.h"
 
 #include "Demo.h"
+#include "DemoGameMode.h"
 #include "MGameInstance.h"
 #include "MPlayerState.h"
 #include "Characters/MCharacter.h"
@@ -11,6 +12,7 @@
 #include "Net/UnrealNetwork.h"
 
 AMPlayerController::AMPlayerController(const FObjectInitializer& ObjectInitializer)
+: Super(ObjectInitializer)
 {
 }
 
@@ -30,6 +32,16 @@ AMPlayerState* AMPlayerController::GetMPlayerState() const
  	return Cast<AMPlayerState>(PlayerState);
 }
 
+int64 AMPlayerController::K2_GetUserID() const
+{
+	if (const AMPlayerState* PS = GetMPlayerState())
+	{
+		return PS->GetUserID();
+	}
+
+	return 0;
+}
+
 void AMPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -46,10 +58,7 @@ void AMPlayerController::K2_Login()
 {
 	Login([this](const ELoginCode Code)
 	{
-		if (Code == ELoginCode::Ok)
-			OnFinishedLogin.Broadcast(true);
-
-		OnFinishedLogin.Broadcast(false);
+		OnFinishedLogin.Broadcast(Code);
 	});
 }
 
@@ -85,15 +94,27 @@ void AMPlayerController::Login(const FOnLoginResult& InCallback)
 
 void AMPlayerController::LoginReq_Implementation(const uint64 ID, const FString& Name)
 {
+	// 玩家在线
+	if (const AMGameMode* GameMode = Cast<AMGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		if (GameMode->FindOnlinePlayerByID(ID))
+		{
+			LoginAck(ELoginCode::DuplicateLogin, FMUserData());
+			return;
+		}
+	}
+
 	// GetData from SaveGame
 	// 如果没有用户就为其注册一个，并返回数据
 	const UMGameInstance* GameInstance = Cast<UMGameInstance>(GetGameInstance());
-	if (GameInstance && GameInstance->SaveGame)
+	AMPlayerState* PS = GetMPlayerState();
+	if (GameInstance && GameInstance->SaveGame && PS)
 	{
 		UMSaveGame* SaveGame = GameInstance->SaveGame;
 		if (const FMUserData* FoundData = SaveGame->FindUserDataRef(ID))
 		{
-			LoginAck(*FoundData);
+			PS->SetUserData(*FoundData);
+			LoginAck(ELoginCode::Ok, *FoundData);
 		}
 		else
 		{
@@ -104,18 +125,18 @@ void AMPlayerController::LoginReq_Implementation(const uint64 ID, const FString&
 			NewData.CreateDate = FDateTime::Now().GetTicks();
 			
 			if (SaveGame->CreateUser(NewData))
-				LoginAck(NewData);
+			{
+				PS->SetUserData(NewData);
+				LoginAck(ELoginCode::Ok, NewData);
+			}
 			else
 			{
-				LoginAck(FMUserData());
+				LoginAck(ELoginCode::Unknown, FMUserData());
 			}
 		}
 	}
 
-	UserID = ID;
-	UserName = Name;
-
-	// 为角色改名
+	// Todo 为角色改名，以后会删掉
 	if (AMCharacter* MCharacter = Cast<AMCharacter>(GetPawn()))
 	{
 		MCharacter->RoleName = Name;
@@ -124,18 +145,15 @@ void AMPlayerController::LoginReq_Implementation(const uint64 ID, const FString&
 	UE_LOG(LogProjectM, Log, TEXT("Server: User: %s enter the game"), *Name);
 }
 
-void AMPlayerController::LoginAck_Implementation(const FMUserData& InData)
+void AMPlayerController::LoginAck_Implementation(const ELoginCode Code, const FMUserData& InData)
 {
 	AMPlayerState* PS = GetMPlayerState();
-	if (!PS || InData.UserID <= 0)
+	if (PS && Code == ELoginCode::Ok)
 	{
-		OnLoginCallback(ELoginCode::Unknown);
-		return;
+		PS->SetUserData(InData);
 	}
 	
-	PS->SetUserData(InData);
-
-	OnLoginCallback(ELoginCode::Ok);
+	OnLoginCallback(Code);
 }
 
 void AMPlayerController::CreateRoleReq_Implementation(const uint64 InID, const FCreateRoleParams& InParam)
@@ -183,16 +201,4 @@ void AMPlayerController::ChooseRoleAck_Implementation(const bool bOk)
 	{
 		Callback->ExecuteIfBound(bOk);
 	}
-}
-
-void AMPlayerController::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	FDoRepLifetimeParams SharedParams;
-	SharedParams.bIsPushBased = true;
-	SharedParams.Condition = COND_InitialOnly;
-	
-	DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerController, UserID, SharedParams);
-	DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerController, UserName, SharedParams);
 }

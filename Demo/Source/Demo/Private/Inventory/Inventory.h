@@ -17,7 +17,8 @@ class DEMO_API UInventory : public UObject
 	GENERATED_BODY()
 	
 public:
-	UInventory();
+	
+	UInventory(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	const UItem* GetItemByConfigID(const int32 ID) { return nullptr; };

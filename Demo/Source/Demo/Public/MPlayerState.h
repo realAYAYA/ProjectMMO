@@ -19,10 +19,24 @@ class DEMO_API AMPlayerState : public APlayerState
 
 public:
 	
-	AMPlayerState();
+	AMPlayerState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+
+	// Steam, Epic, PS4 : ID, to show
+	UPROPERTY(Replicated)
+	uint64 UserID;
+
+	// Steam, Epic, PS4 : Name, to show
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
+	FString UserName;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
+	bool IsOnline() const { return UserData.UserID > 0; }
+	
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	int32 GetRoleNum() const;
 
 	// Todo 背包模块
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	class UInventory* InventoryModule;
 	
 	// Todo 天赋模块
@@ -33,13 +47,7 @@ public:
 	// Todo 聊天模块 - 服务器微服务
 	// Todo 拍卖行 - 服务器微服务
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
-	bool IsOnline() const { return UserData.UserID > 0; }
-
 	uint64 GetUserID() const { return UserData.UserID; }
-	
-	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	int32 GetRoleNum() const;
 	
 	const FMUserData& GetUserData() const { return UserData; }
 
