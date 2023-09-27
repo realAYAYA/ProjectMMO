@@ -186,7 +186,7 @@ void AMPlayerController::CreateRoleAck_Implementation(const FRoleData& InData)
 			// Todo AddToData
 		}
 		
-		Callback->ExecuteIfBound(bOk);
+		Callback->ExecuteIfBound(ERpcErrorCode::Ok);
 	}
 }
 
@@ -199,6 +199,6 @@ void AMPlayerController::ChooseRoleAck_Implementation(const bool bOk)
 {
 	if (const FOnRpcResult* Callback = RpcManager.Find(TEXT("ChangeRole")))
 	{
-		Callback->ExecuteIfBound(bOk);
+		Callback->ExecuteIfBound(ERpcErrorCode::Ok);
 	}
 }

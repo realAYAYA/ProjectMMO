@@ -10,7 +10,6 @@
 #include "MPlayerController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinishedLogin, const ELoginCode, Code);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FOnRpcResult, bool, bOk);
 
 class AMPlayerState;
 /**

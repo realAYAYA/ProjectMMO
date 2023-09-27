@@ -8,6 +8,8 @@
 
 #include "MGameTypes.generated.h"
 
+DECLARE_DYNAMIC_DELEGATE_OneParam(FOnRpcResult, const ERpcErrorCode, bOk);
+
 /** 玩家离线后，游戏中角色身上Buff快照数据 */
 USTRUCT(BlueprintType) 
 struct FMBuffSnapShoot
