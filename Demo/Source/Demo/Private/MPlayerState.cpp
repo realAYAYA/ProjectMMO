@@ -9,8 +9,6 @@
 AMPlayerState::AMPlayerState(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
-	UserID = 0;
-	
 	InventoryModule = NewObject<UInventory>();
 }
 

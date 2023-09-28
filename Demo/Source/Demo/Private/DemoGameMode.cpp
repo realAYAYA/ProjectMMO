@@ -14,7 +14,7 @@ AMGameMode::AMGameMode()
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 }
 
-const AMPlayerState* AMGameMode::FindOnlinePlayerByID(const int64 InID) const
+const AMPlayerState* AMGameMode::FindOnlinePlayerByID(const FString InID) const
 {
 	if (!GameState)
 		return nullptr;
@@ -22,7 +22,7 @@ const AMPlayerState* AMGameMode::FindOnlinePlayerByID(const int64 InID) const
 	for (const auto PlayerState : GameState.Get()->PlayerArray)
 	{
 		const AMPlayerState* MPlayerState = Cast<AMPlayerState>(PlayerState.Get());
-		if (MPlayerState && MPlayerState->GetUserID() == InID)
+		if (MPlayerState && MPlayerState->UserID == InID)
 			return MPlayerState;
 	}
 

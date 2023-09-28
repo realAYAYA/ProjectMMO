@@ -28,8 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjecetM")
 	bool IsOnline() const;
 
+	/** Steam, Epic, PS4 ID*/
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "GetUserID")
-	int64 K2_GetUserID() const;
+	FString K2_GetUserID() const;
 	
 	/** 不保证在游戏开始（网络同步完成前）时，可以拿到非空的PlayerState*/
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjecetM")
@@ -69,19 +70,19 @@ private:
 	void Login(const FOnLoginResult& InCallback);
 
 	UFUNCTION(Server, Reliable)
-	void LoginReq(const uint64 ID, const FString& Name);
+	void LoginReq(const FString& InID, const FString& Name);
 
 	UFUNCTION(Client, Reliable)
 	void LoginAck(const ELoginCode Code, const FMUserData& InData);
 
 	UFUNCTION(Server, Reliable)
-	void CreateRoleReq(const uint64 InID, const FCreateRoleParams& InParam);
+	void CreateRoleReq(const FString& InID, const FCreateRoleParams& InParam);
 
 	UFUNCTION(Client, Reliable)
 	void CreateRoleAck(const FRoleData& InData);
 
 	UFUNCTION(Server, Reliable)
-	void ChooseRoleReq(const uint64 InID, const FString& InName);
+	void ChooseRoleReq(const FString& InID, const FString& InName);
 
 	UFUNCTION(Client, Reliable)
 	void ChooseRoleAck(const bool bOk);

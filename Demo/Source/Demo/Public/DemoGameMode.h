@@ -18,7 +18,7 @@ public:
 	AMGameMode();
 
 	UFUNCTION(BlueprintCallable, Category = "ProjecetM")
-	const AMPlayerState* FindOnlinePlayerByID(const int64 InID) const;
+	const AMPlayerState* FindOnlinePlayerByID(const FString InID) const;
 
 	UFUNCTION(BlueprintCallable, Category = "ProjecetM")
 	const AMPlayerState* FindOnlinePlayerByName(const FString& InName) const;

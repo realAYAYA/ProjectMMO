@@ -126,7 +126,7 @@ struct FMUserData
 
 	// 用户ID
 	UPROPERTY()
-	uint64 UserID = 0;
+	FString UserID;
 
 	// 用户名
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")

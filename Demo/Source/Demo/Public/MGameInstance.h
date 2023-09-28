@@ -22,11 +22,11 @@ class DEMO_API UMGameInstance : public UGameInstance
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void SetLoginInfo(const int64 InUserID, const FString& InUserName);
+	void SetLoginInfo(const FString& InUserID, const FString& InUserName);
 
 	// Steam, Epic, PS4 : ID
 	UPROPERTY()
-	uint64 UserID;
+	FString UserID;
 	
 	// Steam, Epic, PS4 : USerName
 	UPROPERTY()

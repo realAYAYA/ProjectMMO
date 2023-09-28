@@ -43,7 +43,7 @@ UMGameInstance* UMGameInstance::GetMGameInstance(const UWorld* World)
 	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
 }
 
-void UMGameInstance::SetLoginInfo(const int64 InUserID, const FString& InUserName)
+void UMGameInstance::SetLoginInfo(const FString& InUserID, const FString& InUserName)
 {
 	// Todo 从Steam获取信息
 	UserID = InUserID;

@@ -23,21 +23,20 @@ public:
 
 	// Steam, Epic, PS4 : ID, to show
 	UPROPERTY(Replicated)
-	uint64 UserID;
+	FString UserID;
 
 	// Steam, Epic, PS4 : Name, to show
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
 	FString UserName;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
-	bool IsOnline() const { return UserData.UserID > 0; }
+	bool IsOnline() const { return !UserID.IsEmpty(); }
 	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	int32 GetRoleNum() const;
-
-	// Todo 背包模块
+	
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	class UInventory* InventoryModule;
+	class UInventory* InventoryModule;// Todo 背包模块
 	
 	// Todo 天赋模块
 	// Todo 任务模块
@@ -46,8 +45,6 @@ public:
 	// Todo 成就模块 - ToSteam
 	// Todo 聊天模块 - 服务器微服务
 	// Todo 拍卖行 - 服务器微服务
-
-	uint64 GetUserID() const { return UserData.UserID; }
 	
 	const FMUserData& GetUserData() const { return UserData; }
 

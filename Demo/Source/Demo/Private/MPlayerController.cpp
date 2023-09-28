@@ -32,14 +32,14 @@ AMPlayerState* AMPlayerController::GetMPlayerState() const
  	return Cast<AMPlayerState>(PlayerState);
 }
 
-int64 AMPlayerController::K2_GetUserID() const
+FString AMPlayerController::K2_GetUserID() const
 {
 	if (const AMPlayerState* PS = GetMPlayerState())
 	{
-		return PS->GetUserID();
+		return PS->UserID;
 	}
 
-	return 0;
+	return TEXT("");
 }
 
 void AMPlayerController::BeginPlay()
@@ -68,7 +68,7 @@ void AMPlayerController::K2_CreateRole(const FCreateRoleParams& InParam, const F
 	if (PS && PS->IsOnline())
 	{
 		RpcManager.Add(TEXT("CreateRole"), InCallback);
-		CreateRoleReq(PS->GetUserID(), InParam);
+		CreateRoleReq(PS->UserID, InParam);
 	}
 }
 
@@ -78,7 +78,7 @@ void AMPlayerController::K2_ChooseRole(const FString& InName, const FOnRpcResult
 	if (PS && PS->IsOnline())
 	{
 		RpcManager.Add(TEXT("ChooseRole"), InCallback);
-		ChooseRoleReq(PS->GetUserID(), InName);
+		ChooseRoleReq(PS->UserID, InName);
 	}
 }
 
@@ -92,12 +92,12 @@ void AMPlayerController::Login(const FOnLoginResult& InCallback)
 	}
 }
 
-void AMPlayerController::LoginReq_Implementation(const uint64 ID, const FString& Name)
+void AMPlayerController::LoginReq_Implementation(const FString& InID, const FString& Name)
 {
 	// 玩家在线
 	if (const AMGameMode* GameMode = Cast<AMGameMode>(GetWorld()->GetAuthGameMode()))
 	{
-		if (GameMode->FindOnlinePlayerByID(ID))
+		if (GameMode->FindOnlinePlayerByID(InID))
 		{
 			LoginAck(ELoginCode::DuplicateLogin, FMUserData());
 			return;
@@ -111,7 +111,7 @@ void AMPlayerController::LoginReq_Implementation(const uint64 ID, const FString&
 	if (GameInstance && GameInstance->SaveGame && PS)
 	{
 		UMSaveGame* SaveGame = GameInstance->SaveGame;
-		if (const FMUserData* FoundData = SaveGame->FindUserDataRef(ID))
+		if (const FMUserData* FoundData = SaveGame->FindUserDataRef(InID))
 		{
 			PS->SetUserData(*FoundData);
 			LoginAck(ELoginCode::Ok, *FoundData);
@@ -120,7 +120,7 @@ void AMPlayerController::LoginReq_Implementation(const uint64 ID, const FString&
 		{
 			// Create User
 			FMUserData NewData;
-			NewData.UserID = ID;
+			NewData.UserID = InID;
 			NewData.UserName = Name;
 			NewData.CreateDate = FDateTime::Now().GetTicks();
 			
@@ -139,7 +139,7 @@ void AMPlayerController::LoginReq_Implementation(const uint64 ID, const FString&
 	// Todo 为角色改名，以后会删掉
 	if (AMCharacter* MCharacter = Cast<AMCharacter>(GetPawn()))
 	{
-		MCharacter->RoleName = Name;
+		MCharacter->RoleName = InID;
 	}
 
 	UE_LOG(LogProjectM, Log, TEXT("Server: User: %s enter the game"), *Name);
@@ -156,7 +156,7 @@ void AMPlayerController::LoginAck_Implementation(const ELoginCode Code, const FM
 	OnLoginCallback(Code);
 }
 
-void AMPlayerController::CreateRoleReq_Implementation(const uint64 InID, const FCreateRoleParams& InParam)
+void AMPlayerController::CreateRoleReq_Implementation(const FString& InID, const FCreateRoleParams& InParam)
 {
 	// Todo 创建角色存档
 	const UMGameInstance* GameInstance = Cast<UMGameInstance>(GetGameInstance());
@@ -190,7 +190,7 @@ void AMPlayerController::CreateRoleAck_Implementation(const FRoleData& InData)
 	}
 }
 
-void AMPlayerController::ChooseRoleReq_Implementation(const uint64 InID, const FString& InName)
+void AMPlayerController::ChooseRoleReq_Implementation(const FString& InID, const FString& InName)
 {
 	
 }

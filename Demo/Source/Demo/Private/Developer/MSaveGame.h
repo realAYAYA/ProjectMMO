@@ -28,40 +28,39 @@ public:
 	 */
 	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	bool CreateUser(const int64 InID, const FString& InName);
+	bool CreateUser(const FString& InID, const FString& InName);
 
 	bool CreateUser(const FMUserData& InData);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void RemoveUser(const int64 InID);
+	void RemoveUser(const FString& InID);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FMUserData FindUserData(const int64 InID);
+	FMUserData FindUserData(const FString& InID);
 	
-	FMUserData* FindUserDataRef(const int64 InID);
+	FMUserData* FindUserDataRef(const FString& InID);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FRoleData GetRoleData(const int64 InID, const FString& InName);
+	FRoleData GetRoleData(const FString& InID, const FString& InName);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	bool UpdateRoleName(const int64 InID, const FString& OldName, const FString& NewName);
+	bool UpdateRoleName(const FString& InID, const FString& OldName, const FString& NewName);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	bool CreateRole(const int64 InID, const FCreateRoleParams& InParams);
+	bool CreateRole(const FString& InID, const FCreateRoleParams& InParams);
 	
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	bool UpdateRole(const int64 InID, const FString& InName, const FRoleData& InData);
+	bool UpdateRole(const FString& InID, const FString& InName, const FRoleData& InData);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void RemoveRole(const int64 InID, const FString& InName);
+	void RemoveRole(const FString& InID, const FString& InName);
 
 	
 private:
 	
-	int32 FindUserIndex(const int64 InID);
-	int32 FindUserIndex(const FString& InName);
+	int32 FindUserIndex(const FString& InID);
 	
-	int32 FindRoleIndex(const int64 InID, const FString& InName);
+	int32 FindRoleIndex(const FString& InID, const FString& InName);
 	int32 FindRoleIndex(const int32 Index, const FString& InName);
 	
 	UPROPERTY()
