@@ -1,26 +1,26 @@
-﻿#include "MWebSocketServerSubsystem.h"
-#include "MWebSocketServerPrivate.h"
+﻿#include "MGameServerSubsystem.h"
+#include "MGameServerPrivate.h"
 
 #include "IWebSocketNetworkingModule.h"
 
-bool UMWebSocketServerSubsystem::ShouldCreateSubsystem(UObject* Outer) const
+bool UMGameServerSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
 	return Super::ShouldCreateSubsystem(Outer);
 }
 
-void UMWebSocketServerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+void UMGameServerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 }
 
-void UMWebSocketServerSubsystem::Deinitialize()
+void UMGameServerSubsystem::Deinitialize()
 {
 	StopWebSocketServer();
 	
 	Super::Deinitialize();
 }
 
-void UMWebSocketServerSubsystem::Tick(float DeltaTime)
+void UMGameServerSubsystem::Tick(float DeltaTime)
 {
 	if (IsServerRunning())
 	{
@@ -28,43 +28,43 @@ void UMWebSocketServerSubsystem::Tick(float DeltaTime)
 	}
 }
 
-bool UMWebSocketServerSubsystem::IsTickable() const
+bool UMGameServerSubsystem::IsTickable() const
 {
 	return FTickableGameObject::IsTickable();
 }
 
-TStatId UMWebSocketServerSubsystem::GetStatId() const
+TStatId UMGameServerSubsystem::GetStatId() const
 {
 	RETURN_QUICK_DECLARE_CYCLE_STAT(UMWebSocketServerSubsystem, STATGROUP_Tickables);
 }
 
-bool UMWebSocketServerSubsystem::StartWebSocketServer(const int32 ServerPort)
+bool UMGameServerSubsystem::StartWebSocketServer(const int32 ServerPort)
 {
 	FWebSocketClientConnectedCallBack CallBack;
-	CallBack.BindUObject(this, &UMWebSocketServerSubsystem::OnClientConnected);
+	CallBack.BindUObject(this, &UMGameServerSubsystem::OnClientConnected);
 
 	if (MWebSocketServer && MWebSocketServer.IsValid())
 	{
-		UE_LOG(LogMWebSocketServer, Display, TEXT("%s: WebSocketServer is running."), *FString(__FUNCTION__));
+		UE_LOG(LogMGameServer, Display, TEXT("%s: WebSocketServer is running."), *FString(__FUNCTION__));
 		return false;
 	}
 	
 	MWebSocketServer = FModuleManager::Get().LoadModuleChecked<IWebSocketNetworkingModule>(TEXT("WebSocketNetworking")).CreateServer();
 	if (!MWebSocketServer || !MWebSocketServer->Init(ServerPort, CallBack))
 	{
-		UE_LOG(LogMWebSocketServer, Display, TEXT("%s: WebSocketServer Init Failed."), *FString(__FUNCTION__));
+		UE_LOG(LogMGameServer, Display, TEXT("%s: WebSocketServer Init Failed."), *FString(__FUNCTION__));
 		MWebSocketServer.Reset();
 		return false;
 	}
 
-	UE_LOG(LogMWebSocketServer, Display, TEXT("%s: WebSocketServer Init Succed."), *FString(__FUNCTION__));
+	UE_LOG(LogMGameServer, Display, TEXT("%s: WebSocketServer Init Succed."), *FString(__FUNCTION__));
 	
 	return true;
 }
 
-void UMWebSocketServerSubsystem::StopWebSocketServer()
+void UMGameServerSubsystem::StopWebSocketServer()
 {
-	UE_LOG(LogMWebSocketServer, Display, TEXT("%s"), *FString(__FUNCTION__));
+	UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));
 
 	if (IsServerRunning())
 	{
@@ -72,7 +72,7 @@ void UMWebSocketServerSubsystem::StopWebSocketServer()
 	}
 }
 
-void UMWebSocketServerSubsystem::SendToAll(const FString& InMessage)
+void UMGameServerSubsystem::SendToAll(const FString& InMessage)
 {
 	const FTCHARToUTF8 UTF8Str(*InMessage);
 	const int32 UTF8StrLen = UTF8Str.Length();
@@ -82,7 +82,7 @@ void UMWebSocketServerSubsystem::SendToAll(const FString& InMessage)
 	SendToAll(UTF8Array);
 }
 
-void UMWebSocketServerSubsystem::SendToAll(const TArray<uint8>& InData)
+void UMGameServerSubsystem::SendToAll(const TArray<uint8>& InData)
 {
 	for (const auto& Connection : Connections)
 	{
@@ -90,7 +90,7 @@ void UMWebSocketServerSubsystem::SendToAll(const TArray<uint8>& InData)
 	}
 }
 
-void UMWebSocketServerSubsystem::SendTo(const FGuid InID, const TArray<uint8>& InData)
+void UMGameServerSubsystem::SendTo(const FGuid InID, const TArray<uint8>& InData)
 {
 	if (const FMWebSocketConnection* Connection = Connections.FindByPredicate([&InID](const FMWebSocketConnection& Elem)
 	{
@@ -101,7 +101,7 @@ void UMWebSocketServerSubsystem::SendTo(const FGuid InID, const TArray<uint8>& I
 	}
 }
 
-bool UMWebSocketServerSubsystem::CheckConnectionValid(const FGuid InID)
+bool UMGameServerSubsystem::CheckConnectionValid(const FGuid InID)
 {
 	if (!IsServerRunning())
 		return false;
@@ -117,9 +117,9 @@ bool UMWebSocketServerSubsystem::CheckConnectionValid(const FGuid InID)
 	return true;
 }
 
-void UMWebSocketServerSubsystem::OnClientConnected(INetworkingWebSocket* InWebSocket)
+void UMGameServerSubsystem::OnClientConnected(INetworkingWebSocket* InWebSocket)
 {
-	UE_LOG(LogMWebSocketServer, Display, TEXT("%s"), *FString(__FUNCTION__));
+	UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));
 
 	if (!InWebSocket)
 		return;
@@ -127,35 +127,35 @@ void UMWebSocketServerSubsystem::OnClientConnected(INetworkingWebSocket* InWebSo
 	FMWebSocketConnection WebSocketConnection = FMWebSocketConnection { InWebSocket };
 	
 	FWebSocketInfoCallBack ConnectedCallBack;
-	ConnectedCallBack.BindUObject(this, &UMWebSocketServerSubsystem::OnConnected, WebSocketConnection.ID);
+	ConnectedCallBack.BindUObject(this, &UMGameServerSubsystem::OnConnected, WebSocketConnection.ID);
 	InWebSocket->SetConnectedCallBack(ConnectedCallBack);
 
 	FWebSocketInfoCallBack ErrorCallBack;
-	ErrorCallBack.BindUObject(this, &UMWebSocketServerSubsystem::OnError, WebSocketConnection.ID);
+	ErrorCallBack.BindUObject(this, &UMGameServerSubsystem::OnError, WebSocketConnection.ID);
 	InWebSocket->SetErrorCallBack(ErrorCallBack);
 	
 	FWebSocketPacketReceivedCallBack ReceivedCallBack;
-	ReceivedCallBack.BindUObject(this, &UMWebSocketServerSubsystem::OnReceive, WebSocketConnection.ID);
+	ReceivedCallBack.BindUObject(this, &UMGameServerSubsystem::OnReceive, WebSocketConnection.ID);
 	InWebSocket->SetReceiveCallBack(ReceivedCallBack);
 
 	FWebSocketInfoCallBack ClosedCallBack;
-	ClosedCallBack.BindUObject(this, &UMWebSocketServerSubsystem::OnClosed, WebSocketConnection.ID);
+	ClosedCallBack.BindUObject(this, &UMGameServerSubsystem::OnClosed, WebSocketConnection.ID);
 	InWebSocket->SetSocketClosedCallBack(ClosedCallBack);
 
 	Connections.Add(MoveTemp(WebSocketConnection));
 }
 
-bool UMWebSocketServerSubsystem::IsServerRunning() const
+bool UMGameServerSubsystem::IsServerRunning() const
 {
 	return MWebSocketServer && MWebSocketServer.IsValid();
 }
 
-void UMWebSocketServerSubsystem::OnConnected(const FGuid InID) const
+void UMGameServerSubsystem::OnConnected(const FGuid InID) const
 {
-	UE_LOG(LogMWebSocketServer, Display, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
+	UE_LOG(LogMGameServer, Display, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
 }
 
-void UMWebSocketServerSubsystem::OnReceive(void* InData, const int32 DataSize, const FGuid InID)
+void UMGameServerSubsystem::OnReceive(void* InData, const int32 DataSize, const FGuid InID)
 {
 	const TArrayView<uint8> DataArrayView = MakeArrayView(static_cast<uint8*>(InData), DataSize);
 
@@ -165,12 +165,12 @@ void UMWebSocketServerSubsystem::OnReceive(void* InData, const int32 DataSize, c
 	ProcessAllClientInfo(InID, Str);
 }
 
-void UMWebSocketServerSubsystem::OnError(const FGuid InID)
+void UMGameServerSubsystem::OnError(const FGuid InID)
 {
-	UE_LOG(LogMWebSocketServer, Warning, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
+	UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
 }
 
-void UMWebSocketServerSubsystem::OnClosed(const FGuid InID)
+void UMGameServerSubsystem::OnClosed(const FGuid InID)
 {
 	const int32 Index = Connections.IndexOfByPredicate([InID](const FMWebSocketConnection& Connection)
 	{
@@ -183,10 +183,10 @@ void UMWebSocketServerSubsystem::OnClosed(const FGuid InID)
 		Connections.RemoveAtSwap(Index);
 	}
 
-	UE_LOG(LogMWebSocketServer, Display, TEXT("%s"), *FString(__FUNCTION__));
+	UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));
 }
 
-void UMWebSocketServerSubsystem::ProcessAllClientInfo(const FGuid ClientID, const FString& Info)
+void UMGameServerSubsystem::ProcessAllClientInfo(const FGuid ClientID, const FString& Info)
 {
 	
 }

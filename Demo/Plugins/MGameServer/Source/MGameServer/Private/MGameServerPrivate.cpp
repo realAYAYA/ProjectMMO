@@ -1,19 +1,18 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "MWebSocketServerPrivate.h"
+#include "MGameServerPrivate.h"
 
 #define LOCTEXT_NAMESPACE "FMWebSocketServerModule"
 
-DEFINE_LOG_CATEGORY(LogMWebSocketServer);
-DEFINE_LOG_CATEGORY(LogMWebSocketClient);
+DEFINE_LOG_CATEGORY(LogMGameServer);
 
-void FMWebSocketServerModule::StartupModule()
+void FMGameServerModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 	
 }
 
-void FMWebSocketServerModule::ShutdownModule()
+void FMGameServerModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
@@ -22,4 +21,4 @@ void FMWebSocketServerModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FMWebSocketServerModule, MWebSocketServer)
+IMPLEMENT_MODULE(FMGameServerModule, MWebSocketServer)

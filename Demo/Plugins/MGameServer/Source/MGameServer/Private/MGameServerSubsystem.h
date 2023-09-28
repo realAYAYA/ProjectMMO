@@ -4,7 +4,7 @@
 
 #include "INetworkingWebSocket.h"
 #include "IWebSocketServer.h"
-#include "MWebSocketServerSubsystem.generated.h"
+#include "MGameServerSubsystem.generated.h"
 
 struct FMWebSocketConnection
 {
@@ -41,7 +41,7 @@ DECLARE_DELEGATE_OneParam(FMWebSocketClientClosedCallBack, const FGuid);
 DECLARE_DELEGATE_TwoParams(FMWebSocketReceiveCallBack, const FGuid, FString);
 
 UCLASS()
-class UMWebSocketServerSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
+class UMGameServerSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
 {
 	GENERATED_BODY()
 

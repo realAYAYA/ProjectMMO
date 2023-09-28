@@ -2,12 +2,12 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogMWebSocketServer, Log, All);
-DECLARE_LOG_CATEGORY_EXTERN(LogMWebSocketClient, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogMGameClient, Log, All);
 
-class FMWebSocketServerModule : public IModuleInterface
+class FMGameClientModule : public IModuleInterface
 {
 public:
 

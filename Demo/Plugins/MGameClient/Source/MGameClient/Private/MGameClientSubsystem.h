@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 
 #include "IWebSocket.h"
-#include "MWebSocketClientSubsystem.generated.h"
+#include "MGameClientSubsystem.generated.h"
 
 UCLASS()
 class UMWebSocketClientSubsystem : public UGameInstanceSubsystem, public FTickableGameObject

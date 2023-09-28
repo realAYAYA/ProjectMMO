@@ -18,13 +18,13 @@ void UMGameInstance::Init()
 
 	GetMGameTables();
 	
-	if (!UGameplayStatics::DoesSaveGameExist(TEXT("MSaveGame"), 1))
+	if (!UGameplayStatics::DoesSaveGameExist(TEXT("MSaveGame"), 0))
 	{
 		SaveGame = NewObject<UMSaveGame>(this);
 	}
 	else
 	{
-		SaveGame = Cast<UMSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MSaveGame"), 1));
+		SaveGame = Cast<UMSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MSaveGame"), 0));
 		if (!SaveGame)
 			SaveGame = NewObject<UMSaveGame>(this);
 	}
@@ -32,8 +32,13 @@ void UMGameInstance::Init()
 
 void UMGameInstance::BeginDestroy()
 {
-	if (UGameplayStatics::SaveGameToSlot(SaveGame, TEXT("MSaveGame"), 1))
-		UE_LOG(LogProjectM, Error, TEXT("SaveGame Failed."));
+	if (SaveGame)
+	{
+		if (!UGameplayStatics::SaveGameToSlot(SaveGame, TEXT("MSaveGame"), 0))
+		{
+			UE_LOG(LogProjectM, Error, TEXT("SaveGame Failed."));
+		}
+	}
 	
 	Super::BeginDestroy();
 }

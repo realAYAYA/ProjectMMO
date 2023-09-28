@@ -1,4 +1,4 @@
-#include "MWebSocketClientSubsystem.h"
+#include "MGameClientSubsystem.h"
 
 #include "WebSocketsModule.h"
 
@@ -44,6 +44,8 @@ void UMWebSocketClientSubsystem::CreateSocket()
 	Socket->OnConnectionError().AddUObject(this, &UMWebSocketClientSubsystem::OnConnectionError);
 	Socket->OnMessage().AddUObject(this, &UMWebSocketClientSubsystem::OnMessage);
 	Socket->OnMessageSent().AddUObject(this, &UMWebSocketClientSubsystem::OnMessageSent);
+
+	Socket->Connect();
 }
 
 void UMWebSocketClientSubsystem::CloseSocket()

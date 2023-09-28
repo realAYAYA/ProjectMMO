@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "MWebSocketServerBPLibrary.generated.h"
+#include "MGameServerBPLibrary.generated.h"
 
 /* 
 *	Function library class.
@@ -23,7 +23,7 @@
 *	https://wiki.unrealengine.com/Custom_Blueprint_Node_Creation
 */
 UCLASS()
-class UMWebSocketServerBPLibrary : public UBlueprintFunctionLibrary
+class UMGameServerBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 

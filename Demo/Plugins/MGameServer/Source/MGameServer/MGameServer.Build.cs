@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class MWebSocketServer : ModuleRules
+public class MGameServer : ModuleRules
 {
-	public MWebSocketServer(ReadOnlyTargetRules Target) : base(Target)
+	public MGameServer(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
