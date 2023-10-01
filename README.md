@@ -1,2 +1,2 @@
-# ProjectSS
-A meach FPS game, code name:  Siegfried Sigurd
+# ProjectMMO
+A MMO RPG game frame based on UE5.3
