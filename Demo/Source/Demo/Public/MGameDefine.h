@@ -28,6 +28,23 @@ enum class ELoginCode : uint8
 /** Rpc*/
 
 UENUM(BlueprintType)
+enum class EGender : uint8
+{
+	None			UMETA(DisplayName = "无"),
+	Male 			UMETA(DisplayName = "男"),
+	Female			UMETA(DisplayName = "女"),
+};
+
+// 出身
+UENUM(BlueprintType)
+enum class EBirth : uint8
+{
+	None			UMETA(DisplayName = "None"),
+	Student 		UMETA(DisplayName = "男"),
+	Female			UMETA(DisplayName = "女"),
+};
+
+UENUM(BlueprintType)
 enum class ERoleClass : uint8
 {
 	None		UMETA(Displayname = "None"),
@@ -54,6 +71,68 @@ enum class EItemState : uint8
 	None		UMETA(Displayname = "None"),
 	Dropped		UMETA(Displayname = "Dropped"),
 	Equipped	UMETA(Displayname = "Equipped"),
+};
+
+UENUM(BlueprintType)
+enum class ERace : uint8
+{
+	None		UMETA(Displayname = "None"),
+	Orc			UMETA(Displayname = "Orc"),
+	Dwarf		UMETA(Displayname = "Orc"),
+	Human		UMETA(Displayname = "Human"),
+	Elven		UMETA(Displayname = "Elven"),
+	Furry		UMETA(Displayname = "Furry"),
+	Undead		UMETA(Displayname = "Undead"),
+	Demon		UMETA(Displayname = "Demon"),
+	Dragon		UMETA(Displayname = "Demon"),
+};
+
+UENUM(BlueprintType)
+enum class EHumanBranch : uint8
+{
+	None		UMETA(Displayname = "None"),
+};
+
+UENUM(BlueprintType)
+enum class EOrcBranch : uint8
+{
+	None		UMETA(Displayname = "None"),
+};
+
+UENUM(BlueprintType)
+enum class EDwarfBranch : uint8
+{
+	None		UMETA(Displayname = "None"),
+};
+
+UENUM(BlueprintType)
+enum class EElvenBranch : uint8
+{
+	None		UMETA(Displayname = "None"),
+};
+
+UENUM(BlueprintType)
+enum class EFurryBranch : uint8
+{
+	None		UMETA(Displayname = "None"),
+};
+
+UENUM(BlueprintType)
+enum class EUndeadBranch : uint8
+{
+	None		UMETA(Displayname = "None"),
+};
+
+UENUM(BlueprintType)
+enum class EDemonBranch : uint8
+{
+	None		UMETA(Displayname = "None"),
+};
+
+UENUM(BlueprintType)
+enum class EDragonBranch : uint8
+{
+	None		UMETA(Displayname = "None"),
 };
 
 UENUM(BlueprintType)

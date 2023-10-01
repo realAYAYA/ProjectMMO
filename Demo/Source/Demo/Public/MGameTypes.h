@@ -87,11 +87,23 @@ struct FRoleData
 
 	// 性别
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	int32 Gender = 0;
+	EGender Gender = EGender::None;
 
 	// 阵营
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	ECamp Camp = ECamp::None;
+
+	// 种族
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	ERace Race = ERace::None;
+
+	// 种族分支
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 RaceBranch = 0;
+
+	// 出身
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	EBirth Birth = EBirth::None;
 
 	// 角色职业
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
@@ -153,11 +165,25 @@ struct FCreateRoleParams
 
 	// 性别
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	int32 Gender = 0;
+	EGender Gender = EGender::None;
+
+	// 种族
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	ERace Race = ERace::None;
 	
-	// 角色职业
+	// 种族分支
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	int32 RaceBranch = 0;
+
+	// 出身
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	EBirth Birth = EBirth::None;
+
+	// 职业
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	ERoleClass Class = ERoleClass::None;
+
+	// Todo 外观数据
 };
 
 // Todo Delete
