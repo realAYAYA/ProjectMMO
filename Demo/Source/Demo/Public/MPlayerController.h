@@ -9,8 +9,6 @@
 
 #include "MPlayerController.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFinishedLogin, const ELoginCode, Code);
-
 class AMPlayerState;
 /**
  * 
@@ -47,48 +45,19 @@ private:
 	/** Rpc*/
 public:
 
-	/** Todo 手动触发登录，仅供蓝图测试*/
+	/*/** Todo 手动触发登录，仅供蓝图测试#1#
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "Login")
 	void K2_Login();
 	
-	/** Create Role*/
+	/** Create Role#1#
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "CreateRole")
 	void K2_CreateRole(const FCreateRoleParams& InParam, const FOnRpcResult& InCallback);
 
-	/** Choose Role*/
+	/** Choose Role#1#
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "ChooseRole")
-	void K2_ChooseRole(const FString& InName, const FOnRpcResult& InCallback);
-
-	UPROPERTY(BlueprintAssignable)
-	FOnFinishedLogin OnFinishedLogin;
+	void K2_ChooseRole(const FString& InName, const FOnRpcResult& InCallback);*/
 	
 protected:
 
 private:
-
-	typedef TFunction<void(const ELoginCode Code)> FOnLoginResult;
-	void Login(const FOnLoginResult& InCallback);
-
-	UFUNCTION(Server, Reliable)
-	void LoginReq(const FString& InID, const FString& Name);
-
-	UFUNCTION(Client, Reliable)
-	void LoginAck(const ELoginCode Code, const FMUserData& InData);
-
-	UFUNCTION(Server, Reliable)
-	void CreateRoleReq(const FString& InID, const FCreateRoleParams& InParam);
-
-	UFUNCTION(Client, Reliable)
-	void CreateRoleAck(const FRoleData& InData);
-
-	UFUNCTION(Server, Reliable)
-	void ChooseRoleReq(const FString& InID, const FString& InName);
-
-	UFUNCTION(Client, Reliable)
-	void ChooseRoleAck(const bool bOk);
-	
-	UPROPERTY()
-	TMap<FString, FOnRpcResult> RpcManager;
-	
-	FOnLoginResult OnLoginCallback;
 };

@@ -33,7 +33,9 @@ public class Demo : ModuleRules
 			
 			"UMG",
 			"Slate",
-			"SlateCore",
+			"SlateCore", 
+			
+			"GameShared"
 		});
 	}
 }

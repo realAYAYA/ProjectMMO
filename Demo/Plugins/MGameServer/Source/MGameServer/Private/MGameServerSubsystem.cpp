@@ -84,18 +84,16 @@ void UMGameServerSubsystem::SendToAll(const FString& InMessage)
 
 void UMGameServerSubsystem::SendToAll(const TArray<uint8>& InData)
 {
-	for (const auto& Connection : Connections)
+	for (const auto& Elem : Connections)
 	{
+		const FMWebSocketConnection& Connection = Elem.Value;
 		Connection.WebSocket->Send(InData.GetData(), InData.Num(), false);
 	}
 }
 
 void UMGameServerSubsystem::SendTo(const FGuid InID, const TArray<uint8>& InData)
 {
-	if (const FMWebSocketConnection* Connection = Connections.FindByPredicate([&InID](const FMWebSocketConnection& Elem)
-	{
-		return Elem.ID == InID;
-	}))
+	if (const FMWebSocketConnection* Connection = Connections.Find(InID))
 	{
 		Connection->WebSocket->Send(InData.GetData(), InData.Num(), false);
 	}
@@ -106,11 +104,7 @@ bool UMGameServerSubsystem::CheckConnectionValid(const FGuid InID)
 	if (!IsServerRunning())
 		return false;
 
-	const FMWebSocketConnection* Connection = Connections.FindByPredicate([&InID](const FMWebSocketConnection& Elem)
-	{
-		return Elem.ID == InID;
-	});
-
+	const FMWebSocketConnection* Connection = Connections.Find(InID);
 	if (!Connection->WebSocket)
 		return false;
 	
@@ -142,7 +136,7 @@ void UMGameServerSubsystem::OnClientConnected(INetworkingWebSocket* InWebSocket)
 	ClosedCallBack.BindUObject(this, &UMGameServerSubsystem::OnClosed, WebSocketConnection.ID);
 	InWebSocket->SetSocketClosedCallBack(ClosedCallBack);
 
-	Connections.Add(MoveTemp(WebSocketConnection));
+	Connections.Add(WebSocketConnection.ID, MoveTemp(WebSocketConnection));
 }
 
 bool UMGameServerSubsystem::IsServerRunning() const
@@ -172,15 +166,11 @@ void UMGameServerSubsystem::OnError(const FGuid InID)
 
 void UMGameServerSubsystem::OnClosed(const FGuid InID)
 {
-	const int32 Index = Connections.IndexOfByPredicate([InID](const FMWebSocketConnection& Connection)
-	{
-		return Connection.ID == InID;
-	});
-
-	if (Index != INDEX_NONE)
+	const FMWebSocketConnection* Connection = Connections.Find(InID);
+	if (Connection->WebSocket)
 	{
 		WebSocketClientClosedCallBack.ExecuteIfBound(InID);
-		Connections.RemoveAtSwap(Index);
+		Connections.Remove(InID);
 	}
 
 	UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));

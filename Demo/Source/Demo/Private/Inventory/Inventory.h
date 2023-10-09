@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MGameDefines.h"
+#include "MGameDefines.h"
 
 #include "MGameTypes.h"
 #include "Net/RpcObject.h"

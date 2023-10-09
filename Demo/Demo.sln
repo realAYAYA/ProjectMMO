@@ -19,110 +19,110 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnrealBuildTool.Plugins", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE5", "Intermediate\ProjectFiles\UE5.vcxproj", "{7D49085B-C769-3E32-9B16-566428BD69FC}"
 	ProjectSection(ProjectDependencies) = postProject
-		{EB28882B-7D8F-30B9-98A4-9F548753ACA3} = {EB28882B-7D8F-30B9-98A4-9F548753ACA3}
+		{75FEBCA3-9D7A-38DF-8304-BF0DFF6B3D96} = {75FEBCA3-9D7A-38DF-8304-BF0DFF6B3D96}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo", "Intermediate\ProjectFiles\Demo.vcxproj", "{C8A1AC3A-6720-3179-82E2-F2DA5B652C43}"
 	ProjectSection(ProjectDependencies) = postProject
-		{EB28882B-7D8F-30B9-98A4-9F548753ACA3} = {EB28882B-7D8F-30B9-98A4-9F548753ACA3}
+		{75FEBCA3-9D7A-38DF-8304-BF0DFF6B3D96} = {75FEBCA3-9D7A-38DF-8304-BF0DFF6B3D96}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnrealBuildTool", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\UnrealBuildTool\UnrealBuildTool.csproj", "{EB28882B-7D8F-30B9-98A4-9F548753ACA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnrealBuildTool", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\UnrealBuildTool\UnrealBuildTool.csproj", "{75FEBCA3-9D7A-38DF-8304-BF0DFF6B3D96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationTool", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\AutomationTool.csproj", "{4D4E8F86-26BF-33B7-BEC5-D8EFD402BB06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationTool", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\AutomationTool.csproj", "{F67AA70E-72F3-3C3D-A34A-085DDC667730}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Android\Android.Automation.csproj", "{3315E3BD-36AC-3E4B-87F9-6E9CCE338341}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Android\Android.Automation.csproj", "{D9010A02-C99A-3E00-BB64-0DD4F670B905}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apple.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Apple\Apple.Automation.csproj", "{5FAAAD30-5082-3FAA-BBFE-A762483061A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apple.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Apple\Apple.Automation.csproj", "{B84AC8A6-CA92-36ED-85DF-4052BF763E77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationUtils.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\AutomationUtils\AutomationUtils.Automation.csproj", "{61890202-37EA-31AC-92BC-0EEB6C7617F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationUtils.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\AutomationUtils\AutomationUtils.Automation.csproj", "{145A4CD4-3A53-36E4-9BB0-8C85BE6B2FDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildGraph.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\BuildGraph\BuildGraph.Automation.csproj", "{23F8EF87-331B-3AB7-86BF-EE10971A56AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildGraph.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\BuildGraph\BuildGraph.Automation.csproj", "{63A07EBB-CAC3-301C-919B-2A3F0324A642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookedEditor.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\CookedEditor\CookedEditor.Automation.csproj", "{801009BF-8D8E-3594-B98E-25BE05954FA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookedEditor.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\CookedEditor\CookedEditor.Automation.csproj", "{4865D9D2-25C0-32BB-AB6C-953581D49EE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdinLocalization.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\CrowdinLocalization\CrowdinLocalization.Automation.csproj", "{E6210C5C-4735-355C-B268-DDEA91342474}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdinLocalization.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\CrowdinLocalization\CrowdinLocalization.Automation.csproj", "{CB69D95F-8EB1-3989-ABAA-34EFD759B125}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gauntlet.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Gauntlet\Gauntlet.Automation.csproj", "{28DF538F-B717-3F9C-B4AE-2A3C7DA20F0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gauntlet.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Gauntlet\Gauntlet.Automation.csproj", "{4B4D75C9-1DC2-340F-9A2A-E9C31C0ECF5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOS.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\IOS\IOS.Automation.csproj", "{19E073E2-E5C8-388B-8B96-EA29138330DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IOS.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\IOS\IOS.Automation.csproj", "{19414C2F-3735-3BA4-9C35-5E7477840999}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linux.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Linux\Linux.Automation.csproj", "{D5C535D4-DD1F-3BFA-B5E2-F1C3E2DB99F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linux.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Linux\Linux.Automation.csproj", "{A975D940-B490-39CE-BDBF-D51EA0EC435E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Localization\Localization.Automation.csproj", "{6B1AA5E1-BEB0-30C0-9676-680B358D5412}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Localization\Localization.Automation.csproj", "{FF8BA49A-82BB-3842-AF9F-017E78E51445}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowLevelTests.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\LowLevelTests\LowLevelTests.Automation.csproj", "{CFDF5D04-494A-3DE5-8DE5-905B2F99ABC7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LowLevelTests.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\LowLevelTests\LowLevelTests.Automation.csproj", "{E676F476-3F3F-39AE-B39E-57FE98B12B54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mac.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Mac\Mac.Automation.csproj", "{B1AFE6AE-B4BD-3C56-9C0B-B7E3870D701C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mac.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Mac\Mac.Automation.csproj", "{CD6CD6FD-5BC5-3F30-9B06-20AA25B98294}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneSkyLocalization.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\OneSkyLocalization\OneSkyLocalization.Automation.csproj", "{3431B39A-3C0D-3D8D-8810-E3957764F9ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneSkyLocalization.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\OneSkyLocalization\OneSkyLocalization.Automation.csproj", "{30E9D21F-AD12-333F-B180-86F0F60CF635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationScripts.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Scripts\AutomationScripts.Automation.csproj", "{F6729C55-FEE0-33E8-9F0F-B0B09A412930}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationScripts.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Scripts\AutomationScripts.Automation.csproj", "{C6E29104-6D12-321E-8B0C-21697FA316F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartlingLocalization.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\SmartlingLocalization\SmartlingLocalization.Automation.csproj", "{89DA3803-381F-3FDF-A6E4-2E64432116A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartlingLocalization.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\SmartlingLocalization\SmartlingLocalization.Automation.csproj", "{A02D5E96-9294-33AC-9D58-FF8848639AD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamDeck.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\SteamDeck\SteamDeck.Automation.csproj", "{6828A54C-6FB1-332D-9D1B-FB83E1605FAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamDeck.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\SteamDeck\SteamDeck.Automation.csproj", "{A1F0D28F-FD2F-358D-AD18-06C1E38E4750}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVOS.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\TVOS\TVOS.Automation.csproj", "{9941B220-286C-3E91-B220-9D5360F29B2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVOS.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\TVOS\TVOS.Automation.csproj", "{92F151D3-1D9A-3231-B146-E151E96C664B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turnkey.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Turnkey\Turnkey.Automation.csproj", "{2DCB1FD6-7093-3EFF-AAFA-14B0802F605B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turnkey.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Turnkey\Turnkey.Automation.csproj", "{6C1BD623-E91D-30F8-8485-87ECECBE2E50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Win.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\Win\Win.Automation.csproj", "{5516081D-7848-34B7-83E9-322D46974A82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Win.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\Win\Win.Automation.csproj", "{2F238BCC-2778-3204-BC2C-25C14E972EEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLocLocalization.Automation", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\AutomationTool\XLocLocalization\XLocLocalization.Automation.csproj", "{C0FD8B04-7A6C-32F8-8479-F2943925CA0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLocLocalization.Automation", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\AutomationTool\XLocLocalization\XLocLocalization.Automation.csproj", "{BE84F09C-02D0-3E0F-9F43-A9A0AC2100A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptGeneratorUbtPlugin.ubtplugin", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Plugins\ScriptPlugin\Source\ScriptGeneratorUbtPlugin\ScriptGeneratorUbtPlugin.ubtplugin.csproj", "{76565412-F968-3DAF-9648-84C141F6B77D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptGeneratorUbtPlugin.ubtplugin", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Plugins\ScriptPlugin\Source\ScriptGeneratorUbtPlugin\ScriptGeneratorUbtPlugin.ubtplugin.csproj", "{6010EE5F-71EA-3366-BFA4-4D5415720382}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.AspNet", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.AspNet\EpicGames.AspNet.csproj", "{594F06AA-A397-35B8-988B-3888CE6BCD38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.AspNet", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.AspNet\EpicGames.AspNet.csproj", "{757B4EDC-AACE-3F27-8AF9-07B8B3A0E670}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Box", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Box\EpicGames.Box.csproj", "{3B924852-9074-31D3-AEF0-C65F3A2156AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Box", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Box\EpicGames.Box.csproj", "{72C5268F-A66F-37B4-AE3D-E333BB72E37B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Build", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Build\EpicGames.Build.csproj", "{67939092-E66D-3A0B-A7AE-3C9501BD9DF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Build", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Build\EpicGames.Build.csproj", "{567EF5EC-2002-346C-8FA9-FC790CEE0E6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.BuildGraph", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.BuildGraph\EpicGames.BuildGraph.csproj", "{9B526EAF-F16E-3E3D-B1D0-32D63535544E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.BuildGraph", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.BuildGraph\EpicGames.BuildGraph.csproj", "{C53F30F9-D847-330A-9733-8301D4E49D1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Core", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Core\EpicGames.Core.csproj", "{5A7B3D32-FB55-325E-BD15-80383257D5F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Core", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Core\EpicGames.Core.csproj", "{16681419-E1A5-3BB6-AF02-674EE7917A68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Horde", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Horde\EpicGames.Horde.csproj", "{BDDC28BA-1B05-3924-B2DC-5B079DD3FDD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Horde", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Horde\EpicGames.Horde.csproj", "{04FC92F1-3C98-3608-AF4D-04E7EE0CF327}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.IoHash", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.IoHash\EpicGames.IoHash.csproj", "{08AEBED8-97C6-3078-B5A8-58B6618210F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.IoHash", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.IoHash\EpicGames.IoHash.csproj", "{482F2BA2-BEC9-3A7B-A3A5-8688C6215F36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Jupiter", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Jupiter\EpicGames.Jupiter.csproj", "{A9AC00DC-51E0-35B2-884A-8BCEFA7195AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Jupiter", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Jupiter\EpicGames.Jupiter.csproj", "{BDA447F3-E6EA-3ADC-81FE-C56F03EF7382}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.MongoDB", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.MongoDB\EpicGames.MongoDB.csproj", "{AD08CD44-0D2E-3536-B90B-655721E2AB41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.MongoDB", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.MongoDB\EpicGames.MongoDB.csproj", "{282EB1F4-2D69-38CA-A2A8-247AEE700887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.MsBuild", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.MsBuild\EpicGames.MsBuild.csproj", "{6E4103CD-6788-3A25-9138-FE765FD99FB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.MsBuild", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.MsBuild\EpicGames.MsBuild.csproj", "{798E4F5F-51E9-36F0-90C0-2B4A4A6BF3AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.OIDC", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.OIDC\EpicGames.OIDC.csproj", "{ED1B2913-A62A-3657-B07C-28B2F955357F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.OIDC", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.OIDC\EpicGames.OIDC.csproj", "{842E408D-0B47-31A0-8AD6-31673EACCB61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Oodle", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Oodle\EpicGames.Oodle.csproj", "{8E6DF074-76CF-33DD-A743-BBF124A589DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Oodle", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Oodle\EpicGames.Oodle.csproj", "{3ADE0AF1-0FC4-3F97-8129-A0C63E4EC41D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Perforce", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Perforce\EpicGames.Perforce.csproj", "{5AAC6B51-930C-355A-8790-A72636085EF7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Perforce", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Perforce\EpicGames.Perforce.csproj", "{E941DAEA-7DD1-3C76-8707-112488BAE0D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Perforce.Fixture", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Perforce.Fixture\EpicGames.Perforce.Fixture.csproj", "{0C3B4CA9-7A91-35AE-A3FF-278237593B50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Perforce.Fixture", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Perforce.Fixture\EpicGames.Perforce.Fixture.csproj", "{7AA6F754-EBA9-3A01-968C-86C1ACBF1F4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Perforce.Managed", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Perforce.Managed\EpicGames.Perforce.Managed.csproj", "{9BF1FB3E-0F8D-3CDC-80B2-58CC921008E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Perforce.Managed", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Perforce.Managed\EpicGames.Perforce.Managed.csproj", "{6FCB26C9-9D0B-37B1-8503-EA403E29D9D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Redis", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Redis\EpicGames.Redis.csproj", "{BE612B5C-BAE0-35A0-9867-154BA6A79BD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Redis", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Redis\EpicGames.Redis.csproj", "{B2B10918-4D3C-3070-BAB8-80628CBBE0A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Serialization", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Serialization\EpicGames.Serialization.csproj", "{411CD0CB-3882-3FBC-A7F9-CC6A836CB22B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Serialization", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Serialization\EpicGames.Serialization.csproj", "{D1AFF586-4D42-3C42-8B52-5A78032DFD68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Slack", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Slack\EpicGames.Slack.csproj", "{9492348E-6DBA-3516-A6B0-A48B84209DE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Slack", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Slack\EpicGames.Slack.csproj", "{E4937B18-E4C7-3BB9-B355-A6123E236937}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Tracing", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Tracing\EpicGames.Tracing.csproj", "{28E1171F-CFB9-3B41-B923-2DF0AF2180DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.Tracing", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.Tracing\EpicGames.Tracing.csproj", "{6ADBDBA6-F027-3C18-8A6A-B3CBB3025420}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.UHT", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.UHT\EpicGames.UHT.csproj", "{A5CF39A2-4646-3269-8CCE-11A7FF688BBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpicGames.UHT", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Source\Programs\Shared\EpicGames.UHT\EpicGames.UHT.csproj", "{5BE70B6A-9827-3F90-8C2F-97A126D83847}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoModuleRules", "Intermediate\Build\BuildRulesProjects\DemoModuleRules\DemoModuleRules.csproj", "{39A6C176-D0CA-3BB9-A53A-775734191517}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UE5ProgramRules", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Intermediate\Build\BuildRulesProjects\UE5ProgramRules\UE5ProgramRules.csproj", "{5AB453C9-B9EA-375F-A808-51348CEF2763}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UE5ProgramRules", "E:\Codes\UnrealEngine53\UnrealEngine\Engine\Intermediate\Build\BuildRulesProjects\UE5ProgramRules\UE5ProgramRules.csproj", "{4E34AF6A-695B-34B8-AAD3-B9165C85DF02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UE5Rules", "..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Intermediate\Build\BuildRulesProjects\UE5Rules\UE5Rules.csproj", "{0EF01159-5221-3017-9300-C40C59944DE7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoModuleRules", "Intermediate\Build\BuildRulesProjects\DemoModuleRules\DemoModuleRules.csproj", "{56A4ACF7-5CCB-3B95-91FE-E1B2242D64AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{1CCEC849-CC72-4C59-8C36-2F7C38706D4C}"
 	ProjectSection(SolutionItems) = preProject
-		E:\Codes\UnrealEngine53\UnrealEngine\Engine\Extras\VisualStudioDebugging\Unreal.natvis = E:\Codes\UnrealEngine53\UnrealEngine\Engine\Extras\VisualStudioDebugging\Unreal.natvis
-		E:\Codes\UnrealEngine53\UnrealEngine\Engine\Extras\VisualStudioDebugging\Unreal.natstepfilter = E:\Codes\UnrealEngine53\UnrealEngine\Engine\Extras\VisualStudioDebugging\Unreal.natstepfilter
+		..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Extras\VisualStudioDebugging\Unreal.natvis = ..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Extras\VisualStudioDebugging\Unreal.natvis
+		..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Extras\VisualStudioDebugging\Unreal.natstepfilter = ..\..\53\UnrealEngine-ToonLit\UnrealEngine\Engine\Extras\VisualStudioDebugging\Unreal.natstepfilter
 	EndProjectSection
 EndProject
 Global

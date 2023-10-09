@@ -2,78 +2,98 @@
 
 #include "WebSocketsModule.h"
 
-bool UMWebSocketClientSubsystem::ShouldCreateSubsystem(UObject* Outer) const
+bool UMGameClientSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
 	return Super::ShouldCreateSubsystem(Outer);
 }
 
-void UMWebSocketClientSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+void UMGameClientSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 }
 
-void UMWebSocketClientSubsystem::Deinitialize()
+void UMGameClientSubsystem::Deinitialize()
 {
-	
 	Super::Deinitialize();
 }
 
-void UMWebSocketClientSubsystem::Tick(float DeltaTime)
+void UMGameClientSubsystem::Tick(float DeltaTime)
 {
 	
 }
 
-bool UMWebSocketClientSubsystem::IsTickable() const
+bool UMGameClientSubsystem::IsTickable() const
 {
 	return FTickableGameObject::IsTickable();
 }
 
-TStatId UMWebSocketClientSubsystem::GetStatId() const
+TStatId UMGameClientSubsystem::GetStatId() const
 {
-	RETURN_QUICK_DECLARE_CYCLE_STAT(UMWebSocketServerSubsystem, STATGROUP_Tickables);
+	RETURN_QUICK_DECLARE_CYCLE_STAT(UMGameClientSubsystem, STATGROUP_Tickables);
 }
 
-void UMWebSocketClientSubsystem::CreateSocket()
+void UMGameClientSubsystem::K2_CreateSocket(const FString& ServerURL, const FString& ServerProtocol, const FOnConnectServer& Callback)
 {
-	const FString ServerURL = TEXT("ws://127.0.0.1:9093");
-	const FString ServerProtocol = TEXT("");
+	CreateSocket(ServerURL, ServerProtocol);
 
+	OnConnectedServer = Callback;
+}
+
+void UMGameClientSubsystem::CreateSocket(const FString& ServerURL, const FString& ServerProtocol)
+{
 	Socket = FWebSocketsModule::Get().CreateWebSocket(ServerURL, ServerProtocol);
-	Socket->OnConnected().AddUObject(this, &UMWebSocketClientSubsystem::OnConnected);
-	Socket->OnClosed().AddUObject(this, &UMWebSocketClientSubsystem::OnClosed);
-	Socket->OnConnectionError().AddUObject(this, &UMWebSocketClientSubsystem::OnConnectionError);
-	Socket->OnMessage().AddUObject(this, &UMWebSocketClientSubsystem::OnMessage);
-	Socket->OnMessageSent().AddUObject(this, &UMWebSocketClientSubsystem::OnMessageSent);
-
+	Socket->OnConnected().AddUObject(this, &UMGameClientSubsystem::OnConnected);
+	Socket->OnClosed().AddUObject(this, &UMGameClientSubsystem::OnClosed);
+	Socket->OnConnectionError().AddUObject(this, &UMGameClientSubsystem::OnConnectionError);
+	Socket->OnMessage().AddUObject(this, &UMGameClientSubsystem::OnMessage);
+	Socket->OnRawMessage().AddUObject(this, &UMGameClientSubsystem::OnRawMessage);
+	Socket->OnBinaryMessage().AddUObject(this, &UMGameClientSubsystem::OnBinaryMessage);
+	Socket->OnMessageSent().AddUObject(this, &UMGameClientSubsystem::OnMessageSent);
+	
 	Socket->Connect();
 }
 
-void UMWebSocketClientSubsystem::CloseSocket()
+void UMGameClientSubsystem::CloseSocket(const FOnDisConnectServer& Callback)
+{
+	OnDisConnectedServer = Callback;
+	Socket->Close();
+}
+
+void UMGameClientSubsystem::Send(const TArray<uint8>& Data) const
+{
+	Socket->Send(Data.GetData(), Data.Num(), true);
+}
+
+void UMGameClientSubsystem::OnConnected() const
+{
+	OnConnectedServer.ExecuteIfBound(true);
+}
+
+void UMGameClientSubsystem::OnConnectionError(const FString& Error) const
+{
+	OnErrorCallback.Broadcast(Error);
+}
+
+void UMGameClientSubsystem::OnClosed(const int32 StatusCode, const FString& Reason, const bool bWasClean)
+{
+	OnDisConnectedServer.ExecuteIfBound();
+	
+	Socket = nullptr;
+}
+
+void UMGameClientSubsystem::OnMessage(const FString& Message)
 {
 }
 
-void UMWebSocketClientSubsystem::SendMessage(const FString& InMessage)
+void UMGameClientSubsystem::OnRawMessage(const void* Data, SIZE_T Size, SIZE_T BytesRemaining)
 {
 	
 }
 
-void UMWebSocketClientSubsystem::OnConnected() const
-{
-	
-}
-
-void UMWebSocketClientSubsystem::OnConnectionError(const FString& Error)
+void UMGameClientSubsystem::OnBinaryMessage(const void* Data, SIZE_T Size, bool bIsLastFragment)
 {
 }
 
-void UMWebSocketClientSubsystem::OnClosed(const int32 StatusCode, const FString& Reason, const bool bWasClean)
-{
-}
-
-void UMWebSocketClientSubsystem::OnMessage(const FString& Message)
-{
-}
-
-void UMWebSocketClientSubsystem::OnMessageSent(const FString& Message)
+void UMGameClientSubsystem::OnMessageSent(const FString& Message)
 {
 }

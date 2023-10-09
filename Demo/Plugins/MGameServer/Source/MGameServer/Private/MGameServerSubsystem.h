@@ -91,6 +91,5 @@ private:
 
 	TUniquePtr<IWebSocketServer> MWebSocketServer;
 
-	TArray<FMWebSocketConnection> Connections;
-
+	TMap<FGuid, FMWebSocketConnection> Connections;
 };

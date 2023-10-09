@@ -7,7 +7,7 @@
 #include "TopLevelPlayerController.generated.h"
 
 /**
- * 用于流式关卡下的头部PlayerControler
+ * 用于流式关卡下的头部PlayerController
  */
 UCLASS()
 class ATopLevelPlayerController : public APlayerController
@@ -15,6 +15,7 @@ class ATopLevelPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+
 	//UFUNCTION(Client, Reliable)
 	//void SendToMe(const FString& In);
 };
