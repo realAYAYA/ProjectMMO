@@ -38,6 +38,8 @@ public class GameShared : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				
+				"WebSockets",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

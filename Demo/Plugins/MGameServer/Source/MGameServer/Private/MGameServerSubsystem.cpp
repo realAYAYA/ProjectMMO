@@ -5,7 +5,7 @@
 
 bool UMGameServerSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
-	return Super::ShouldCreateSubsystem(Outer);
+	return Super::ShouldCreateSubsystem(Outer) && IsRunningDedicatedServer();
 }
 
 void UMGameServerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
