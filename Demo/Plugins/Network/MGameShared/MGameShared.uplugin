@@ -2,21 +2,21 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "GameShared",
-	"Description": "Game Common Define",
+	"FriendlyName": "MGameShared",
+	"Description": "MGame Common Define",
 	"Category": "Other",
 	"CreatedBy": "LiuD",
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
 	"SupportURL": "",
-	"CanContainContent": true,
+	"CanContainContent": false,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "GameShared",
+			"Name": "MGameShared",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

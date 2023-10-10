@@ -7,7 +7,7 @@
 class IWebSocket;
 
 UCLASS()
-class MGAMECLIENT_API UMGameRpcManager : public UObject
+class MRPC_API UMGameRpcManager : public UObject
 {
 	GENERATED_BODY()
 	

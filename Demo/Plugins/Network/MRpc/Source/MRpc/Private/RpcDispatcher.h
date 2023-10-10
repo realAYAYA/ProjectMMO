@@ -1,6 +1,6 @@
 #pragma once
 
-class GAMESHARED_API FMessageDispatcher
+class MRPC_API FMessageDispatcher
 {
 public:
 

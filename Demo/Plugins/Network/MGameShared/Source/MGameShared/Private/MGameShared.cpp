@@ -1,15 +1,15 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "GameShared.h"
+#include "MGameShared.h"
 
 #define LOCTEXT_NAMESPACE "FGameSharedModule"
 
-void FGameSharedModule::StartupModule()
+void FMGameSharedModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 }
 
-void FGameSharedModule::ShutdownModule()
+void FMGameSharedModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
@@ -17,4 +17,4 @@ void FGameSharedModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FGameSharedModule, GameShared)
+IMPLEMENT_MODULE(FMGameSharedModule, GameShared)

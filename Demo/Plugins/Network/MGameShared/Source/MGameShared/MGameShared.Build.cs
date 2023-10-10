@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class MGameClient : ModuleRules
+public class MGameShared : ModuleRules
 {
-	public MGameClient(ReadOnlyTargetRules Target) : base(Target)
+	public MGameShared(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -36,11 +36,8 @@ public class MGameClient : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-
-				"WebSocketNetworking",
-				"WebSockets", 
-				
-				"MGameShared",
+				"Slate",
+				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

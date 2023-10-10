@@ -38,6 +38,8 @@ public class MGameServer : ModuleRules
 				"Engine",
 				"WebSocketNetworking", 
 				"WebSockets",
+				
+				"MGameShared"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
