@@ -2,35 +2,34 @@
 
 #include "CoreMinimal.h"
 #include "MRpcMessage.h"
+#include "NetFwd.h"
 #include "RpcManager.generated.h"
 
-class IWebSocket;
-
 UCLASS()
-class MRPC_API UMGameRpcManager : public UObject
+class MRPC_API URpcManager : public UObject
 {
 	GENERATED_BODY()
 	
 public:
 
-	typedef TFunction<void(const TSharedPtr<IWebSocket>&, const FMRpcMessage&)> FMethodCallback;
+	typedef TFunction<void(const FConnectionPtr& InConn, const FMRpcMessage&)> FMethodCallback;
 	typedef TFunction<void(ERpcErrorCode, const FMRpcMessage&)> FResponseCallback;
 
-	void SendRequest(const TSharedPtr<IWebSocket>& InConn, const FMGameMessage& InMessage, const FResponseCallback& Callback);
-	static void SendResponse(const TSharedPtr<IWebSocket>& InConn, const uint64 InReqSerialNum, const FMGameMessage& InMessage, const ERpcErrorCode ErrorCode);
+	void SendRequest(const FConnectionPtr& InConn, const FMGameMessage& InMessage, const FResponseCallback& Callback);
+	static void SendResponse(const FConnectionPtr& InConn, const uint64 InReqSerialNum, const FMGameMessage& InMessage, const ERpcErrorCode ErrorCode);
 
 	void AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback);
 	
-	void OnMessage(const TSharedPtr<IWebSocket>& InConn, uint64 InCode, const char* InDataPtr, int32 InDataLen);
+	void OnMessage(const FConnectionPtr& InConn, uint64 InCode, const char* InDataPtr, int32 InDataLen);
 
 	static bool CheckBodyLength(const TArray<uint8>& Data);
 	
 private:
 
-	void OnRpcMessage(const TSharedPtr<IWebSocket>& InConn, const FMRpcMessage& InMessage);
-	void OnNotify(const TSharedPtr<IWebSocket>& InConn, const FMRpcMessage& InMessage);
-	void OnRequest(const TSharedPtr<IWebSocket>& InConn, const FMRpcMessage& InMessage);
-	void OnResponse(const TSharedPtr<IWebSocket>& InConn, const FMRpcMessage& InMessage);
+	void OnRpcMessage(const FConnectionPtr& InConn, const FMRpcMessage& InMessage);
+	void OnNotify(const FConnectionPtr& InConn, const FMRpcMessage& InMessage);
+	void OnRequest(const FConnectionPtr& InConn, const FMRpcMessage& InMessage);
+	void OnResponse(const FConnectionPtr& InConn, const FMRpcMessage& InMessage);
 	
 	uint64 SerialNum = 1;
 

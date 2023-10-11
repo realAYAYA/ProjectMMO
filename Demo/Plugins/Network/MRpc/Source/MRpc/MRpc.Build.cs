@@ -35,9 +35,6 @@ public class MRpc : ModuleRules
 			new string[]
 			{
 				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore", 
 				
 				"WebSockets", 
 				

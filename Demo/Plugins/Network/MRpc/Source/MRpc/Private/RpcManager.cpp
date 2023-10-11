@@ -5,8 +5,8 @@
 static constexpr uint32 HeadLength = sizeof(FMRpcMessage);// 包头长度
 static constexpr uint32 MaxBodyLength = 1024 * 1024 * 8;// 最大包体长度
 
-void UMGameRpcManager::SendRequest(
-	const TSharedPtr<IWebSocket>& InConn,
+void URpcManager::SendRequest(
+	const FConnectionPtr& InConn,
 	const FMGameMessage& InMessage,
 	const FResponseCallback& Callback)
 {
@@ -35,8 +35,8 @@ void UMGameRpcManager::SendRequest(
 	AllRequestPending.Emplace(SerialNum, std::move(Data));
 }
 
-void UMGameRpcManager::SendResponse(
-	const TSharedPtr<IWebSocket>& InConn,
+void URpcManager::SendResponse(
+	const FConnectionPtr& InConn,
 	const uint64 InReqSerialNum,
 	const FMGameMessage& InMessage,
 	const ERpcErrorCode ErrorCode)
@@ -60,12 +60,12 @@ void UMGameRpcManager::SendResponse(
 	InConn->Send(BinaryData.GetData(), BinaryData.Num(), true);
 }
 
-void UMGameRpcManager::AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback)
+void URpcManager::AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback)
 {
 }
 
-void UMGameRpcManager::OnMessage(
-	const TSharedPtr<IWebSocket>& InConn,
+void URpcManager::OnMessage(
+	const FConnectionPtr& InConn,
 	uint64 InCode,
 	const char* InDataPtr,
 	int32 InDataLen)
@@ -73,7 +73,7 @@ void UMGameRpcManager::OnMessage(
 	
 }
 
-bool UMGameRpcManager::CheckBodyLength(const TArray<uint8>& Data)
+bool URpcManager::CheckBodyLength(const TArray<uint8>& Data)
 {
 	const uint32 TotalLength = Data.Num();
 	const uint32 BodyLength = TotalLength - HeadLength;
@@ -87,7 +87,7 @@ bool UMGameRpcManager::CheckBodyLength(const TArray<uint8>& Data)
 	return true;
 }
 
-void UMGameRpcManager::OnRpcMessage(const TSharedPtr<IWebSocket>& InConn, const FMRpcMessage& InMessage)
+void URpcManager::OnRpcMessage(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
 {
 	switch (InMessage.RpcMessageOp)
 	{
@@ -111,12 +111,12 @@ void UMGameRpcManager::OnRpcMessage(const TSharedPtr<IWebSocket>& InConn, const 
 	}
 }
 
-void UMGameRpcManager::OnNotify(const TSharedPtr<IWebSocket>& InConn, const FMRpcMessage& InMessage)
+void URpcManager::OnNotify(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
 {
 }
 
 // 服务器调用，收到请求
-void UMGameRpcManager::OnRequest(const TSharedPtr<IWebSocket>& InConn, const FMRpcMessage& InMessage)
+void URpcManager::OnRequest(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
 {
 	const auto Ret = AllMethods.Find(InMessage.TypeID);
 	if (!Ret)
@@ -126,7 +126,7 @@ void UMGameRpcManager::OnRequest(const TSharedPtr<IWebSocket>& InConn, const FMR
 }
 
 // 客户端调用，收到服务器回应
-void UMGameRpcManager::OnResponse(const TSharedPtr<IWebSocket>& InConn, const FMRpcMessage& InMessage)
+void URpcManager::OnResponse(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
 {
 	const auto Ret = AllRequestPending.Find(InMessage.TypeID);
 	if (!Ret)

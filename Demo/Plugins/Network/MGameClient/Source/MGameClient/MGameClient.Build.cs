@@ -40,7 +40,8 @@ public class MGameClient : ModuleRules
 				"WebSocketNetworking",
 				"WebSockets", 
 				
-				"MGameShared",
+				"MGameShared", 
+				"MRpc",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
