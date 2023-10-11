@@ -1,5 +1,7 @@
 #include "MGameClientSubsystem.h"
 
+#include "GameRpcClient.h"
+#include "IWebSocket.h"
 #include "WebSocketsModule.h"
 
 bool UMGameClientSubsystem::ShouldCreateSubsystem(UObject* Outer) const
@@ -34,38 +36,34 @@ TStatId UMGameClientSubsystem::GetStatId() const
 
 void UMGameClientSubsystem::K2_CreateSocket(const FString& ServerURL, const FString& ServerProtocol, const FOnConnectServer& Callback)
 {
-	CreateSocket(ServerURL, ServerProtocol);
-
 	OnConnectedServer = Callback;
+	CreateSocket(ServerURL, ServerProtocol);
 }
 
 void UMGameClientSubsystem::CreateSocket(const FString& ServerURL, const FString& ServerProtocol)
 {
-	Socket = FWebSocketsModule::Get().CreateWebSocket(ServerURL, ServerProtocol);
-	Socket->OnConnected().AddUObject(this, &UMGameClientSubsystem::OnConnected);
-	Socket->OnClosed().AddUObject(this, &UMGameClientSubsystem::OnClosed);
-	Socket->OnConnectionError().AddUObject(this, &UMGameClientSubsystem::OnConnectionError);
-	Socket->OnMessage().AddUObject(this, &UMGameClientSubsystem::OnMessage);
-	Socket->OnRawMessage().AddUObject(this, &UMGameClientSubsystem::OnRawMessage);
-	Socket->OnBinaryMessage().AddUObject(this, &UMGameClientSubsystem::OnBinaryMessage);
-	Socket->OnMessageSent().AddUObject(this, &UMGameClientSubsystem::OnMessageSent);
+	Connection = FWebSocketsModule::Get().CreateWebSocket(ServerURL, ServerProtocol);
+	Connection->OnConnected().AddUObject(this, &UMGameClientSubsystem::OnConnected);
+	Connection->OnClosed().AddUObject(this, &UMGameClientSubsystem::OnClosed);
+	Connection->OnConnectionError().AddUObject(this, &UMGameClientSubsystem::OnConnectionError);
+	//Connection->OnMessage().AddUObject(this, &UMGameClientSubsystem::OnMessage);
+	Connection->OnRawMessage().AddUObject(this, &UMGameClientSubsystem::OnRawMessage);
+	Connection->OnBinaryMessage().AddUObject(this, &UMGameClientSubsystem::OnBinaryMessage);
+	//Connection->OnMessageSent().AddUObject(this, &UMGameClientSubsystem::OnMessageSent);
 	
-	Socket->Connect();
+	Connection->Connect();
 }
 
 void UMGameClientSubsystem::CloseSocket(const FOnDisConnectServer& Callback)
 {
 	OnDisConnectedServer = Callback;
-	Socket->Close();
+	Connection->Close();
 }
 
-void UMGameClientSubsystem::Send(const TArray<uint8>& Data) const
+void UMGameClientSubsystem::OnConnected()
 {
-	Socket->Send(Data.GetData(), Data.Num(), true);
-}
-
-void UMGameClientSubsystem::OnConnected() const
-{
+	GameRpcClient->Setup(&RpcManager, Connection);
+	
 	OnConnectedServer.ExecuteIfBound(true);
 }
 
@@ -76,24 +74,31 @@ void UMGameClientSubsystem::OnConnectionError(const FString& Error) const
 
 void UMGameClientSubsystem::OnClosed(const int32 StatusCode, const FString& Reason, const bool bWasClean)
 {
+	GameRpcClient->Setup(nullptr, nullptr);
+	Connection = nullptr;
+	
 	OnDisConnectedServer.ExecuteIfBound();
-	
-	Socket = nullptr;
 }
 
-void UMGameClientSubsystem::OnMessage(const FString& Message)
+void UMGameClientSubsystem::OnRawMessage(const void* InData, SIZE_T Size, SIZE_T BytesRemaining)
 {
+	TArray<uint8> Data;
+	Data.Reserve(Size);
+	memcpy(Data.GetData(), InData, Size);
+
+	FMRpcMessage RpcMessage;
+	RpcMessage.ParseFromArray(Data);
+	RpcManager.OnRpcMessage(Connection, RpcMessage);
 }
 
-void UMGameClientSubsystem::OnRawMessage(const void* Data, SIZE_T Size, SIZE_T BytesRemaining)
+void UMGameClientSubsystem::OnBinaryMessage(const void* InData, SIZE_T Size, bool bIsLastFragment)
 {
-	
+	TArray<uint8> Data;
+	Data.Reserve(Size);
+	memcpy(Data.GetData(), InData, Size);
+
+	FMRpcMessage RpcMessage;
+	RpcMessage.ParseFromArray(Data);
+	RpcManager.OnRpcMessage(Connection, RpcMessage);
 }
 
-void UMGameClientSubsystem::OnBinaryMessage(const void* Data, SIZE_T Size, bool bIsLastFragment)
-{
-}
-
-void UMGameClientSubsystem::OnMessageSent(const FString& Message)
-{
-}

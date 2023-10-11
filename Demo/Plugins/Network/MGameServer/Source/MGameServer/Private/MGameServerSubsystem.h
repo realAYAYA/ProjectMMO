@@ -1,41 +1,11 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-
-#include "INetworkingWebSocket.h"
-#include "IWebSocketServer.h"
+#include "GameMessage.h"
+#include "GameSession.h"
 #include "MGameServerSubsystem.generated.h"
 
-struct FMWebSocketConnection
-{
-	explicit FMWebSocketConnection(INetworkingWebSocket* InWebSocket)
-		: WebSocket(InWebSocket), ID(FGuid::NewGuid())
-	{
-	}
-
-	FMWebSocketConnection(FMWebSocketConnection&& Right) noexcept
-		: ID(Right.ID)
-	{
-		WebSocket = Right.WebSocket;
-		Right.WebSocket = nullptr;
-	}
-
-	~FMWebSocketConnection()
-	{
-		if (WebSocket)
-		{
-			delete WebSocket;
-			WebSocket = nullptr;
-		}
-	}
-
-	FMWebSocketConnection(const FMWebSocketConnection&) = delete;
-	FMWebSocketConnection& operator=(const FMWebSocketConnection&) = delete;
-	FMWebSocketConnection& operator=(FMWebSocketConnection&&) = delete;
-
-	INetworkingWebSocket* WebSocket = nullptr;
-	FGuid ID;
-};
+class IWebSocketServer;
 
 DECLARE_DELEGATE_OneParam(FMWebSocketClientClosedCallBack, const FGuid);
 DECLARE_DELEGATE_TwoParams(FMWebSocketReceiveCallBack, const FGuid, FString);
@@ -63,12 +33,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MWebSocketServer")
 	void StopWebSocketServer();
 
-	UFUNCTION(BlueprintCallable, Category = "MWebSocketServer")
-	void SendToAll(const FString& InMessage);
-
-	void SendToAll(const TArray<uint8>& InData);
+	void SendToAll(const FGameMessage& InMessage);
 	
+	void SendToAll(const TArray<uint8>& InData);
+
 	void SendTo(const FGuid InID, const TArray<uint8>& InData);
+	
+	void SendTo(const FGameSessionPtr InConn, const TArray<uint8>& InData);
 	
 	bool CheckConnectionValid(const FGuid InID);
 
@@ -81,15 +52,13 @@ protected:
 	bool IsServerRunning() const;
 
 	void OnConnected(const FGuid InID) const;
-	void OnReceive(void* InData, const int32 DataSize, const FGuid InID);
+	//void OnReceive(void* InData, const int32 DataSize, const FGuid InID);
 	void OnError(const FGuid InID);
 	void OnClosed(const FGuid InID);
-	
-	void ProcessAllClientInfo(const FGuid ClientID, const FString& Info);
 
 private:
 
-	TUniquePtr<IWebSocketServer> MWebSocketServer;
+	TUniquePtr<IWebSocketServer> WebSocketServer;
 
-	TMap<FGuid, FMWebSocketConnection> Connections;
+	TMap<FGuid, FGameSessionPtr> Connections;
 };

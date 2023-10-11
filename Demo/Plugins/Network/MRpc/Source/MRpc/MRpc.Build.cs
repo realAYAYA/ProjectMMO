@@ -25,7 +25,9 @@ public class MRpc : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core", 
+				
+				"MGameShared",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

@@ -5,9 +5,9 @@
 static constexpr uint32 HeadLength = sizeof(FMRpcMessage);// 包头长度
 static constexpr uint32 MaxBodyLength = 1024 * 1024 * 8;// 最大包体长度
 
-void URpcManager::SendRequest(
+void FRpcManager::SendRequest(
 	const FConnectionPtr& InConn,
-	const FMGameMessage& InMessage,
+	const FGameMessage& InMessage,
 	const FResponseCallback& Callback)
 {
 	FMRpcMessage ReqMessage;
@@ -35,10 +35,10 @@ void URpcManager::SendRequest(
 	AllRequestPending.Emplace(SerialNum, std::move(Data));
 }
 
-void URpcManager::SendResponse(
+void FRpcManager::SendResponse(
 	const FConnectionPtr& InConn,
 	const uint64 InReqSerialNum,
-	const FMGameMessage& InMessage,
+	const FGameMessage& InMessage,
 	const ERpcErrorCode ErrorCode)
 {
 	FMRpcMessage ReqMessage;
@@ -60,20 +60,12 @@ void URpcManager::SendResponse(
 	InConn->Send(BinaryData.GetData(), BinaryData.Num(), true);
 }
 
-void URpcManager::AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback)
+void FRpcManager::AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback)
 {
+	AllMethods.Emplace(InReqTypeId, InCallback);
 }
 
-void URpcManager::OnMessage(
-	const FConnectionPtr& InConn,
-	uint64 InCode,
-	const char* InDataPtr,
-	int32 InDataLen)
-{
-	
-}
-
-bool URpcManager::CheckBodyLength(const TArray<uint8>& Data)
+bool FRpcManager::CheckBodyLength(const TArray<uint8>& Data)
 {
 	const uint32 TotalLength = Data.Num();
 	const uint32 BodyLength = TotalLength - HeadLength;
@@ -87,7 +79,7 @@ bool URpcManager::CheckBodyLength(const TArray<uint8>& Data)
 	return true;
 }
 
-void URpcManager::OnRpcMessage(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
+void FRpcManager::OnRpcMessage(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
 {
 	switch (InMessage.RpcMessageOp)
 	{
@@ -111,12 +103,12 @@ void URpcManager::OnRpcMessage(const FConnectionPtr& InConn, const FMRpcMessage&
 	}
 }
 
-void URpcManager::OnNotify(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
+void FRpcManager::OnNotify(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
 {
 }
 
 // 服务器调用，收到请求
-void URpcManager::OnRequest(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
+void FRpcManager::OnRequest(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
 {
 	const auto Ret = AllMethods.Find(InMessage.TypeID);
 	if (!Ret)
@@ -126,7 +118,7 @@ void URpcManager::OnRequest(const FConnectionPtr& InConn, const FMRpcMessage& In
 }
 
 // 客户端调用，收到服务器回应
-void URpcManager::OnResponse(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
+void FRpcManager::OnResponse(const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
 {
 	const auto Ret = AllRequestPending.Find(InMessage.TypeID);
 	if (!Ret)

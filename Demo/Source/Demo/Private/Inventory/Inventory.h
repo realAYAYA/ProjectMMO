@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MGameDefines.h"
-#include "MGameDefines.h"
+#include "..\..\..\..\Plugins\Network\MGameShared\Source\MGameShared\Public\GameDefines.h"
+#include "..\..\..\..\Plugins\Network\MGameShared\Source\MGameShared\Public\GameDefines.h"
 
 #include "MGameTypes.h"
 #include "Net/RpcObject.h"
