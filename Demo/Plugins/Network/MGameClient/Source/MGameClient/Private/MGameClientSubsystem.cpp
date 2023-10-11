@@ -86,9 +86,9 @@ void UMGameClientSubsystem::OnRawMessage(const void* InData, SIZE_T Size, SIZE_T
 	Data.Reserve(Size);
 	memcpy(Data.GetData(), InData, Size);
 
-	FMRpcMessage RpcMessage;
+	FNetworkMessage RpcMessage;
 	RpcMessage.ParseFromArray(Data);
-	RpcManager.OnRpcMessage(Connection, RpcMessage);
+	RpcManager.OnMessage(Connection, RpcMessage);
 }
 
 void UMGameClientSubsystem::OnBinaryMessage(const void* InData, SIZE_T Size, bool bIsLastFragment)
@@ -97,8 +97,8 @@ void UMGameClientSubsystem::OnBinaryMessage(const void* InData, SIZE_T Size, boo
 	Data.Reserve(Size);
 	memcpy(Data.GetData(), InData, Size);
 
-	FMRpcMessage RpcMessage;
+	FNetworkMessage RpcMessage;
 	RpcMessage.ParseFromArray(Data);
-	RpcManager.OnRpcMessage(Connection, RpcMessage);
+	RpcManager.OnMessage(Connection, RpcMessage);
 }
 

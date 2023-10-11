@@ -4,30 +4,17 @@
 #include "GameMessage.h"
 #include "NetFwd.h"
 
-class MRPC_API FRpcManager
+class MRPC_API FClientRpcManager
 {
 	
 public:
-
-	typedef TFunction<void(const FConnectionPtr& InConn, const FMRpcMessage&)> FMethodCallback;
-	typedef TFunction<void(ERpcErrorCode, const FMRpcMessage&)> FResponseCallback;
-
-	void SendRequest(const FConnectionPtr& InConn, const FGameMessage& InMessage, const FResponseCallback& Callback);
-	static void SendResponse(const FConnectionPtr& InConn, const uint64 InReqSerialNum, const FGameMessage& InMessage, const ERpcErrorCode ErrorCode);
-
-	void AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback);
 	
-	//void OnMessage(const FConnectionPtr& InConn, uint64 InCode, const char* InDataPtr, int32 InDataLen);
+	typedef TFunction<void(const ERpcErrorCode, const FNetworkMessage&)> FResponseCallback;
+	void SendRequest(const FConnectionPtr& InConn, const FGameMessage& InMessage, const FResponseCallback& Callback);
 
-	static bool CheckBodyLength(const TArray<uint8>& Data);
-
-	void OnRpcMessage(const FConnectionPtr& InConn, const FMRpcMessage& InMessage);
+	void OnMessage(const FConnectionPtr& InConn, const FNetworkMessage& InMessage);
 	
 private:
-	
-	void OnNotify(const FConnectionPtr& InConn, const FMRpcMessage& InMessage);
-	void OnRequest(const FConnectionPtr& InConn, const FMRpcMessage& InMessage);
-	void OnResponse(const FConnectionPtr& InConn, const FMRpcMessage& InMessage);
 	
 	uint64 SerialNum = 1;
 
@@ -39,7 +26,22 @@ private:
 	};
 	
 	TMap<uint64, FRequestPendingData> AllRequestPending;
+};
+
+
+class MRPC_API FServerRpcManager
+{
 	
-	TMap<uint64, FMethodCallback> AllMethods;
+public:
 	
+	typedef TFunction<void(const FServerPtr& InConn, const FNetworkMessage&)> FMethodCallback;
+	static void SendResponse(const FServerPtr& InConn, const uint64 InReqSerialNum, const FGameMessage& InMessage, const ERpcErrorCode ErrorCode);
+
+	void AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback);
+
+	void OnMessage(const FServerPtr& InConn, const FNetworkMessage& InMessage);
+	
+private:
+	
+	TMap<uint64, FMethodCallback> Methods;
 };

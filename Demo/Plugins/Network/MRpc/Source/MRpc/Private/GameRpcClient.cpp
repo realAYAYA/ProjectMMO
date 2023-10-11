@@ -1,6 +1,8 @@
 #include "GameRpcClient.h"
 
-void UGameRpcClient::Setup(FRpcManager* InManager, const FConnectionPtr& InConn)
+#include "RpcManager.h"
+
+void UGameRpcClient::Setup(FClientRpcManager* InManager, const FConnectionPtr& InConn)
 {
 	Manager = InManager;
 	Connection = InConn;
@@ -8,43 +10,34 @@ void UGameRpcClient::Setup(FRpcManager* InManager, const FConnectionPtr& InConn)
 	
 }
 
-void UGameRpcClient::K2_LoginGame(const FLoginReq& InParams, const FOnLoginResult& InCallback)
+void UGameRpcClient::K2_LoginGame(const FLoginReq& InParams, const FOnLoginResult& InCallback) const
 {
 	if (!Manager || !Connection)
 		return;
-        
-	auto ReqMessage = MakeShared<idlezt::LoginGameReq>();
-	InParams.ToPb(&ReqMessage.Get());  // USTRUCT -> PB
     
-	LoginGame(ReqMessage, [InCallback](EZRpcErrorCode ErrorCode, const TSharedPtr<idlezt::LoginGameAck>& InRspMessage)
-	{        
-		const UObject* Owner = InCallback.GetUObject();
-		if (IsValid(Owner))
+	LoginGame(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FLoginAck& InRspMessage)
+	{
+		if (IsValid(InCallback.GetUObject()))
 		{
-			FZLoginGameAck Rsp;
-			if (InRspMessage)
-			{
-				Rsp = *InRspMessage;  // PB -> USTRUCT
-			}        
-
-			InCallback.ExecuteIfBound(ErrorCode, Rsp);
+			const bool bOk = InCallback.ExecuteIfBound(ErrorCode, InRspMessage);
+			if (!bOk)
+				UE_LOG(LogGameNetwork, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
 		}
 	});
 }
 
-void UGameRpcClient::LoginGame(const FLoginReq& InReqMessage, const OnLoginGameResult& InCallback)
+void UGameRpcClient::LoginGame(const FLoginReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const
 {
 	if (!Manager || !Connection)
 		return;
 
-	Manager->SendRequest(Connection, InReqMessage, [InCallback](EZRpcErrorCode ErrorCode, const TSharedPtr<idlezt::ZRpcMessage>& InMessage)
+	Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
 	{
-		auto RspMessage = MakeShared<idlezt::LoginGameAck>();
+		const FLoginAck RspMessage;
                
-		if (ErrorCode == EZRpcErrorCode::RpcErrorCode_Ok)
+		if (ErrorCode == ERpcErrorCode::Ok)
 		{
-			if (!RspMessage->ParseFromArray(InMessage->body().c_str(), InMessage->body().size()))
-				return;
+			RspMessage.ParseFromArray(InMessage.GetBody());
 		}
 
 		InCallback(ErrorCode, RspMessage);

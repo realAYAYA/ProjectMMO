@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "IWebSocketServer.h"
+
 #include "GameMessage.h"
 #include "GameSession.h"
 #include "MGameServerSubsystem.generated.h"
-
-class IWebSocketServer;
 
 DECLARE_DELEGATE_OneParam(FMWebSocketClientClosedCallBack, const FGuid);
 DECLARE_DELEGATE_TwoParams(FMWebSocketReceiveCallBack, const FGuid, FString);
@@ -52,7 +52,7 @@ protected:
 	bool IsServerRunning() const;
 
 	void OnConnected(const FGuid InID) const;
-	//void OnReceive(void* InData, const int32 DataSize, const FGuid InID);
+	void OnReceive(void* InData, const int32 DataSize, const FGuid InID);
 	void OnError(const FGuid InID);
 	void OnClosed(const FGuid InID);
 

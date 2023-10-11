@@ -63,5 +63,5 @@ private:
 
 	FOnDisConnectServer OnDisConnectedServer;
 
-	FRpcManager RpcManager;
+	FClientRpcManager RpcManager;
 };

@@ -2,7 +2,6 @@
 #include "MGameServerPrivate.h"
 
 #include "IWebSocketNetworkingModule.h"
-#include "IWebSocketServer.h"
 
 bool UMGameServerSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
@@ -75,7 +74,7 @@ void UMGameServerSubsystem::StopWebSocketServer()
 
 void UMGameServerSubsystem::SendToAll(const FGameMessage& InMessage)
 {
-	FMRpcMessage RpcMessage;
+	FNetworkMessage RpcMessage;
 	RpcMessage.RpcErrorCode = ERpcErrorCode::Ok;
 	RpcMessage.RpcMessageOp = ERpcMessageOp::Notify;
 	
@@ -129,11 +128,15 @@ void UMGameServerSubsystem::OnClientConnected(INetworkingWebSocket* InWebSocket)
 	if (!InWebSocket)
 		return;
 
-	auto Conn = MakeShared<FGameSession>(InWebSocket);
+	FGameSessionPtr Conn = MakeShared<FGameSession>(InWebSocket);
 	
 	FWebSocketInfoCallBack ConnectedCallBack;
 	ConnectedCallBack.BindUObject(this, &UMGameServerSubsystem::OnConnected, Conn->ID);
 	InWebSocket->SetConnectedCallBack(ConnectedCallBack);
+
+	FWebSocketPacketReceivedCallBack ReceivedCallBack;
+	ReceivedCallBack.BindUObject(this, &UMGameServerSubsystem::OnReceive, Conn->ID);
+	InWebSocket->SetReceiveCallBack(ReceivedCallBack);
 
 	FWebSocketInfoCallBack ErrorCallBack;
 	ErrorCallBack.BindUObject(this, &UMGameServerSubsystem::OnError, Conn->ID);
@@ -154,6 +157,15 @@ bool UMGameServerSubsystem::IsServerRunning() const
 void UMGameServerSubsystem::OnConnected(const FGuid InID) const
 {
 	UE_LOG(LogMGameServer, Display, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
+}
+
+void UMGameServerSubsystem::OnReceive(void* InData, const int32 DataSize, const FGuid InID)
+{
+	const FGameSessionPtr* Connection = Connections.Find(InID);
+	if (Connection && (*Connection)->WebSocket)
+	{
+		(*Connection)->OnReceive(InData, DataSize);
+	}
 }
 
 void UMGameServerSubsystem::OnError(const FGuid InID)

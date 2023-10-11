@@ -8,30 +8,31 @@
 
 #include "GameRpcClient.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginResult, ERpcErrorCode, InErrorCode, FLoginAck, InData);
+class FClientRpcManager;
 
-class FRpcManager;
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginResult, const ERpcErrorCode, InErrorCode, const FLoginAck&, InData);
+
 
 UCLASS(BlueprintType, Blueprintable)
-class UGameRpcClient : public UObject
+class MRPC_API UGameRpcClient : public UObject
 {
 	GENERATED_BODY()
 public:
 
-	void Setup(FRpcManager* InManager, const FConnectionPtr& InConn);
+	void Setup(FClientRpcManager* InManager, const FConnectionPtr& InConn);
 
 	/**
 	 * 登录游戏
 	*/
 	UFUNCTION(BlueprintCallable, Category="IdleZ", DisplayName="LoginGame")
-	void K2_LoginGame(const FLoginReq& InParams, const FOnLoginResult& InCallback);
+	void K2_LoginGame(const FLoginReq& InParams, const FOnLoginResult& InCallback) const;
     
-	typedef TFunction<void(ERpcErrorCode, const FLoginAck&)> OnLoginGameResult;
-	void LoginGame(const FLoginReq& InReqMessage, const OnLoginGameResult& InCallback);
+	typedef TFunction<void(ERpcErrorCode, const FLoginAck&)> FOnLoginGameResultFunction;
+	void LoginGame(const FLoginReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const;
 
 private:
 
-	FRpcManager* Manager = nullptr;
+	FClientRpcManager* Manager = nullptr;
 
 	FConnectionPtr Connection;
 };

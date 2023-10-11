@@ -1,14 +1,14 @@
 #pragma once
 #include "GameMessage.h"
 
-class FRpcManager;
+class FServerRpcManager;
 
 // 服务器专用 Rpc接口
 class FGameRpcInterface final
 {
 public:
 	
-	explicit FGameRpcInterface(FRpcManager* InManager);
+	explicit FGameRpcInterface(FServerRpcManager* InManager);
 	~FGameRpcInterface();
 	
 	/**

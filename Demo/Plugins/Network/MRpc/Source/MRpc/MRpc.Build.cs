@@ -26,8 +26,6 @@ public class MRpc : ModuleRules
 			new string[]
 			{
 				"Core", 
-				
-				"MGameShared",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -37,10 +35,10 @@ public class MRpc : ModuleRules
 			new string[]
 			{
 				"CoreUObject",
-				
+				"WebSocketNetworking",
 				"WebSockets", 
 				
-				"MGameShared",
+				"MGameShared", 
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

@@ -1,9 +1,9 @@
 #include "GameRpcInterface.h"
 #include "RpcManager.h"
 
-FGameRpcInterface::FGameRpcInterface(FRpcManager* InManager)
+FGameRpcInterface::FGameRpcInterface(FServerRpcManager* InManager)
 {
-	InManager->AddMethod(FLoginReq::KeyTypeID, [this, InManager](const FConnectionPtr& InConn, const FMRpcMessage& InMessage)
+	InManager->AddMethod(FLoginReq::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
 	{
 		const uint64 ReqSerialNum = InMessage.TypeID;
 

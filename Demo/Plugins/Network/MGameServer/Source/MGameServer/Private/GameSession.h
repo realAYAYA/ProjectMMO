@@ -1,6 +1,8 @@
 #pragma once
 
+#include "GameRpcInterface.h"
 #include "INetworkingWebSocket.h"
+#include "RpcManager.h"
 
 class FRole;
 
@@ -16,13 +18,14 @@ public:
 	{
 		WebSocket = Right.WebSocket;
 		Right.WebSocket = nullptr;
+
+		RpcInterface = MakeShared<FGameRpcInterface>(&Manager);
 	}
 
 	~FGameSession()
 	{
 		if (WebSocket)
 		{
-			delete WebSocket;
 			WebSocket = nullptr;
 		}
 	}
@@ -33,13 +36,18 @@ public:
 
 	void Send(const TArray<uint8>& Data) const;
 	
-	void OnReceive(void* InData, const int32 DataSize);
+	void OnReceive(void* InData, const int32 Size);
 
 	FString Account;
 	
 	FRole* Role = nullptr;
 
-	INetworkingWebSocket* WebSocket = nullptr;
+	TSharedPtr<FGameRpcInterface> RpcInterface;
+	
+	FServerRpcManager Manager;
+	
+	TSharedPtr<INetworkingWebSocket> WebSocket = nullptr;
+	
 	FGuid ID;
 };
 

@@ -9,7 +9,7 @@
 #include "GameMessage.generated.h"
 
 USTRUCT(BlueprintType)
-struct FMRpcMessage
+struct FNetworkMessage
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -65,19 +65,19 @@ public:
 
 	virtual ~FGameMessage() = default;
 
-	virtual UScriptStruct* GetStaticStruct() const { return StaticStruct(); }
+	virtual UScriptStruct* RequestStaticStruct() const { return StaticStruct(); }
 
 	void SerializeToArray(TArray<uint8>& Data) const
 	{
 		FMemoryWriter Writer(Data, false);
-		UScriptStruct* DataType = GetStaticStruct();
+		UScriptStruct* DataType = RequestStaticStruct();
 		DataType->SerializeTaggedProperties(Writer, (uint8*)this, DataType, nullptr);
 	}
 
 	void ParseFromArray(const TArray<uint8>& Data) const
 	{
 		FMemoryReader Reader(Data, false);
-		UScriptStruct* DataType = GetStaticStruct();
+		UScriptStruct* DataType = RequestStaticStruct();
 		DataType->SerializeTaggedProperties(Reader, (uint8*)this, DataType, nullptr);
 	}
 };
@@ -96,7 +96,7 @@ struct FLoginReq : public FGameMessage
 	FString ClientVersion;
 	
 	virtual uint64 GetTypeID() const override { return KeyTypeID; }
-	virtual UScriptStruct* GetStaticStruct() const override { return StaticStruct(); }
+	virtual UScriptStruct* RequestStaticStruct() const override { return StaticStruct(); }
 
 	static constexpr uint64 KeyTypeID = 0;
 };
@@ -113,7 +113,7 @@ struct FLoginAck : public FGameMessage
 	bool bReLogin = false;
 	
 	virtual uint64 GetTypeID() const override { return KeyTypeID; }
-	virtual UScriptStruct* GetStaticStruct() const override { return StaticStruct(); }
+	virtual UScriptStruct* RequestStaticStruct() const override { return StaticStruct(); }
 
 	static constexpr uint64 KeyTypeID = 1;
 };
