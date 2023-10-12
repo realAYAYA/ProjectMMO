@@ -36,10 +36,6 @@ public:
 	void SendToAll(const FGameMessage& InMessage);
 	
 	void SendToAll(const TArray<uint8>& InData);
-
-	void SendTo(const FGuid InID, const TArray<uint8>& InData);
-	
-	void SendTo(const FGameSessionPtr InConn, const TArray<uint8>& InData);
 	
 	bool CheckConnectionValid(const FGuid InID);
 

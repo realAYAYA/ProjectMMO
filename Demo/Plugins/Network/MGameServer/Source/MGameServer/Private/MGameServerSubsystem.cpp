@@ -96,19 +96,6 @@ void UMGameServerSubsystem::SendToAll(const TArray<uint8>& InData)
 	}
 }
 
-void UMGameServerSubsystem::SendTo(const FGuid InID, const TArray<uint8>& InData)
-{
-	if (const FGameSessionPtr* Connection = Connections.Find(InID))
-	{
-		(*Connection)->Send(InData);
-	}
-}
-
-void UMGameServerSubsystem::SendTo(const FGameSessionPtr InConn, const TArray<uint8>& InData)
-{
-	InConn->Send(InData);
-}
-
 bool UMGameServerSubsystem::CheckConnectionValid(const FGuid InID)
 {
 	if (!IsServerRunning())
@@ -156,7 +143,12 @@ bool UMGameServerSubsystem::IsServerRunning() const
 
 void UMGameServerSubsystem::OnConnected(const FGuid InID) const
 {
-	UE_LOG(LogMGameServer, Display, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
+	// Todo ReConnected
+	const FGameSessionPtr* Connection = Connections.Find(InID);
+	if (Connection && (*Connection)->WebSocket)
+	{
+		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *(*Connection)->Account, *FString(__FUNCTION__));
+	}
 }
 
 void UMGameServerSubsystem::OnReceive(void* InData, const int32 DataSize, const FGuid InID)
@@ -170,7 +162,11 @@ void UMGameServerSubsystem::OnReceive(void* InData, const int32 DataSize, const 
 
 void UMGameServerSubsystem::OnError(const FGuid InID)
 {
-	UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
+	const FGameSessionPtr* Connection = Connections.Find(InID);
+	if (Connection && (*Connection)->WebSocket)
+	{
+		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *(*Connection)->Account, *FString(__FUNCTION__));
+	}
 }
 
 void UMGameServerSubsystem::OnClosed(const FGuid InID)
@@ -178,7 +174,10 @@ void UMGameServerSubsystem::OnClosed(const FGuid InID)
 	const FGameSessionPtr* Connection = Connections.Find(InID);
 	if (Connection && (*Connection)->WebSocket)
 	{
-		WebSocketClientClosedCallBack.ExecuteIfBound(InID);
+		const bool bOk = WebSocketClientClosedCallBack.ExecuteIfBound(InID);
+		if (!bOk)
+			UE_LOG(LogMGameServer, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
+		
 		Connections.Remove(InID);
 	}
 

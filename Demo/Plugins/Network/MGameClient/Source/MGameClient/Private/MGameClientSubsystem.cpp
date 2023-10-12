@@ -2,6 +2,7 @@
 
 #include "GameRpcClient.h"
 #include "IWebSocket.h"
+#include "MGameClientPrivate.h"
 #include "WebSocketsModule.h"
 
 bool UMGameClientSubsystem::ShouldCreateSubsystem(UObject* Outer) const
@@ -64,7 +65,9 @@ void UMGameClientSubsystem::OnConnected()
 {
 	GameRpcClient->Setup(&RpcManager, Connection);
 	
-	OnConnectedServer.ExecuteIfBound(true);
+	const bool bOk = OnConnectedServer.ExecuteIfBound(true);
+	if (!bOk)
+		UE_LOG(LogMGameClient, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
 }
 
 void UMGameClientSubsystem::OnConnectionError(const FString& Error) const
@@ -77,7 +80,9 @@ void UMGameClientSubsystem::OnClosed(const int32 StatusCode, const FString& Reas
 	GameRpcClient->Setup(nullptr, nullptr);
 	Connection = nullptr;
 	
-	OnDisConnectedServer.ExecuteIfBound();
+	const bool bOk = OnDisConnectedServer.ExecuteIfBound();
+	if (!bOk)
+		UE_LOG(LogMGameClient, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
 }
 
 void UMGameClientSubsystem::OnRawMessage(const void* InData, SIZE_T Size, SIZE_T BytesRemaining)
