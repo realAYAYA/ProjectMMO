@@ -3,12 +3,12 @@
 
 FGameRpcInterface::FGameRpcInterface(FServerRpcManager* InManager)
 {
-	InManager->AddMethod(FLoginReq::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
+	InManager->AddMethod(FLoginGameReq::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
 	{
 		const uint64 ReqSerialNum = InMessage.TypeID;
 
-		const FLoginReq ReqMessage;
-		FLoginAck RspMessage;
+		const FLoginGameReq ReqMessage;
+		FLoginGameAck RspMessage;
 		ReqMessage.ParseFromArray(InMessage.GetBody());
 
 		if (InMessage.GetBody().Num() <= 0)

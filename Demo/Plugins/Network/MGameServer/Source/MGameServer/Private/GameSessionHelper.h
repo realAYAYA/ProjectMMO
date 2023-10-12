@@ -1,7 +1,24 @@
 ﻿#pragma once
 
-class GameSessionHelper
-{
-public:
-	
-};
+class FGameSession;
+
+#ifndef MMODULENAME
+#define MMODULENAME Default
+#endif
+
+#define M_GAME_MESSAGE_HANDLE_REGISTRANT_VARNAME PREPROCESSOR_JOIN(_MVAR_,PREPROCESSOR_JOIN(MMODULENAME,PREPROCESSOR_JOIN(_,__LINE__)))
+
+#define M_GAME_RPC_HANDLE(RpcInterfaceName, RpcMethodName, GameSessionVar, ReqVar, AckVar) \
+struct M_GAME_MESSAGE_HANDLE_REGISTRANT_TYPENAME \
+{ \
+	M_GAME_MESSAGE_HANDLE_REGISTRANT_TYPENAME() {} \
+	M_GAME_MESSAGE_HANDLE_REGISTRANT_TYPENAME(FGameSession* InSession, void* InRpcInterface) \
+	{ \
+		((PREPROCESSOR_JOIN(F,PREPROCESSOR_JOIN(RpcInterfaceName,Interface))*)InRpcInterface)->PREPROCESSOR_JOIN(On,RpcMethodName) = [this, InSession](const PREPROCESSOR_JOIN(F,PREPROCESSOR_JOIN(RpcMethodName,Req))& InReq, const PREPROCESSOR_JOIN(F,PREPROCESSOR_JOIN(RpcMethodName,Ack)& InAck)) { \
+			this->Handle(InSession, InReq, InAck); \
+		}; \
+	} \
+	void Handle(FGameSession*, const PREPROCESSOR_JOIN(F,PREPROCESSOR_JOIN(RpcMethodName,Req))& Req, const PREPROCESSOR_JOIN(F,PREPROCESSOR_JOIN(RpcMethodName,Ack))& Ack); \
+};	\
+static M_GAME_MESSAGE_HANDLE_REGISTRANT_TYPENAME M_GAME_MESSAGE_HANDLE_REGISTRANT_VARNAME; \
+void M_GAME_MESSAGE_HANDLE_REGISTRANT_TYPENAME::Handle(FGameSession* GameSession, const PREPROCESSOR_JOIN(F,PREPROCESSOR_JOIN(RpcMethodName,Req))& ReqVar, const PREPROCESSOR_JOIN(PREPROCESSOR_JOIN(F,PREPROCESSOR_JOIN(RpcMethodName,Ack))& AckVar))

@@ -85,7 +85,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 USTRUCT(BlueprintType)
-struct FLoginReq : public FGameMessage
+struct FLoginGameReq : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -102,7 +102,7 @@ struct FLoginReq : public FGameMessage
 };
 
 USTRUCT(BlueprintType)
-struct FLoginAck : public FGameMessage
+struct FLoginGameAck : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 

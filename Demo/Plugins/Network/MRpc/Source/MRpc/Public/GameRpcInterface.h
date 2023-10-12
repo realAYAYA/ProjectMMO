@@ -14,7 +14,7 @@ public:
 	/**
 	 * 登录游戏
 	*/    
-	typedef TFunction<void(const FLoginReq&, FLoginAck&)> FLoginGameCallback;
+	typedef TFunction<void(const FLoginGameReq&, FLoginGameAck&)> FLoginGameCallback;
 	FLoginGameCallback OnLoginGame;
 	
 };
