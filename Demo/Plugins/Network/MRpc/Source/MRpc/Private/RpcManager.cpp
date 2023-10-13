@@ -43,7 +43,7 @@ void FClientRpcManager::SendRequest(
 		return;
 	}
 	
-	InConn->Send(BinaryData.GetData(), BinaryData.Num(), true);
+	InConn->Send(BinaryData.GetData(), BinaryData.Num() * sizeof(uint8), true);
 
 	FRequestPendingData Data;
 	Data.SerialNum = SerialNum;
@@ -68,13 +68,13 @@ void FClientRpcManager::OnMessage(const FConnectionPtr& InConn, const FNetworkMe
 		break;
 	case ERpcMessageOp::Response:
 		{
-			const auto Ret = AllRequestPending.Find(InMessage.TypeID);
+			const auto Ret = AllRequestPending.Find(InMessage.SerialNum);
 			if (!Ret)
 				return;
 
 			Ret->Callback(InMessage.RpcErrorCode, InMessage);
 
-			AllRequestPending.Remove(InMessage.TypeID);
+			AllRequestPending.Remove(InMessage.SerialNum);
 		}
 		break;
 	default:
@@ -104,7 +104,7 @@ void FServerRpcManager::SendResponse(
 		return;
 	}
 	
-	InConn->Send(BinaryData.GetData(), BinaryData.Num(), false);
+	InConn->Send(BinaryData.GetData(), BinaryData.Num() * sizeof(uint8), false);
 }
 
 void FServerRpcManager::AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback)

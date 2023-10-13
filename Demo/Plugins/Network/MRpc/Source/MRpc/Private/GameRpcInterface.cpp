@@ -5,7 +5,7 @@ FGameRpcInterface::FGameRpcInterface(FServerRpcManager* InManager)
 {
 	InManager->AddMethod(FLoginGameReq::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
 	{
-		const uint64 ReqSerialNum = InMessage.TypeID;
+		const uint64 ReqSerialNum = InMessage.SerialNum;
 
 		const FLoginGameReq ReqMessage;
 		FLoginGameAck RspMessage;
@@ -28,6 +28,3 @@ FGameRpcInterface::FGameRpcInterface(FServerRpcManager* InManager)
 	});
 }
 
-FGameRpcInterface::~FGameRpcInterface()
-{
-}

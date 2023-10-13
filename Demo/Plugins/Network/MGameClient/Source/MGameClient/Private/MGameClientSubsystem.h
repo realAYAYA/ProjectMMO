@@ -51,7 +51,7 @@ protected:
 	void OnConnectionError(const FString& Error);
 	void OnClosed(const int32 StatusCode, const FString& Reason, const bool bWasClean);
 	//void OnMessage(const FString& Message);
-	void OnRawMessage(const void* InData, SIZE_T Size, SIZE_T BytesRemaining);
+	//void OnRawMessage(const void* InData, SIZE_T Size, SIZE_T BytesRemaining);
 	void OnBinaryMessage(const void* InData, SIZE_T Size, bool bIsLastFragment);
 	//void OnMessageSent(const FString& Message);
 

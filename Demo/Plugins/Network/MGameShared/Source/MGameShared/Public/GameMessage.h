@@ -23,7 +23,7 @@ struct FNetworkMessage
 	uint64 SerialNum = 0;
 
 	UPROPERTY()
-	ERpcMessageOp RpcMessageOp = ERpcMessageOp::Notify;
+	ERpcMessageOp RpcMessageOp = ERpcMessageOp::Request;
 
 	UPROPERTY()
 	int64 Timestamp = 0;
@@ -36,14 +36,14 @@ struct FNetworkMessage
 
 	void SerializeToArray(TArray<uint8>& Data)
 	{
-		FMemoryWriter Writer(Data, false);
+		FMemoryWriter Writer(Data);
 		UScriptStruct* DataType = StaticStruct();
 		DataType->SerializeTaggedProperties(Writer, (uint8*)this, DataType, nullptr);
 	}
 
 	void ParseFromArray(const TArray<uint8>& Data)
 	{
-		FMemoryReader Reader(Data, false);
+		FMemoryReader Reader(Data);
 		UScriptStruct* DataType = StaticStruct();
 		DataType->SerializeTaggedProperties(Reader, (uint8*)this, DataType, nullptr);
 	}
@@ -98,7 +98,7 @@ struct FLoginGameReq : public FGameMessage
 	virtual uint64 GetTypeID() const override { return KeyTypeID; }
 	virtual UScriptStruct* RequestStaticStruct() const override { return StaticStruct(); }
 
-	static constexpr uint64 KeyTypeID = 0;
+	static constexpr uint64 KeyTypeID = 1;
 };
 
 USTRUCT(BlueprintType)
@@ -115,5 +115,5 @@ struct FLoginGameAck : public FGameMessage
 	virtual uint64 GetTypeID() const override { return KeyTypeID; }
 	virtual UScriptStruct* RequestStaticStruct() const override { return StaticStruct(); }
 
-	static constexpr uint64 KeyTypeID = 1;
+	static constexpr uint64 KeyTypeID = 2;
 };

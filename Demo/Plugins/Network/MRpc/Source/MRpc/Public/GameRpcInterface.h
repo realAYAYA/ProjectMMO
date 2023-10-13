@@ -4,15 +4,16 @@
 class FServerRpcManager;
 
 // 服务器专用 Rpc接口
-class FGameRpcInterface final
+class MRPC_API FGameRpcInterface
 {
 	
 public:
 	
 	const TCHAR* GetName() const { return TEXT("GameRpc"); }
-	
+
 	explicit FGameRpcInterface(FServerRpcManager* InManager);
-	~FGameRpcInterface();
+	
+	~FGameRpcInterface() {}
 	
 	/**
 	 * 登录游戏

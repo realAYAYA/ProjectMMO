@@ -20,5 +20,19 @@
 			"Type": "RuntimeAndProgram",
 			"LoadingPhase": "Default"
 		}
+	],
+	"Plugins": [
+		{
+			"Name":"WebSocketNetworking",
+			"Enabled":true
+		},
+		{
+			"Name":"MGameShared",
+			"Enabled":true
+		},
+		{
+			"Name":"MRpc",
+			"Enabled":true
+		}
 	]
 }

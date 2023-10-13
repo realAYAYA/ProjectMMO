@@ -13,14 +13,7 @@ public:
 
 	explicit FGameSession(INetworkingWebSocket* InWebSocket);
 
-	FGameSession(FGameSession&& Right) noexcept
-		: ID(Right.ID)
-	{
-		WebSocket = Right.WebSocket;
-		Right.WebSocket = nullptr;
-
-		RpcInterface = MakeShared<FGameRpcInterface>(&Manager);
-	}
+	FGameSession(FGameSession&& Right) noexcept;
 
 	~FGameSession()
 	{

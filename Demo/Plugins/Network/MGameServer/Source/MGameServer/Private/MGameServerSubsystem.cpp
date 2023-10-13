@@ -175,6 +175,7 @@ void UMGameServerSubsystem::OnConnected(const FGuid InID)
 void UMGameServerSubsystem::OnReceive(void* InData, const int32 DataSize, const FGuid InID)
 {
 	const FGameSessionPtr* Connection = Connections.Find(InID);
+
 	if (Connection && (*Connection)->WebSocket)
 	{
 		(*Connection)->OnReceive(InData, DataSize);
