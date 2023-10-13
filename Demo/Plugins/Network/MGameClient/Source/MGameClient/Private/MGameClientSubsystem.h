@@ -48,7 +48,7 @@ public:
 protected:
 	
 	void OnConnected();
-	void OnConnectionError(const FString& Error) const;
+	void OnConnectionError(const FString& Error);
 	void OnClosed(const int32 StatusCode, const FString& Reason, const bool bWasClean);
 	//void OnMessage(const FString& Message);
 	void OnRawMessage(const void* InData, SIZE_T Size, SIZE_T BytesRemaining);

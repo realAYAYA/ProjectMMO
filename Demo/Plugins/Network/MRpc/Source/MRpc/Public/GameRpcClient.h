@@ -25,7 +25,7 @@ public:
 	 * 登录游戏
 	*/
 	UFUNCTION(BlueprintCallable, Category = "ProjcetM", DisplayName = "LoginGame")
-	void K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginResult& InCallback) const;
+	void K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginResult& InCallback);
     
 	typedef TFunction<void(ERpcErrorCode, const FLoginGameAck&)> FOnLoginGameResultFunction;
 	void LoginGame(const FLoginGameReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const;

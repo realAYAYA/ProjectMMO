@@ -10,7 +10,7 @@ void UGameRpcClient::Setup(FClientRpcManager* InManager, const FConnectionPtr& I
 	
 }
 
-void UGameRpcClient::K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginResult& InCallback) const
+void UGameRpcClient::K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginResult& InCallback)
 {
 	if (!Manager || !Connection)
 		return;

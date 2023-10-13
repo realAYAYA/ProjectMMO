@@ -28,11 +28,11 @@ void FClientRpcManager::SendRequest(
 	const FResponseCallback& Callback)
 {
 	FNetworkMessage ReqMessage;
-	
-	ReqMessage.RpcMessageOp = ERpcMessageOp::Request;
-	ReqMessage.SerialNum = ++SerialNum;
-	ReqMessage.RpcErrorCode = ERpcErrorCode::Ok;
+
 	ReqMessage.TypeID = InMessage.GetTypeID();
+	ReqMessage.RpcMessageOp = ERpcMessageOp::Request;
+	ReqMessage.RpcErrorCode = ERpcErrorCode::Ok;
+	ReqMessage.SerialNum = ++SerialNum;
 	InMessage.SerializeToArray(ReqMessage.SetBody());
 
 	TArray<uint8> BinaryData;

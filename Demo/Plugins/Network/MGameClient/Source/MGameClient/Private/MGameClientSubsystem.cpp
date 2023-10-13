@@ -13,6 +13,8 @@ bool UMGameClientSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 void UMGameClientSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
+
+	GameRpcClient = NewObject<UGameRpcClient>(this);
 }
 
 void UMGameClientSubsystem::Deinitialize()
@@ -38,12 +40,25 @@ TStatId UMGameClientSubsystem::GetStatId() const
 void UMGameClientSubsystem::K2_CreateSocket(const FString& ServerURL, const FString& ServerProtocol, const FOnConnectServer& Callback)
 {
 	OnConnectedServer = Callback;
+	
+	if (Connection && IsValid(OnConnectedServer.GetUObject()))
+	{
+		OnConnectedServer.Execute(false);// 连接已存在
+		return;
+	}
+	
 	CreateSocket(ServerURL, ServerProtocol);
 }
 
 void UMGameClientSubsystem::CreateSocket(const FString& ServerURL, const FString& ServerProtocol)
 {
 	Connection = FWebSocketsModule::Get().CreateWebSocket(ServerURL, ServerProtocol);
+	if (!Connection && IsValid(OnConnectedServer.GetUObject()))
+	{
+		OnConnectedServer.Execute(false);
+		return;
+	}
+	
 	Connection->OnConnected().AddUObject(this, &UMGameClientSubsystem::OnConnected);
 	Connection->OnClosed().AddUObject(this, &UMGameClientSubsystem::OnClosed);
 	Connection->OnConnectionError().AddUObject(this, &UMGameClientSubsystem::OnConnectionError);
@@ -59,29 +74,35 @@ void UMGameClientSubsystem::CloseSocket(const FOnDisConnectServer& Callback)
 {
 	OnDisConnectedServer = Callback;
 	Connection->Close();
+	Connection.Reset();
 }
 
 void UMGameClientSubsystem::OnConnected()
 {
 	GameRpcClient->Setup(&RpcManager, Connection);
 	
-	const bool bOk = OnConnectedServer.ExecuteIfBound(true);
-	if (!bOk)
+	if (!OnConnectedServer.ExecuteIfBound(true))
 		UE_LOG(LogMGameClient, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
 }
 
-void UMGameClientSubsystem::OnConnectionError(const FString& Error) const
+void UMGameClientSubsystem::OnConnectionError(const FString& Error)
 {
+	if (IsValid(OnConnectedServer.GetUObject()))
+		OnConnectedServer.Execute(false);
+	
 	OnErrorCallback.Broadcast(Error);
+
+	Connection.Reset();
+
+	UE_LOG(LogMGameClient, Warning, TEXT("%s"), *FString(__FUNCTION__));
 }
 
 void UMGameClientSubsystem::OnClosed(const int32 StatusCode, const FString& Reason, const bool bWasClean)
 {
 	GameRpcClient->Setup(nullptr, nullptr);
-	Connection = nullptr;
+	Connection.Reset();
 	
-	const bool bOk = OnDisConnectedServer.ExecuteIfBound();
-	if (!bOk)
+	if (!OnDisConnectedServer.ExecuteIfBound())
 		UE_LOG(LogMGameClient, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
 }
 
