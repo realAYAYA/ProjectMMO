@@ -10,12 +10,12 @@ void UGameRpcClient::Setup(FClientRpcManager* InManager, const FConnectionPtr& I
 	
 }
 
-void UGameRpcClient::K2_LoginGame(const FLoginReq& InParams, const FOnLoginResult& InCallback) const
+void UGameRpcClient::K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginResult& InCallback) const
 {
 	if (!Manager || !Connection)
 		return;
     
-	LoginGame(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FLoginAck& InRspMessage)
+	LoginGame(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FLoginGameAck& InRspMessage)
 	{
 		if (IsValid(InCallback.GetUObject()))
 		{
@@ -26,14 +26,14 @@ void UGameRpcClient::K2_LoginGame(const FLoginReq& InParams, const FOnLoginResul
 	});
 }
 
-void UGameRpcClient::LoginGame(const FLoginReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const
+void UGameRpcClient::LoginGame(const FLoginGameReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const
 {
 	if (!Manager || !Connection)
 		return;
 
 	Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
 	{
-		const FLoginAck RspMessage;
+		const FLoginGameAck RspMessage;
                
 		if (ErrorCode == ERpcErrorCode::Ok)
 		{

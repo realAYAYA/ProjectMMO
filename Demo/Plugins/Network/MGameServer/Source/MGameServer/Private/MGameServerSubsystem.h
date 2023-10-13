@@ -27,7 +27,14 @@ public:
 
 public:
 
-	UFUNCTION(BlueprintCallable, Category = "MWebSocketServer")
+	// Test
+	UFUNCTION(BlueprintCallable, Category = "ProjcetM", DisplayName = "StartWebSocketServer")
+	bool K2_StartWebSocketServer(const int32 ServerPort = 10086);
+
+	// Test
+	UFUNCTION(BlueprintCallable, Category = "ProjcetM", DisplayName = "SendMessageToAll")
+	void K2_SendToAll(const FString& InMessage);
+	
 	bool StartWebSocketServer(const int32 ServerPort);
 
 	UFUNCTION(BlueprintCallable, Category = "MWebSocketServer")
@@ -47,7 +54,7 @@ protected:
 	void OnClientConnected(INetworkingWebSocket* InWebSocket);
 	bool IsServerRunning() const;
 
-	void OnConnected(const FGuid InID) const;
+	void OnConnected(const FGuid InID);
 	void OnReceive(void* InData, const int32 DataSize, const FGuid InID);
 	void OnError(const FGuid InID);
 	void OnClosed(const FGuid InID);

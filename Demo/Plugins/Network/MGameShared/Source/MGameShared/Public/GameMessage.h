@@ -89,10 +89,10 @@ struct FLoginGameReq : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "ProjectM")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FString UserName;
 
-	UPROPERTY(EditAnywhere, Category = "ProjectM")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FString ClientVersion;
 	
 	virtual uint64 GetTypeID() const override { return KeyTypeID; }
@@ -106,10 +106,10 @@ struct FLoginGameAck : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "ProjectM")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	ELoginGameRetCode Ret = ELoginGameRetCode::UnKnow;
 
-	UPROPERTY(EditAnywhere, Category = "ProjectM")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	bool bReLogin = false;
 	
 	virtual uint64 GetTypeID() const override { return KeyTypeID; }

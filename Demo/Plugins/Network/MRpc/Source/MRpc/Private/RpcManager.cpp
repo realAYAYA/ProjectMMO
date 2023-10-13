@@ -104,7 +104,7 @@ void FServerRpcManager::SendResponse(
 		return;
 	}
 	
-	InConn->Send(BinaryData.GetData(), BinaryData.Num(), true);
+	InConn->Send(BinaryData.GetData(), BinaryData.Num(), false);
 }
 
 void FServerRpcManager::AddMethod(uint64 InReqTypeId, const FMethodCallback& InCallback)

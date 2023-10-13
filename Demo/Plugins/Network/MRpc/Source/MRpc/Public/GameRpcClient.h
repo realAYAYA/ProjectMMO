@@ -10,7 +10,7 @@
 
 class FClientRpcManager;
 
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginResult, const ERpcErrorCode, InErrorCode, const FLoginAck&, InData);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginResult, const ERpcErrorCode, InErrorCode, const FLoginGameAck&, InData);
 
 
 UCLASS(BlueprintType, Blueprintable)
@@ -24,11 +24,11 @@ public:
 	/**
 	 * 登录游戏
 	*/
-	UFUNCTION(BlueprintCallable, Category="IdleZ", DisplayName="LoginGame")
-	void K2_LoginGame(const FLoginReq& InParams, const FOnLoginResult& InCallback) const;
+	UFUNCTION(BlueprintCallable, Category = "ProjcetM", DisplayName = "LoginGame")
+	void K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginResult& InCallback) const;
     
-	typedef TFunction<void(ERpcErrorCode, const FLoginAck&)> FOnLoginGameResultFunction;
-	void LoginGame(const FLoginReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const;
+	typedef TFunction<void(ERpcErrorCode, const FLoginGameAck&)> FOnLoginGameResultFunction;
+	void LoginGame(const FLoginGameReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const;
 
 private:
 

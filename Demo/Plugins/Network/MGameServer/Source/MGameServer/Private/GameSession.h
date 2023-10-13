@@ -26,7 +26,7 @@ public:
 	{
 		if (WebSocket)
 		{
-			WebSocket = nullptr;
+			WebSocket.Reset();
 		}
 	}
 
@@ -35,6 +35,8 @@ public:
 	FGameSession& operator=(FGameSession&&) = delete;
 
 	void Send(const TArray<uint8>& Data) const;
+
+	void OnConnected(const FGuid InID);
 	
 	void OnReceive(void* InData, const int32 Size);
 

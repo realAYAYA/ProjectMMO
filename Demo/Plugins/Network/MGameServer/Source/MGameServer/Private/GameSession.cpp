@@ -1,5 +1,7 @@
 #include "GameSession.h"
 
+#include "GameSessionHelper.h"
+
 FGameSession::FGameSession(INetworkingWebSocket* InWebSocket)
 : WebSocket(InWebSocket), ID(FGuid::NewGuid())
 {
@@ -8,6 +10,12 @@ FGameSession::FGameSession(INetworkingWebSocket* InWebSocket)
 void FGameSession::Send(const TArray<uint8>& Data) const
 {
 	WebSocket->Send(Data.GetData(), Data.Num(), false);
+}
+
+void FGameSession::OnConnected(const FGuid InID)
+{
+	ID = InID;
+	FRpcServerHandleInitializers::Get().Bind(this, RpcInterface.Get());
 }
 
 void FGameSession::OnReceive(void* InData, const int32 Size)
