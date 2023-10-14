@@ -133,7 +133,8 @@ void UMGameServerSubsystem::OnClientConnected(INetworkingWebSocket* InWebSocket)
 	if (!InWebSocket)
 		return;
 
-	FGameSessionPtr Conn = MakeShared<FGameSession>(InWebSocket);
+	
+	FGameSessionPtr Conn = MakeShared<FGameSession>(InWebSocket, FGuid::NewGuid());
 	
 	FWebSocketInfoCallBack ConnectedCallBack;
 	ConnectedCallBack.BindUObject(this, &UMGameServerSubsystem::OnConnected, Conn->ID);
@@ -151,6 +152,8 @@ void UMGameServerSubsystem::OnClientConnected(INetworkingWebSocket* InWebSocket)
 	ClosedCallBack.BindUObject(this, &UMGameServerSubsystem::OnClosed, Conn->ID);
 	InWebSocket->SetSocketClosedCallBack(ClosedCallBack);
 
+	Conn->OnConnected();
+	
 	Connections.Emplace(Conn->ID, Conn);
 
 	UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));
@@ -163,11 +166,11 @@ bool UMGameServerSubsystem::IsServerRunning() const
 
 void UMGameServerSubsystem::OnConnected(const FGuid InID)
 {
-	// Todo ReConnected
+	// Todo ReConnected 不知道为啥第一次连接成功没有调用
 	const FGameSessionPtr* Connection = Connections.Find(InID);
 	if (Connection && (*Connection)->WebSocket)
 	{
-		(*Connection)->OnConnected(InID);
+		(*Connection)->OnConnected();
 		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *(*Connection)->Account, *FString(__FUNCTION__));
 	}
 }

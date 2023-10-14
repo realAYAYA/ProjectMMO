@@ -24,6 +24,7 @@ FGameRpcInterface::FGameRpcInterface(FServerRpcManager* InManager)
 		else
 		{
 			InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::Unimplemented);
+			UE_LOG(LogGameNetwork, Warning, TEXT("RpcTypeID: %s unimplemented"), *FString::FromInt(FLoginGameReq::KeyTypeID));
 		}
 	});
 }

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameMessage.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MGameServerBPLibrary.generated.h"
 
@@ -27,6 +28,12 @@ class UMGameServerBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Execute Sample function", Keywords = "MWebSocketServer sample test testing"), Category = "MWebSocketServerTesting")
-	static float MWebSocketServerSampleFunction(float Param);
+	UFUNCTION(BlueprintCallable, Category = "MWebSocketServerTesting")
+	static FString NetMessageToString(const FLoginGameReq& Param);
+
+	UFUNCTION(BlueprintCallable, Category = "MWebSocketServerTesting")
+	static FLoginGameReq StringToNetMessage(const FString& Param);
+	
+	UFUNCTION(BlueprintCallable, Category = "MWebSocketServerTesting")
+	static FLoginGameReq SerializeTest(const FLoginGameReq& Param);
 };

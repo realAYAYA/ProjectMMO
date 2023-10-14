@@ -11,7 +11,7 @@ class FGameSession
 	
 public:
 
-	explicit FGameSession(INetworkingWebSocket* InWebSocket);
+	explicit FGameSession(INetworkingWebSocket* InWebSocket, const FGuid& InID);
 
 	FGameSession(FGameSession&& Right) noexcept;
 
@@ -29,7 +29,7 @@ public:
 
 	void Send(const TArray<uint8>& Data) const;
 
-	void OnConnected(const FGuid InID);
+	void OnConnected();
 	
 	void OnReceive(void* InData, const int32 Size);
 

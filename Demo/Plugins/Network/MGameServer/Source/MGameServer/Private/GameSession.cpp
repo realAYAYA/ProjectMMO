@@ -2,17 +2,15 @@
 
 #include "GameSessionHelper.h"
 
-FGameSession::FGameSession(INetworkingWebSocket* InWebSocket)
+FGameSession::FGameSession(INetworkingWebSocket* InWebSocket, const FGuid& InID)
 : WebSocket(InWebSocket), ID(FGuid::NewGuid())
 {
 	RpcInterface = MakeShared<FGameRpcInterface>(&Manager);
 }
 
 FGameSession::FGameSession(FGameSession&& Right) noexcept
-: ID(Right.ID)
+: WebSocket(Right.WebSocket), ID(Right.ID)
 {
-	WebSocket = Right.WebSocket;
-
 	RpcInterface = MakeShared<FGameRpcInterface>(&Manager);
 }
 
@@ -21,9 +19,8 @@ void FGameSession::Send(const TArray<uint8>& Data) const
 	WebSocket->Send(Data.GetData(), Data.Num(), false);
 }
 
-void FGameSession::OnConnected(const FGuid InID)
+void FGameSession::OnConnected()
 {
-	ID = InID;
 	FRpcServerHandleInitializers::Get().Bind(this, RpcInterface.Get());
 }
 

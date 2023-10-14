@@ -43,7 +43,7 @@ void FClientRpcManager::SendRequest(
 		return;
 	}
 	
-	InConn->Send(BinaryData.GetData(), BinaryData.Num() * sizeof(uint8), true);
+	InConn->Send(BinaryData.GetData(), BinaryData.Num(), false);
 
 	FRequestPendingData Data;
 	Data.SerialNum = SerialNum;

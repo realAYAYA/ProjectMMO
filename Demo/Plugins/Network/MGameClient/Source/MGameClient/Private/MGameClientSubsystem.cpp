@@ -63,8 +63,8 @@ void UMGameClientSubsystem::CreateSocket(const FString& ServerURL, const FString
 	Connection->OnClosed().AddUObject(this, &UMGameClientSubsystem::OnClosed);
 	Connection->OnConnectionError().AddUObject(this, &UMGameClientSubsystem::OnConnectionError);
 	//Connection->OnMessage().AddUObject(this, &UMGameClientSubsystem::OnMessage);
-	//Connection->OnRawMessage().AddUObject(this, &UMGameClientSubsystem::OnRawMessage);
-	Connection->OnBinaryMessage().AddUObject(this, &UMGameClientSubsystem::OnBinaryMessage);
+	Connection->OnRawMessage().AddUObject(this, &UMGameClientSubsystem::OnRawMessage);
+	//Connection->OnBinaryMessage().AddUObject(this, &UMGameClientSubsystem::OnBinaryMessage);
 	//Connection->OnMessageSent().AddUObject(this, &UMGameClientSubsystem::OnMessageSent);
 	
 	Connection->Connect();
@@ -91,7 +91,8 @@ void UMGameClientSubsystem::OnConnectionError(const FString& Error)
 		OnConnectedServer.Execute(false);
 	
 	OnErrorCallback.Broadcast(Error);
-
+	
+	Connection->Close();
 	Connection.Reset();
 
 	UE_LOG(LogMGameClient, Warning, TEXT("%s"), *FString(__FUNCTION__));
@@ -106,18 +107,7 @@ void UMGameClientSubsystem::OnClosed(const int32 StatusCode, const FString& Reas
 		UE_LOG(LogMGameClient, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
 }
 
-/*void UMGameClientSubsystem::OnRawMessage(const void* InData, SIZE_T Size, SIZE_T BytesRemaining)
-{
-	TArray<uint8> Data;
-	Data.Reserve(Size);
-	memcpy(Data.GetData(), InData, Size);
-
-	FNetworkMessage RpcMessage;
-	RpcMessage.ParseFromArray(Data);
-	RpcManager.OnMessage(Connection, RpcMessage);
-}*/
-
-void UMGameClientSubsystem::OnBinaryMessage(const void* InData, SIZE_T Size, bool bIsLastFragment)
+void UMGameClientSubsystem::OnRawMessage(const void* InData, SIZE_T Size, SIZE_T BytesRemaining)
 {
 	TArray<uint8> Data;
 	Data.Append((uint8*)InData, Size);
@@ -126,4 +116,14 @@ void UMGameClientSubsystem::OnBinaryMessage(const void* InData, SIZE_T Size, boo
 	RpcMessage.ParseFromArray(Data);
 	RpcManager.OnMessage(Connection, RpcMessage);
 }
+
+/*void UMGameClientSubsystem::OnBinaryMessage(const void* InData, SIZE_T Size, bool bIsLastFragment)
+{
+	TArray<uint8> Data;
+	Data.Append((uint8*)InData, Size);
+
+	FNetworkMessage RpcMessage;
+	RpcMessage.ParseFromArray(Data);
+	RpcManager.OnMessage(Connection, RpcMessage);
+}*/
 
