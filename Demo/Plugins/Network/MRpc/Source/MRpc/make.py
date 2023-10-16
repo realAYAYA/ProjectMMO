@@ -10,14 +10,14 @@ engine_dir = 'D:/53/UnrealEngine-ToonLit/UnrealEngine/Engine'
 TEMPL = """
 
 # 签出所有可能影响到的文件
-{{P4CMD}} edit {{CWD}}/Private/*.*
-{{P4CMD}} edit {{CWD}}/Public/*.*
+#{{P4CMD}} edit {{CWD}}/Private/*.*
+#{{P4CMD}} edit {{CWD}}/Public/*.*
 
 {{RPC}} -dllexport_decl=MRPC_API -src_file=GameRpc.rpcdef -hpp_dst_dir={{CWD}}/Public/ -cpp_dst_dir={{CWD}}/Private/
 
 # 还原未修改的文件
-{{P4CMD}} revert -a {{CWD}}/Private/...
-{{P4CMD}} revert -a {{CWD}}/Public/...
+#{{P4CMD}} revert -a {{CWD}}/Private/...
+#{{P4CMD}} revert -a {{CWD}}/Public/...
 
 """
 
@@ -42,7 +42,7 @@ def main():
         p4_cmd = f'{engine_dir}/Binaries/ThirdParty/Perforce/{platform}/p4'
     cwd = os.getcwd()
     p4_cmd = os.path.abspath(cwd + '/' + p4_cmd)
-    py_cmd = os.path.abspath(cwd + '/' + py_cmd)
+    #py_cmd = os.path.abspath(cwd + '/' + py_cmd)
 
     meta_data = {
         "CWD": cwd,

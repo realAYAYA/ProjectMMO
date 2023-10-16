@@ -13,6 +13,7 @@ import jinja2
 
 
 STUB_HPP_TEMPL = """#pragma once
+#include "CoreMinimal.h"
 
 #include "NetFwd.h"
 #include "GameMessage.h"
@@ -20,7 +21,7 @@ STUB_HPP_TEMPL = """#pragma once
 #include "{{inc}}"
 {%- endfor %}
 
-#include "{{service_name}}Stub.generated.h"
+#include "{{service_name}}Client.generated.h"
 
 class FClientRpcManager;
 
@@ -35,7 +36,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOn{{notify_entry['name']}}Result, F
 {% endfor %}
 
 UCLASS(BlueprintType, Blueprintable)
-class {{dllexport_decl}} U{{service_name}} : public UObject
+class {{dllexport_decl}} U{{service_name}}Client : public UObject
 {
     GENERATED_BODY()
 
@@ -53,8 +54,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "PorjectM", DisplayName="{{rpc_entry['name']}}")
     void K2_{{rpc_entry['name']}}(const F{{rpc_entry['p1']}}& InParams, const FOn{{rpc_entry['name']}}Result& InCallback);
     
-    typedef TFunction<void(ERpcErrorCode, const {{rpc_entry['p2']}}& FOn{{rpc_entry['name']}}ResultFunction;
-    void {{rpc_entry['name']}}(const {{rpc_entry['p1']}}& InReqMessage, const FOn{{rpc_entry['name']}}ResultFunction& InCallback);
+    typedef TFunction<void(ERpcErrorCode, const F{{rpc_entry['p2']}}&)> FOn{{rpc_entry['name']}}ResultFunction;
+    void {{rpc_entry['name']}}(const F{{rpc_entry['p1']}}& InReqMessage, const FOn{{rpc_entry['name']}}ResultFunction& InCallback) const;
     
     {%- endfor %}
 
@@ -82,22 +83,22 @@ private:
 """
 
 STUB_CPP_TEMPL = """
-#include "{{service_name}}.h"
+#include "{{service_name}}Client.h"
 #include "RpcManager.h"
 
-void U{{service_name}}::Setup(FClientRpcManager* InManager, const FConnectionPtr& InConn)
+void U{{service_name}}Client::Setup(FClientRpcManager* InManager, const FConnectionPtr& InConn)
 {
     Manager = InManager;
     Connection = InConn;
 }
 
 {% for rpc_entry in rpc_list %}
-void U{{service_name}}::K2_{{rpc_entry['name']}}(const F{{rpc_entry['p1']}}& InParams, const FOn{{rpc_entry['name']}}Result& InCallback)
+void U{{service_name}}Client::K2_{{rpc_entry['name']}}(const F{{rpc_entry['p1']}}& InParams, const FOn{{rpc_entry['name']}}Result& InCallback)
 {
     if (!Manager || !Connection)
         return;
 
-    {{rpc_entry['name']}}(InParams, [InCallback](const ERpcErrorCode ErrorCode, const {{rpc_entry['p2']}}& InRspMessage)
+    {{rpc_entry['name']}}(InParams, [InCallback](const ERpcErrorCode ErrorCode, const F{{rpc_entry['p2']}}& InRspMessage)
     {
         if (IsValid(InCallback.GetUObject()))
         {
@@ -110,14 +111,14 @@ void U{{service_name}}::K2_{{rpc_entry['name']}}(const F{{rpc_entry['p1']}}& InP
     });
 }
 
-void U{{service_name}}::{{rpc_entry['name']}}(const {{rpc_entry['p1']}}& InReqMessage, const FOn{{rpc_entry['name']}}ResultFunction& InCallback)
+void U{{service_name}}Client::{{rpc_entry['name']}}(const F{{rpc_entry['p1']}}& InReqMessage, const FOn{{rpc_entry['name']}}ResultFunction& InCallback) const
 {   
     if (!Manager || !Connection)
         return;
 
     Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
     {
-        const {{rpc_entry['p2']}} RspMessage;
+        const F{{rpc_entry['p2']}} RspMessage;
 
         if (ErrorCode == ERpcErrorCode::Ok)
         {
@@ -160,7 +161,7 @@ public:
      * {{comment}}
     {%- endfor %}
     */
-    typedef TFunction<void(const F{{rpc_entry['name']}}Req&, const F{{rpc_entry['name']}}Ack&)> F{{rpc_entry['name']}}Callback;
+    typedef TFunction<void(const F{{rpc_entry['name']}}Req&, F{{rpc_entry['name']}}Ack&)> F{{rpc_entry['name']}}Callback;
     F{{rpc_entry['name']}}Callback On{{rpc_entry['name']}};
     {% endfor %}
 
@@ -174,12 +175,13 @@ INTERFACE_CPP_TEMPL = """#include "{{service_name}}Interface.h"
 F{{service_name}}Interface::F{{service_name}}Interface(FServerRpcManager* InManager)
 {
 {%- for rpc_entry in rpc_list %}
-    InManager->AddMethod({F{{rpc_entry['p1']}}::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
+    InManager->AddMethod(F{{rpc_entry['p1']}}::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
     {
         const uint64 ReqSerialNum = InMessage.SerialNum;
 
         const F{{rpc_entry['p1']}} ReqMessage;
         F{{rpc_entry['p2']}} RspMessage;
+        ReqMessage.ParseFromArray(InMessage.GetBody());
 
         if (InMessage.GetBody().Num() <= 0)
 		{
@@ -316,8 +318,8 @@ def main(src_file, hpp_dst_dir, cpp_dst_dir, dllexport_decl):
     except Exception as e:
         raise Exception('INTERFACE_CPP_TEMPL 文件渲染失败 {}'.format(e))
     
-    stub_hpp_file_path = hpp_dst_dir + service_name + '.h'
-    stub_cpp_file_path = cpp_dst_dir + service_name + '.cpp'
+    stub_hpp_file_path = hpp_dst_dir + service_name + 'Client.h'
+    stub_cpp_file_path = cpp_dst_dir + service_name + 'Client.cpp'
     
     interface_hpp_file_path = hpp_dst_dir + service_name + 'Interface.h'
     interface_cpp_file_path = cpp_dst_dir + service_name + 'Interface.cpp'
