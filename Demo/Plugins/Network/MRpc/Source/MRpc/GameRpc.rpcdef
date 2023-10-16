@@ -1,0 +1,2 @@
+# 登录游戏
+rpc LoginGame LoginGameReq LoginGameAck

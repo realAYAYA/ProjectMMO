@@ -19,9 +19,11 @@ void UGameRpcClient::K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginR
 	{
 		if (IsValid(InCallback.GetUObject()))
 		{
-			const bool bOk = InCallback.ExecuteIfBound(ErrorCode, InRspMessage);
-			if (!bOk)
-				UE_LOG(LogGameNetwork, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
+			InCallback.Execute(ErrorCode, InRspMessage);
+		}
+		else
+		{
+			UE_LOG(LogGameNetwork, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
 		}
 	});
 }

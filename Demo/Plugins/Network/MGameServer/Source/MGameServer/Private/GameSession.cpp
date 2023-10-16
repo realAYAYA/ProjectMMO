@@ -26,7 +26,6 @@ void FGameSession::OnConnected()
 
 void FGameSession::OnReceive(void* InData, const int32 Size)
 {
-	//const TArrayView<uint8> DataArrayView = MakeArrayView(static_cast<uint8*>(InData), DataSize);
 	TArray<uint8> Data;
 	Data.Append((uint8*)InData, Size);
 
