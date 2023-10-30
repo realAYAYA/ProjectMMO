@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "MRpc.h"
+#include "MRpcPrivate.h"
 
 #define LOCTEXT_NAMESPACE "FMRpcModule"
 

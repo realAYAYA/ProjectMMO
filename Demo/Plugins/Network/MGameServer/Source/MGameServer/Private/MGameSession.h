@@ -3,29 +3,22 @@
 #include "GameRpcInterface.h"
 #include "INetworkingWebSocket.h"
 #include "RpcManager.h"
+#include "MGameSession.generated.h"
 
 class FRole;
 
-class FGameSession
+UCLASS()
+class UMGameSession final : public UObject
 {
+	GENERATED_BODY()
 	
 public:
 
-	explicit FGameSession(INetworkingWebSocket* InWebSocket, const FGuid& InID);
+	UMGameSession() {}
+	
+	void Initialize(INetworkingWebSocket* InWebSocket, const FGuid& InID);
 
-	FGameSession(FGameSession&& Right) noexcept;
-
-	~FGameSession()
-	{
-		if (WebSocket)
-		{
-			WebSocket.Reset();
-		}
-	}
-
-	FGameSession(const FGameSession&) = delete;
-	FGameSession& operator=(const FGameSession&) = delete;
-	FGameSession& operator=(FGameSession&&) = delete;
+	virtual void BeginDestroy() override;
 
 	void Send(const TArray<uint8>& Data) const;
 
@@ -46,4 +39,4 @@ public:
 	FGuid ID;
 };
 
-typedef TSharedPtr<FGameSession> FGameSessionPtr;
+typedef TSharedPtr<UMGameSession> FGameSessionPtr;

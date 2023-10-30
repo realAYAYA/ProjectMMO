@@ -22,21 +22,6 @@ void UMGameClientSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
-void UMGameClientSubsystem::Tick(float DeltaTime)
-{
-	
-}
-
-bool UMGameClientSubsystem::IsTickable() const
-{
-	return FTickableGameObject::IsTickable();
-}
-
-TStatId UMGameClientSubsystem::GetStatId() const
-{
-	RETURN_QUICK_DECLARE_CYCLE_STAT(UMGameClientSubsystem, STATGROUP_Tickables);
-}
-
 void UMGameClientSubsystem::K2_CreateSocket(const FString& ServerURL, const FString& ServerProtocol, const FOnConnectServer& Callback)
 {
 	OnConnectedServer = Callback;

@@ -110,7 +110,7 @@ void UMGameServerSubsystem::SendToAll(const TArray<uint8>& InData)
 {
 	for (const auto& Elem : Connections)
 	{
-		const FGameSessionPtr& Connection = Elem.Value;
+		const UMGameSession* Connection = Elem.Value;
 		if (Connection->WebSocket)
 			Connection->Send(InData);
 	}
@@ -121,8 +121,8 @@ bool UMGameServerSubsystem::CheckConnectionValid(const FGuid InID)
 	if (!IsServerRunning())
 		return false;
 
-	const FGameSessionPtr* Connection = Connections.Find(InID);
-	if (Connection && !(*Connection)->WebSocket)
+	const UMGameSession* Connection = *Connections.Find(InID);
+	if (Connection && Connection->WebSocket)
 		return false;
 	
 	return true;
@@ -132,9 +132,9 @@ void UMGameServerSubsystem::OnClientConnected(INetworkingWebSocket* InWebSocket)
 {
 	if (!InWebSocket)
 		return;
-
 	
-	FGameSessionPtr Conn = MakeShared<FGameSession>(InWebSocket, FGuid::NewGuid());
+	UMGameSession* Conn = NewObject<UMGameSession>(this);
+	Conn->Initialize(InWebSocket, FGuid::NewGuid());
 	
 	FWebSocketInfoCallBack ConnectedCallBack;
 	ConnectedCallBack.BindUObject(this, &UMGameServerSubsystem::OnConnected, Conn->ID);
@@ -167,37 +167,37 @@ bool UMGameServerSubsystem::IsServerRunning() const
 void UMGameServerSubsystem::OnConnected(const FGuid InID)
 {
 	// Todo ReConnected 不知道为啥第一次连接成功没有调用
-	const FGameSessionPtr* Connection = Connections.Find(InID);
-	if (Connection && (*Connection)->WebSocket)
+	UMGameSession* Connection = *Connections.Find(InID);
+	if (Connection && Connection->WebSocket)
 	{
-		(*Connection)->OnConnected();
-		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *(*Connection)->Account, *FString(__FUNCTION__));
+		Connection->OnConnected();
+		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *Connection->Account, *FString(__FUNCTION__));
 	}
 }
 
 void UMGameServerSubsystem::OnReceive(void* InData, const int32 DataSize, const FGuid InID)
 {
-	const FGameSessionPtr* Connection = Connections.Find(InID);
+	/*const FGameSessionPtr* Connection = Connections.Find(InID);
 
 	if (Connection && (*Connection)->WebSocket)
 	{
 		(*Connection)->OnReceive(InData, DataSize);
-	}
+	}*/
 }
 
 void UMGameServerSubsystem::OnError(const FGuid InID)
 {
-	const FGameSessionPtr* Connection = Connections.Find(InID);
-	if (Connection && (*Connection)->WebSocket)
+	const UMGameSession* Connection = *Connections.Find(InID);
+	if (Connection && Connection->WebSocket)
 	{
-		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *(*Connection)->Account, *FString(__FUNCTION__));
+		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *Connection->Account, *FString(__FUNCTION__));
 	}
 }
 
 void UMGameServerSubsystem::OnClosed(const FGuid InID)
 {
-	const FGameSessionPtr* Connection = Connections.Find(InID);
-	if (Connection && (*Connection)->WebSocket)
+	const UMGameSession* Connection = *Connections.Find(InID);
+	if (Connection && Connection->WebSocket)
 	{
 		const bool bOk = WebSocketClientClosedCallBack.ExecuteIfBound(InID);
 		if (!bOk)

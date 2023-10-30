@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_DELEGATE(FOnDisConnectServer);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnErrorCallback, const FString&, Error);
 
 UCLASS()
-class UMGameClientSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
+class UMGameClientSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
@@ -23,10 +23,6 @@ public:
 	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
-
-	virtual void Tick(float DeltaTime) override;
-	virtual bool IsTickable() const override;
-	virtual TStatId GetStatId() const override;
 
 public:
 

@@ -4,7 +4,7 @@
 #include "IWebSocketServer.h"
 
 #include "GameMessage.h"
-#include "GameSession.h"
+#include "MGameSession.h"
 #include "MGameServerSubsystem.generated.h"
 
 DECLARE_DELEGATE_OneParam(FMWebSocketClientClosedCallBack, const FGuid);
@@ -63,5 +63,6 @@ private:
 
 	TUniquePtr<IWebSocketServer> WebSocketServer;
 
-	TMap<FGuid, FGameSessionPtr> Connections;
+	UPROPERTY()
+	TMap<FGuid, UMGameSession*> Connections;
 };

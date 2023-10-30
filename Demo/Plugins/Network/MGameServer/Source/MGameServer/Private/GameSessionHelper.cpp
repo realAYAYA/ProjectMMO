@@ -14,9 +14,9 @@ void FRpcServerHandleInitializers::TearDown()
 
 void FRpcServerHandleInitializers::Register(
 	const char* InRpcInterfaceName,
-	const TFunction<void(FGameSession*, void* InRpcInterface)>& Func)
+	const TFunction<void(UMGameSession*, void* InRpcInterface)>& Func)
 {
-	TArray<TFunction<void(FGameSession*, void*)>>* ContPtr = Handles.Find(InRpcInterfaceName);
+	TArray<TFunction<void(UMGameSession*, void*)>>* ContPtr = Handles.Find(InRpcInterfaceName);
 	if (!ContPtr)
 	{
 		ContPtr = &Handles.Emplace(InRpcInterfaceName);
@@ -26,11 +26,11 @@ void FRpcServerHandleInitializers::Register(
 }
 
 void FRpcServerHandleInitializers::Bind(
-	FGameSession* InGameSession,
+	UMGameSession* InGameSession,
 	const FString& InRpcInterfaceName,
 	void* InRpcInterfacePtr)
 {
-	TArray<TFunction<void(FGameSession*, void*)>>* ContPtr = Handles.Find(InRpcInterfaceName);
+	TArray<TFunction<void(UMGameSession*, void*)>>* ContPtr = Handles.Find(InRpcInterfaceName);
 	if (!ContPtr)
 		return;
 	
