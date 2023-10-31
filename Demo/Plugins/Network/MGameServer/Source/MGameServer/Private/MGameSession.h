@@ -38,5 +38,3 @@ public:
 	
 	FGuid ID;
 };
-
-typedef TSharedPtr<UMGameSession> FGameSessionPtr;

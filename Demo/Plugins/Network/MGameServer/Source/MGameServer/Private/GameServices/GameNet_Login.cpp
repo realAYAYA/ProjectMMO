@@ -1,6 +1,4 @@
-#include "MGameServerSubsystem.h"
-
-#include "..\MGameSession.h"
+#include "MGameSession.h"
 #include "GameSessionHelper.h"
 
 M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
