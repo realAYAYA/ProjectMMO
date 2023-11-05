@@ -61,7 +61,7 @@ void FClientRpcManager::DispatchNotify(
 	Data.Callback = Callback;
 	Data.ExpireTimestamp = 0;
 
-	AllNotifyPending.Emplace(TypeID, Data);
+	AllNotifyPending.Emplace(TypeID, std::move(Data));
 }
 
 void FClientRpcManager::OnMessage(const FConnectionPtr& InConn, const FNetworkMessage& InMessage)

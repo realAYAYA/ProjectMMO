@@ -95,12 +95,13 @@ void U{{service_name}}Client::Setup(FClientRpcManager* InManager, const FConnect
     {    
         {%- for notify_entry in notify_list %}        
         {%- if notify_entry["type"] == 2 %}
-        Manager->DispatchNotify([this](const FZPbConnectionPtr& InConn, const TSharedPtr<{{rpc_space_name}}::{{notify_entry['name']}}>& InMessage)
+        Manager->DispatchNotify(InConn, F{{notify_entry['name']}}::KeyTypeID, [this](const FNetworkMessage& InMessage)
         {
             if (On{{notify_entry['name']}}.IsBound())
             {
-                FZ{{notify_entry['name']}} Result = *InMessage;
-                On{{notify_entry['name']}}.Broadcast(Result);
+                const F{{notify_entry['name']}} NotifyMessage;
+                NotifyMessage.ParseFromArray(InMessage.GetBody());
+                On{{notify_entry['name']}}.Broadcast(NotifyMessage);
             }
         });
         {%- endif %}
@@ -120,10 +121,6 @@ void U{{service_name}}Client::K2_{{rpc_entry['name']}}(const F{{rpc_entry['p1']}
         {
             InCallback.Execute(ErrorCode, InRspMessage);
         }
-        else
-		{
-			UE_LOG(LogGameNetwork, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
-		}
     });
 }
 
