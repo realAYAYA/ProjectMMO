@@ -12,10 +12,14 @@ public:
 	typedef TFunction<void(const ERpcErrorCode, const FNetworkMessage&)> FResponseCallback;
 	void SendRequest(const FConnectionPtr& InConn, const FGameMessage& InMessage, const FResponseCallback& Callback);
 
+	typedef TFunction<void(const FNetworkMessage&)> FNotifyCallback;
+	void DispatchNotify(const FConnectionPtr& InConn, const uint64 TypeID, const FNotifyCallback& Callback);
+
 	void OnMessage(const FConnectionPtr& InConn, const FNetworkMessage& InMessage);
 	
 private:
-	
+
+	// Rpc
 	uint64 SerialNum = 1;
 
 	struct FRequestPendingData
@@ -26,6 +30,15 @@ private:
 	};
 	
 	TMap<uint64, FRequestPendingData> AllRequestPending;
+
+	// Notify message from server
+	struct FNotifyPendingData
+	{
+		FNotifyCallback Callback;
+		int64 ExpireTimestamp = 0;
+	};
+	
+	TMap<uint64, FNotifyPendingData> AllNotifyPending;
 };
 
 

@@ -52,13 +52,29 @@ void FClientRpcManager::SendRequest(
 	AllRequestPending.Emplace(SerialNum, std::move(Data));
 }
 
+void FClientRpcManager::DispatchNotify(
+	const FConnectionPtr& InConn,
+	const uint64 TypeID,
+	const FNotifyCallback& Callback)
+{
+	FNotifyPendingData Data;
+	Data.Callback = Callback;
+	Data.ExpireTimestamp = 0;
+
+	AllNotifyPending.Emplace(TypeID, Data);
+}
+
 void FClientRpcManager::OnMessage(const FConnectionPtr& InConn, const FNetworkMessage& InMessage)
 {
 	switch (InMessage.RpcMessageOp)
 	{
 	case ERpcMessageOp::Notify:
 		{
-			
+			const auto Ret = AllNotifyPending.Find(InMessage.TypeID);
+			if (!Ret)
+				return;
+
+			Ret->Callback(InMessage);
 		}
 		break;
 	case ERpcMessageOp::Request:

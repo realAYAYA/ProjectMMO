@@ -90,6 +90,22 @@ void U{{service_name}}Client::Setup(FClientRpcManager* InManager, const FConnect
 {
     Manager = InManager;
     Connection = InConn;
+
+    if (Manager)
+    {    
+        {%- for notify_entry in notify_list %}        
+        {%- if notify_entry["type"] == 2 %}
+        Manager->DispatchNotify([this](const FZPbConnectionPtr& InConn, const TSharedPtr<{{rpc_space_name}}::{{notify_entry['name']}}>& InMessage)
+        {
+            if (On{{notify_entry['name']}}.IsBound())
+            {
+                FZ{{notify_entry['name']}} Result = *InMessage;
+                On{{notify_entry['name']}}.Broadcast(Result);
+            }
+        });
+        {%- endif %}
+        {%- endfor %}
+    }
 }
 
 {% for rpc_entry in rpc_list %}
