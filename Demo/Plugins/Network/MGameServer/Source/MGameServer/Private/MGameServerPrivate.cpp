@@ -19,6 +19,24 @@ void FMGameServerModule::ShutdownModule()
 	
 }
 
+void FMGameServerModule::Start()
+{
+}
+
+void FMGameServerModule::Shutdown()
+{
+}
+
+bool FMGameServerModule::IsRunning() const
+{
+	return false;
+}
+
+bool FMGameServerModule::Tick(float)
+{
+	return false;
+}
+
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FMGameServerModule, MWebSocketServer)
