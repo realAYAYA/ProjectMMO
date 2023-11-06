@@ -1,0 +1,4 @@
+P4PORT=192.168.12.73:1666
+P4USER=liudong
+P4CLIENT=liudong_zt-2018056_idlez_mainline
+P4CHARSET=utf8

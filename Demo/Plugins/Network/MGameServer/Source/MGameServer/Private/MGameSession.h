@@ -5,7 +5,7 @@
 #include "RpcManager.h"
 #include "MGameSession.generated.h"
 
-class FRole;
+class FMPlayer;
 
 UCLASS()
 class UMGameSession final : public UObject
@@ -28,7 +28,7 @@ public:
 
 	FString Account;
 	
-	FRole* Role = nullptr;
+	FMPlayer* Player = nullptr;
 
 	TSharedPtr<FGameRpcInterface> RpcInterface;
 	

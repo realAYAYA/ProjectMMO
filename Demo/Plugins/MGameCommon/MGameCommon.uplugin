@@ -2,10 +2,10 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "MRpc",
+	"FriendlyName": "MGameCommon",
 	"Description": "",
-	"Category": "Network Server",
-	"CreatedBy": "",
+	"Category": "ProjectM",
+	"CreatedBy": "Liudong",
 	"CreatedByURL": "",
 	"DocsURL": "",
 	"MarketplaceURL": "",
@@ -16,19 +16,9 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "MRpc",
-			"Type": "Runtime",
+			"Name": "MGameCommon",
+			"Type": "RuntimeAndProgram",
 			"LoadingPhase": "Default"
-		}
-	],
-	"Plugins": [
-		{
-			"Name":"WebSocketNetworking",
-			"Enabled":true
-		},
-		{
-			"Name":"MGameShared",
-			"Enabled":true
 		}
 	]
 }
