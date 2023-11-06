@@ -2,4 +2,4 @@
 rpc LoginGame LoginGameReq LoginGameAck
 
 # 收到聊天消息通知
-notify LoginGameAck
+result UpdateChatMessage

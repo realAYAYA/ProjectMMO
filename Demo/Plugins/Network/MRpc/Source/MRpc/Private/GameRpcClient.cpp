@@ -6,6 +6,19 @@ void UGameRpcClient::Setup(FClientRpcManager* InManager, const FConnectionPtr& I
 {
     Manager = InManager;
     Connection = InConn;
+
+    if (Manager)
+    {
+        Manager->DispatchNotify(InConn, FUpdateChatMessage::KeyTypeID, [this](const FNetworkMessage& InMessage)
+        {
+            if (OnUpdateChatMessage.IsBound())
+            {
+                const FUpdateChatMessage NotifyMessage;
+                NotifyMessage.ParseFromArray(InMessage.GetBody());
+                OnUpdateChatMessage.Broadcast(NotifyMessage);
+            }
+        });
+    }
 }
 
 
@@ -20,10 +33,6 @@ void UGameRpcClient::K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginG
         {
             InCallback.Execute(ErrorCode, InRspMessage);
         }
-        else
-		{
-			UE_LOG(LogGameNetwork, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
-		}
     });
 }
 

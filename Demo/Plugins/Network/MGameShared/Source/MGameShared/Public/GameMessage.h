@@ -117,3 +117,23 @@ struct FLoginGameAck : public FGameMessage
 
 	static constexpr uint64 KeyTypeID = 2;
 };
+
+USTRUCT(BlueprintType)
+struct FUpdateChatMessage : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FString Text;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FString Name = TEXT("None");
+	
+	UPROPERTY()
+	uint64 UserID = 0;
+	
+	virtual uint64 GetTypeID() const override { return KeyTypeID; }
+	virtual UScriptStruct* RequestStaticStruct() const override { return StaticStruct(); }
+
+	static constexpr uint64 KeyTypeID = 10001;
+};

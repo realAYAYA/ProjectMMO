@@ -14,6 +14,8 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginGameResult, ERpcErrorCode, InErrorCod
 
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateChatMessageResult, FUpdateChatMessage, InData);
+
 
 UCLASS(BlueprintType, Blueprintable)
 class MRPC_API UGameRpcClient : public UObject
@@ -33,6 +35,12 @@ public:
     typedef TFunction<void(ERpcErrorCode, const FLoginGameAck&)> FOnLoginGameResultFunction;
     void LoginGame(const FLoginGameReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const;
 
+    
+    /**
+     * 收到聊天消息通知
+    */
+    UPROPERTY(BlueprintAssignable, Category = "ProjectM") 
+    FOnUpdateChatMessageResult OnUpdateChatMessage;
     
      
 private:
