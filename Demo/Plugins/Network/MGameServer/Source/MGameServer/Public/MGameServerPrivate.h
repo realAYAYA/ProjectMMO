@@ -6,7 +6,9 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMGameServer, Log, All);
 
-class FMGameServerModule : public IModuleInterface
+class UMGameServer;
+
+class MGAMESERVER_API FMGameServerModule : public IModuleInterface
 {
 	
 public:
@@ -23,19 +25,22 @@ public:
 
 private:
 
+	void OnFirstTick();
+	
 	bool Tick(float);
 
 	//void OnDailyRefresh();
 	//void OnWeeklyRefresh();
 
-	//Server;
+	UMGameServer* Server = nullptr;
+	TSharedPtr<UMGameServer> Server2;
 	//TMap<> Sessions;
 	//TMap<> Levels;
 	
 	bool bFirstTick = true;
+	FTSTicker::FDelegateHandle TickDelegateHandle;
 
 	FDateTime LastTickTime{0};
-	FDateTime NextSessionAliveCheckTime{0};
 	FDateTime NextRedisAliveCheckTime{0};
 
 	FDateTime NextDailyRefreshTime{0};

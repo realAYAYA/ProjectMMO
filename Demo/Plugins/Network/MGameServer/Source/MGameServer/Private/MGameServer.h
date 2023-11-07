@@ -5,46 +5,34 @@
 
 #include "GameMessage.h"
 #include "MGameSession.h"
-#include "MGameServerSubsystem.generated.h"
+#include "MGameServer.generated.h"
 
 DECLARE_DELEGATE_OneParam(FMWebSocketClientClosedCallBack, const FGuid);
 DECLARE_DELEGATE_TwoParams(FMWebSocketReceiveCallBack, const FGuid, FString);
 
 UCLASS()
-class UMGameServerSubsystem : public UGameInstanceSubsystem, public FTickableGameObject
+class UMGameServer : public UObject, public FTickableGameObject
 {
 	GENERATED_BODY()
 
 public:
-
-	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
-	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-	virtual void Deinitialize() override;
-
+	
 	virtual void Tick(float DeltaTime) override;
 	virtual bool IsTickable() const override;
 	virtual TStatId GetStatId() const override;
 
 public:
-
-	// Test
-	UFUNCTION(BlueprintCallable, Category = "ProjcetM", DisplayName = "StartWebSocketServer")
-	bool K2_StartWebSocketServer(const int32 ServerPort = 10086);
-
-	// Test
-	UFUNCTION(BlueprintCallable, Category = "ProjcetM", DisplayName = "SendMessageToAll")
-	void K2_SendToAll(const FString& InMessage);
 	
-	bool StartWebSocketServer(const int32 ServerPort);
-
-	UFUNCTION(BlueprintCallable, Category = "MWebSocketServer")
-	void StopWebSocketServer();
+	bool Start(const int32 ServerPort);
+	void Stop();
 
 	void SendToAll(const FGameMessage& InMessage);
-	
 	void SendToAll(const TArray<uint8>& InData);
 	
 	bool CheckConnectionValid(const FGuid InID);
+
+	void DoAliveCheck(const FDateTime& Now);
+	//void DoPrintStats(FDateTime Now);// 每隔一段时间打印日志
 
 	FMWebSocketClientClosedCallBack WebSocketClientClosedCallBack;
 	FMWebSocketReceiveCallBack WebSocketReceiveCallBack;
@@ -65,4 +53,6 @@ private:
 
 	UPROPERTY()
 	TMap<FGuid, UMGameSession*> Connections;
+
+	FDateTime NextSessionAliveCheckTime{0};
 };

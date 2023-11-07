@@ -20,7 +20,7 @@ public:
 
 	virtual void BeginDestroy() override;
 
-	void Send(const TArray<uint8>& Data) const;
+	void Send(const TArray<uint8>& Data);
 
 	void OnConnected();
 	
@@ -37,4 +37,7 @@ public:
 	TSharedPtr<INetworkingWebSocket> WebSocket = nullptr;
 	
 	FGuid ID;
+
+	TAtomic<int64> LastSentTime;	// 最后发送数据时间
+	TAtomic<int64> LastReceivedTime;// 最后接受数据时间
 };

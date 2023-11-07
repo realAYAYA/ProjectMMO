@@ -20,9 +20,11 @@ void UMGameSession::BeginDestroy()
 	}
 }
 
-void UMGameSession::Send(const TArray<uint8>& Data) const
+void UMGameSession::Send(const TArray<uint8>& Data)
 {
 	WebSocket->Send(Data.GetData(), Data.Num(), false);
+
+	LastSentTime.Store(FDateTime::UtcNow().GetTicks());
 }
 
 void UMGameSession::OnConnected()
@@ -42,4 +44,6 @@ void UMGameSession::OnReceive(void* InData, const int32 Size)
 	FNetworkMessage RpcMessage;
 	RpcMessage.ParseFromArray(Data);
 	Manager.OnMessage(WebSocket, RpcMessage);
+
+	LastReceivedTime.Store(FDateTime::UtcNow().GetTicks());
 }
