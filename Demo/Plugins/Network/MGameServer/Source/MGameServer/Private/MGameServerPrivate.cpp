@@ -20,13 +20,9 @@ void FMGameServerModule::ShutdownModule()
 	// we call this function before unloading the module.
 
 	// 注意，这里的代码能会有模块依赖问题（所依赖的模块已经被提前卸载）
-	// 清理代码最好放在 FMGameServerModule::HandleCorePreExit 中
-	
-	if (TickDelegateHandle.IsValid())
-	{
-		FTSTicker::GetCoreTicker().RemoveTicker(TickDelegateHandle);
-		TickDelegateHandle.Reset();
-	}
+	// 清理代码最好放在 FMGameServerModule::Shutdown() 中
+
+	Shutdown();
 }
 
 void FMGameServerModule::Start()
@@ -39,13 +35,11 @@ void FMGameServerModule::Start()
 	}
 
 	// 创建服务器并启动
-	Server = NewObject<UMGameServer>();
-
-	Server2 = MakeShared<UMGameServer>();
-	
-	Server->AddToRoot();
 	//FString ListenIp = FZGameTablesModule::Get().GetGameTables()->GameServiceConfig.ListenIp;
 	//int32 ListenPort = FZGameTablesModule::Get().GetGameTables()->GameServiceConfig.ListenPort;
+	Server = NewObject<UMGameServer>();
+	Server->AddToRoot();// 不会被GC
+	Server->Start(10086);
 
 	// 初始化数据库并连接
 
@@ -56,7 +50,15 @@ void FMGameServerModule::Start()
 void FMGameServerModule::Shutdown()
 {
 	// 全区服功能模块PreShutdown（依赖网络服务）
+	
 	// 服务器关停
+	if (Server)
+	{
+		Server->Stop();
+		Server->RemoveFromRoot();// 开启GC
+		Server = nullptr;
+	}
+	
 	// 全区服功能模块Shutdown
 
 	// 数据库关停
@@ -71,7 +73,7 @@ void FMGameServerModule::Shutdown()
 
 bool FMGameServerModule::IsRunning() const
 {
-	return false;
+	return Server && Server->IsRunning();
 }
 
 void FMGameServerModule::OnFirstTick()
@@ -92,10 +94,15 @@ bool FMGameServerModule::Tick(float)
 		OnFirstTick();
 	}
 
+	{
+		Server->Tick(DeltaTime);
 	
+		// Todo 心跳机制，检查数据库连接，检查客户端连接
+		Server->DoAliveCheck(Now);
+		Server->DoPrintStats(Now);
+	}
 
-	// Todo 心跳机制，检查数据库连接，检查客户端连接
-
+	// 全区服功能模块Tick
 	const FDateTime LocalNow = FDateTime::Now();
 	
 	return true;
@@ -103,4 +110,4 @@ bool FMGameServerModule::Tick(float)
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FMGameServerModule, MWebSocketServer)
+IMPLEMENT_MODULE(FMGameServerModule, MGameServerModule)

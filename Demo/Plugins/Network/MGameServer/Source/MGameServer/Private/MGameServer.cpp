@@ -5,7 +5,7 @@
 
 void UMGameServer::Tick(float DeltaTime)
 {
-	if (IsServerRunning())
+	if (IsRunning())
 	{
 		WebSocketServer->Tick();
 	}
@@ -47,7 +47,7 @@ bool UMGameServer::Start(const int32 ServerPort)
 
 void UMGameServer::Stop()
 {
-	if (IsServerRunning())
+	if (IsRunning())
 	{
 		WebSocketServer.Reset();
 
@@ -83,7 +83,7 @@ void UMGameServer::SendToAll(const TArray<uint8>& InData)
 
 bool UMGameServer::CheckConnectionValid(const FGuid InID)
 {
-	if (!IsServerRunning())
+	if (!IsRunning())
 		return false;
 
 	const UMGameSession* Connection = *Connections.Find(InID);
@@ -122,6 +122,10 @@ void UMGameServer::DoAliveCheck(const FDateTime& Now)
 	}*/
 }
 
+void UMGameServer::DoPrintStats(FDateTime Now)
+{
+}
+
 void UMGameServer::OnClientConnected(INetworkingWebSocket* InWebSocket)
 {
 	if (!InWebSocket)
@@ -153,19 +157,18 @@ void UMGameServer::OnClientConnected(INetworkingWebSocket* InWebSocket)
 	UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));
 }
 
-bool UMGameServer::IsServerRunning() const
+bool UMGameServer::IsRunning() const
 {
 	return WebSocketServer && WebSocketServer.IsValid();
 }
 
 void UMGameServer::OnConnected(const FGuid InID)
 {
-	// Todo ReConnected 不知道为啥第一次连接成功没有调用
 	UMGameSession* Connection = *Connections.Find(InID);
 	if (Connection && Connection->WebSocket)
 	{
 		Connection->OnConnected();
-		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *Connection->Account, *FString(__FUNCTION__));
+		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
 	}
 }
 
@@ -184,7 +187,7 @@ void UMGameServer::OnError(const FGuid InID)
 	const UMGameSession* Connection = *Connections.Find(InID);
 	if (Connection && Connection->WebSocket)
 	{
-		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *Connection->Account, *FString(__FUNCTION__));
+		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
 	}
 }
 

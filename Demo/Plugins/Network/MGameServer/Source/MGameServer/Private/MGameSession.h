@@ -8,7 +8,7 @@
 class FMPlayer;
 
 UCLASS()
-class UMGameSession final : public UObject
+class UMGameSession : public UObject
 {
 	GENERATED_BODY()
 	
@@ -26,9 +26,7 @@ public:
 	
 	void OnReceive(void* InData, const int32 Size);
 
-	FString Account;
-	
-	FMPlayer* Player = nullptr;
+	virtual void Offline() {}
 
 	TSharedPtr<FGameRpcInterface> RpcInterface;
 	
@@ -38,6 +36,31 @@ public:
 	
 	FGuid ID;
 
-	TAtomic<int64> LastSentTime;	// 最后发送数据时间
-	TAtomic<int64> LastReceivedTime;// 最后接受数据时间
+	TAtomic<int64> LastSentTime{0};	// 最后发送数据时间
+	TAtomic<int64> LastReceivedTime{0};// 最后接受数据时间
+};
+
+UCLASS()
+class UDSConnection final : public UMGameSession
+{
+	GENERATED_BODY()
+	
+public:
+
+	int32 Port = 0;
+
+	//ProcessHandle;
+	
+};
+
+UCLASS()
+class UMPlayerSession final : public UMGameSession
+{
+	GENERATED_BODY()
+	
+public:
+
+	FString Account;
+	
+	FMPlayer* Player = nullptr;
 };

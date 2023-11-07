@@ -25,6 +25,7 @@ public:
 	
 	bool Start(const int32 ServerPort);
 	void Stop();
+	bool IsRunning() const;
 
 	void SendToAll(const FGameMessage& InMessage);
 	void SendToAll(const TArray<uint8>& InData);
@@ -32,7 +33,7 @@ public:
 	bool CheckConnectionValid(const FGuid InID);
 
 	void DoAliveCheck(const FDateTime& Now);
-	//void DoPrintStats(FDateTime Now);// 每隔一段时间打印日志
+	void DoPrintStats(FDateTime Now);// 每隔一段时间打印日志
 
 	FMWebSocketClientClosedCallBack WebSocketClientClosedCallBack;
 	FMWebSocketReceiveCallBack WebSocketReceiveCallBack;
@@ -40,7 +41,6 @@ public:
 protected:
 
 	void OnClientConnected(INetworkingWebSocket* InWebSocket);
-	bool IsServerRunning() const;
 
 	void OnConnected(const FGuid InID);
 	void OnReceive(void* InData, const int32 DataSize, const FGuid InID);
@@ -53,6 +53,10 @@ private:
 
 	UPROPERTY()
 	TMap<FGuid, UMGameSession*> Connections;
+	
+	//TMap<FGuid, > DSs;
+
+	//TMap<FGuid, > Users;
 
 	FDateTime NextSessionAliveCheckTime{0};
 };

@@ -31,11 +31,8 @@ private:
 
 	//void OnDailyRefresh();
 	//void OnWeeklyRefresh();
-
+	
 	UMGameServer* Server = nullptr;
-	TSharedPtr<UMGameServer> Server2;
-	//TMap<> Sessions;
-	//TMap<> Levels;
 	
 	bool bFirstTick = true;
 	FTSTicker::FDelegateHandle TickDelegateHandle;
