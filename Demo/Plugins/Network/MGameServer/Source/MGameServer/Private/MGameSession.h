@@ -20,6 +20,7 @@ public:
 
 	virtual void BeginDestroy() override;
 
+	void Send(const FGameMessage& InMessage);
 	void Send(const TArray<uint8>& Data);
 
 	void OnConnected();

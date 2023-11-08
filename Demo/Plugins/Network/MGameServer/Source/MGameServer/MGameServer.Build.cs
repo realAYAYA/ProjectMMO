@@ -41,7 +41,8 @@ public class MGameServer : ModuleRules
 				"WebSocketNetworking", 
 				"WebSockets",
 				
-				"MRpc"
+				"MRpc", 
+				"MGameCommon"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

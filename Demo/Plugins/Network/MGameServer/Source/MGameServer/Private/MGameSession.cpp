@@ -20,6 +20,13 @@ void UMGameSession::BeginDestroy()
 	}
 }
 
+void UMGameSession::Send(const FGameMessage& InMessage)
+{
+	Manager.SendNotify(WebSocket ,InMessage);
+
+	LastSentTime.Store(FDateTime::UtcNow().GetTicks());
+}
+
 void UMGameSession::Send(const TArray<uint8>& Data)
 {
 	WebSocket->Send(Data.GetData(), Data.Num(), false);

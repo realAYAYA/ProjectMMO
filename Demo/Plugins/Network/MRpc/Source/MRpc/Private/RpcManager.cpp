@@ -98,6 +98,25 @@ void FClientRpcManager::OnMessage(const FConnectionPtr& InConn, const FNetworkMe
 	}
 }
 
+void FServerRpcManager::SendNotify(const FServerPtr& InConn, const FGameMessage& InMessage)
+{
+	FNetworkMessage ReqMessage;
+	
+	ReqMessage.RpcMessageOp = ERpcMessageOp::Notify;
+	ReqMessage.TypeID = InMessage.GetTypeID();
+	InMessage.SerializeToArray(ReqMessage.SetBody());
+
+	TArray<uint8> BinaryData;
+	ReqMessage.SerializeToArray(BinaryData);
+
+	if (!CheckBodyLength(BinaryData))
+	{
+		return;
+	}
+	
+	InConn->Send(BinaryData.GetData(), BinaryData.Num() * sizeof(uint8), false);
+}
+
 void FServerRpcManager::SendResponse(
 	const FServerPtr& InConn,
 	const uint64 InReqSerialNum,

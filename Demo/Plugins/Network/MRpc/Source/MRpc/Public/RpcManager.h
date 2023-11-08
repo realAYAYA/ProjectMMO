@@ -46,6 +46,8 @@ class MRPC_API FServerRpcManager
 {
 	
 public:
+
+	static void SendNotify(const FServerPtr& InConn, const FGameMessage& InMessage);
 	
 	typedef TFunction<void(const FServerPtr& InConn, const FNetworkMessage&)> FMethodCallback;
 	static void SendResponse(const FServerPtr& InConn, const uint64 InReqSerialNum, const FGameMessage& InMessage, const ERpcErrorCode ErrorCode);
