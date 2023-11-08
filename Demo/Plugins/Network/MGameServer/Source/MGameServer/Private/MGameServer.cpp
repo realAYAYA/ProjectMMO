@@ -57,30 +57,6 @@ void UMGameServer::Stop()
 	UE_LOG(LogMGameServer, Display, TEXT("Server was not running"));
 }
 
-void UMGameServer::SendToAll(const FGameMessage& InMessage)
-{
-	FNetworkMessage RpcMessage;
-	RpcMessage.RpcErrorCode = ERpcErrorCode::Ok;
-	RpcMessage.RpcMessageOp = ERpcMessageOp::Notify;
-	
-	InMessage.SerializeToArray(RpcMessage.SetBody());
-
-	TArray<uint8> Data;
-	RpcMessage.SerializeToArray(Data);
-
-	SendToAll(Data);
-}
-
-void UMGameServer::SendToAll(const TArray<uint8>& InData)
-{
-	for (const auto& Elem : Connections)
-	{
-		UMGameSession* Connection = Elem.Value;
-		if (Connection->WebSocket)
-			Connection->Send(InData);
-	}
-}
-
 bool UMGameServer::CheckConnectionValid(const FGuid InID)
 {
 	if (!IsRunning())

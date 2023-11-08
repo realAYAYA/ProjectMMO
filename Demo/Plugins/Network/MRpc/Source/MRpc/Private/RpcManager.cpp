@@ -101,7 +101,7 @@ void FClientRpcManager::OnMessage(const FConnectionPtr& InConn, const FNetworkMe
 void FServerRpcManager::SendNotify(const FServerPtr& InConn, const FGameMessage& InMessage)
 {
 	FNetworkMessage ReqMessage;
-	
+	ReqMessage.RpcErrorCode = ERpcErrorCode::Ok;
 	ReqMessage.RpcMessageOp = ERpcMessageOp::Notify;
 	ReqMessage.TypeID = InMessage.GetTypeID();
 	InMessage.SerializeToArray(ReqMessage.SetBody());

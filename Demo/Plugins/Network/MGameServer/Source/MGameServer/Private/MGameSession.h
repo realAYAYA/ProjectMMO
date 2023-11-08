@@ -5,6 +5,8 @@
 #include "RpcManager.h"
 #include "MGameSession.generated.h"
 
+class UMWorld;
+class UMPlayer;
 class FMPlayer;
 
 UCLASS()
@@ -30,6 +32,12 @@ public:
 	void Shutdown() {}
 
 	virtual void Offline() {}
+
+	UPROPERTY()
+	UMPlayer* Player = nullptr;
+
+	UPROPERTY()
+	UMWorld* World = nullptr;
 
 	TSharedPtr<FGameRpcInterface> RpcInterface;
 	

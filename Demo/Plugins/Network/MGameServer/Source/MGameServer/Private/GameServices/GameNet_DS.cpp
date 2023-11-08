@@ -5,9 +5,11 @@
 
 M_GAME_RPC_HANDLE(GameRpc, LoginAsDS, InSession, Req, Ack)
 {
-	//FRole* Role = InSession->Role;
-	//if (!Role)
+	UMWorld* World = InSession->World;
+	if (!World)
 	{
 		return;
 	}
+
+	
 }

@@ -3,8 +3,8 @@
 
 M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 {
-	//FRole* Role = InSession->Role;
-	//if (!Role)
+	UMPlayer* Player = InSession->Player;
+	if (!Player)
 	{
 		Ack.Ret = ELoginGameRetCode::DuplicateLogin;
 		Ack.bReLogin = true;

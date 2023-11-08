@@ -26,9 +26,6 @@ public:
 	bool Start(const int32 ServerPort);
 	void Stop();
 	bool IsRunning() const;
-
-	void SendToAll(const FGameMessage& InMessage);
-	void SendToAll(const TArray<uint8>& InData);
 	
 	bool CheckConnectionValid(const FGuid InID);
 
