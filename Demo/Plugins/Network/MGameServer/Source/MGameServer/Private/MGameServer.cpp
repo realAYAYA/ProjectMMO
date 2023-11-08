@@ -104,22 +104,19 @@ void UMGameServer::DoAliveCheck(const FDateTime& Now)
 	
 	NextSessionAliveCheckTime = Now + FTimespan::FromSeconds(5);
 	
-	/*for (auto& Elem : Connections)
+	for (auto& Elem : Connections)
 	{
 		auto Session = Elem.Value;
-		if (Session && Session->Connection)
+		if (Session && Session->WebSocket)
 		{
-			const FDateTime LastTime = FMath::Min(Session->GetLastSentTime(), Session->GetLastReceivedTime());
+			const FDateTime LastTime = FMath::Max(Session->GetLastSentTime(), Session->GetLastReceivedTime());
 			const int32 Seconds = (Now - LastTime).GetTotalSeconds();
 			if (Seconds >= 60)
 			{
-				const int32 SentSeconds = (Now - Session->GetLastSentTime()).GetTotalSeconds();
-				const int32 ReceivedSeconds = (Now - Session->GetLastReceivedTime()).GetTotalSeconds();
-				ZERROR(TEXT("[网络模块] 通讯超时 ConnId={} Last={} SentSeconds={} RecvSeconds={}"), Session->Connection->GetId(), Seconds, SentSeconds, ReceivedSeconds);
-				Session->Connection->Shutdown();
+				Session->Shutdown();
 			}
 		}
-	}*/
+	}
 }
 
 void UMGameServer::DoPrintStats(FDateTime Now)

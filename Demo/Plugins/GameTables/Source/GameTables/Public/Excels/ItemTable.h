@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/DataTable.h"
 
-#include "MGameTypes.h"
+//#include "***.h"
 
 // =========================================================
 // *** BEGIN WRITING YOUR CODE - INCLUDE ***
@@ -19,7 +19,7 @@
 
 
 USTRUCT()
-struct DEMO_API FItemRow : public FTableRowBase
+struct GAMETABLES_API FItemRow : public FTableRowBase
 {
     GENERATED_BODY()
 
@@ -58,7 +58,7 @@ struct DEMO_API FItemRow : public FTableRowBase
 };
 
 UCLASS(BlueprintType)
-class DEMO_API UItemConfig : public UObject
+class GAMETABLES_API UItemConfig : public UObject
 {
     GENERATED_BODY()
 public: 
@@ -108,7 +108,7 @@ DECLARE_DYNAMIC_DELEGATE_OneParam(FOnForeachItemConfig, const UItemConfig*, Entr
 
 
 UCLASS(BlueprintType)
-class DEMO_API UItemConfigManager : public UObject
+class GAMETABLES_API UItemConfigManager : public UObject
 {
     GENERATED_BODY()
 public:

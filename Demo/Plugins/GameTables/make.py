@@ -5,14 +5,14 @@ import argparse
 import jinja2
 
 # 引擎目录
-engine_dir = 'D:/UnrealEngine-ToonLit/UnrealEngine/Engine'
+engine_dir = 'D:/53/UnrealEngine-ToonLit/UnrealEngine/Engine'
 
 # 生成代码目录
-hpp_dst_dir = '../../Source/Demo/Public/MGameTables'
-cpp_dst_dir = '../../Source/Demo/Private/MGameTables'
+hpp_dst_dir = 'Source/GameTables/Public/Excels'
+cpp_dst_dir = 'Source/GameTables/Private/Excels'
 
 # API宏名称，根据工程来定
-api_name = 'DEMO_API'
+api_name = 'GAMETABLES_API'
 
 
 # ======================================================================================================================

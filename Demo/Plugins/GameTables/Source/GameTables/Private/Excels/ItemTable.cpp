@@ -1,4 +1,4 @@
-#include "MGameTables/ItemTable.h"
+#include "Excels/ItemTable.h"
 #include "GameTables/Public/ConfigLoadHelper.h"
 
 

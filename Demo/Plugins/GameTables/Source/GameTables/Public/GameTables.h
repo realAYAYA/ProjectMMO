@@ -19,11 +19,11 @@ public:
 	virtual bool Init();
 
 	/** 道具表 */
-	//UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+	//UPROPERTY(BlueprintReadOnly, Category="")
 	//UZItemConfigManager* Item;
 	
 	/** Json常量配置 */
-	//UPROPERTY(BlueprintReadOnly, Category="IdleZ")
+	//UPROPERTY(BlueprintReadOnly, Category="")
 	//FZCommonConstantsConfig CommonConstants;
 	
 };

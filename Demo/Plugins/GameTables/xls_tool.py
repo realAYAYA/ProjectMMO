@@ -16,11 +16,11 @@ from collections import OrderedDict
 
 # 包含头文件，使得生成的胶水代码类型可以识别自定义类型
 custom_includes = """
-#include "MGameTypes.h"
+//#include "***.h"
 """
 
 # 生成胶水代码的头文件目录
-hpp_dir = 'MGameTables'
+hpp_dir = 'Excels'
 
 # 前缀命名
 custom_prefix = ''

@@ -26,6 +26,8 @@ public:
 	
 	void OnReceive(void* InData, const int32 Size);
 
+	void Shutdown() {}
+
 	virtual void Offline() {}
 
 	TSharedPtr<FGameRpcInterface> RpcInterface;
@@ -36,6 +38,9 @@ public:
 	
 	FGuid ID;
 
+	FDateTime GetLastSentTime() const { return LastSentTime.Load(); }
+	FDateTime GetLastReceivedTime() const { return LastReceivedTime.Load(); }
+	
 	TAtomic<int64> LastSentTime{0};	// 最后发送数据时间
 	TAtomic<int64> LastReceivedTime{0};// 最后接受数据时间
 };
@@ -50,6 +55,8 @@ public:
 	int32 Port = 0;
 
 	//ProcessHandle;
+	//FGuid UID;
+	//FLevelInfo LevelInfo; // Owner, LevelName, MaxNum, Progress, BeginDate, ValidDate, 
 	
 };
 
