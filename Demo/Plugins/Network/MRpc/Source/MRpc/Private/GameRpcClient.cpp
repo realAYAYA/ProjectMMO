@@ -22,6 +22,39 @@ void UGameRpcClient::Setup(FClientRpcManager* InManager, const FConnectionPtr& I
 }
 
 
+void UGameRpcClient::K2_LoginAsDS(const FLoginAsDSReq& InParams, const FOnLoginAsDSResult& InCallback)
+{
+    if (!Manager || !Connection)
+        return;
+
+    LoginAsDS(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FLoginAsDSAck& InRspMessage)
+    {
+        if (IsValid(InCallback.GetUObject()))
+        {
+            InCallback.Execute(ErrorCode, InRspMessage);
+        }
+    });
+}
+
+void UGameRpcClient::LoginAsDS(const FLoginAsDSReq& InReqMessage, const FOnLoginAsDSResultFunction& InCallback) const
+{   
+    if (!Manager || !Connection)
+        return;
+
+    Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
+    {
+        const FLoginAsDSAck RspMessage;
+
+        if (ErrorCode == ERpcErrorCode::Ok)
+        {
+            RspMessage.ParseFromArray(InMessage.GetBody());
+        }
+
+        InCallback(ErrorCode, RspMessage);
+    });
+}
+
+
 void UGameRpcClient::K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginGameResult& InCallback)
 {
     if (!Manager || !Connection)

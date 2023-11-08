@@ -44,30 +44,3 @@ public:
 	TAtomic<int64> LastSentTime{0};	// 最后发送数据时间
 	TAtomic<int64> LastReceivedTime{0};// 最后接受数据时间
 };
-
-UCLASS()
-class UDSConnection final : public UMGameSession
-{
-	GENERATED_BODY()
-	
-public:
-
-	int32 Port = 0;
-
-	//ProcessHandle;
-	//FGuid UID;
-	//FLevelInfo LevelInfo; // Owner, LevelName, MaxNum, Progress, BeginDate, ValidDate, 
-	
-};
-
-UCLASS()
-class UMPlayerSession final : public UMGameSession
-{
-	GENERATED_BODY()
-	
-public:
-
-	FString Account;
-	
-	FMPlayer* Player = nullptr;
-};

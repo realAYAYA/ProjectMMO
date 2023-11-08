@@ -17,6 +17,12 @@ public:
     
     
     /**
+     * DS登录WebSocket服务器
+    */
+    typedef TFunction<void(const FLoginAsDSReq&, FLoginAsDSAck&)> FLoginAsDSCallback;
+    FLoginAsDSCallback OnLoginAsDS;
+    
+    /**
      * 登录游戏
     */
     typedef TFunction<void(const FLoginGameReq&, FLoginGameAck&)> FLoginGameCallback;

@@ -10,6 +10,8 @@
 class FClientRpcManager;
 
 
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginAsDSResult, ERpcErrorCode, InErrorCode, FLoginAsDSAck, InData);
+
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginGameResult, ERpcErrorCode, InErrorCode, FLoginGameAck, InData);
 
 
@@ -25,6 +27,15 @@ class MRPC_API UGameRpcClient : public UObject
 public:
 
     void Setup(FClientRpcManager* InManager, const FConnectionPtr& InConn);
+
+    /**
+     * DS登录WebSocket服务器
+    */
+    UFUNCTION(BlueprintCallable, Category = "PorjectM", DisplayName="LoginAsDS")
+    void K2_LoginAsDS(const FLoginAsDSReq& InParams, const FOnLoginAsDSResult& InCallback);
+    
+    typedef TFunction<void(ERpcErrorCode, const FLoginAsDSAck&)> FOnLoginAsDSResultFunction;
+    void LoginAsDS(const FLoginAsDSReq& InReqMessage, const FOnLoginAsDSResultFunction& InCallback) const;
 
     /**
      * 登录游戏
