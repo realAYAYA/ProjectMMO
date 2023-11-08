@@ -18,12 +18,15 @@ class DEMO_API UMBlueprintLibrary : public UBlueprintFunctionLibrary
 
 public:
 
+	/** Test */
+	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
+	static FString TestFunc();
+
 	/** 游戏实例 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static class UMGameInstance* GetMGameInstance(const UObject* WorldContextObject);
 	
 	/** Excel配置 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
-	static class UMGameTables* GetMGameTables(const UObject* WorldContextObject);
-	
+	static class UGameTables* GetMGameTables(const UObject* WorldContextObject);
 };

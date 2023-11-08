@@ -1,7 +1,4 @@
-#include "CommonPrivate.h"
-
 #define LOCTEXT_NAMESPACE "FMGameCommonModule"
-
 
 /**
  * Implements the ZCommonModule module and the network messaging extension modular feature.
@@ -35,6 +32,6 @@ public:
 
 };
 
-IMPLEMENT_MODULE(FMGameCommonModule, ZCommon);
+IMPLEMENT_MODULE(FMGameCommonModule, MGameCommon);
 
 #undef LOCTEXT_NAMESPACE

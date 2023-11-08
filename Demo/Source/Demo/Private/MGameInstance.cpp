@@ -8,15 +8,11 @@
 #include "Developer/MSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "MGameTables/MGameTables.h"
-
 void UMGameInstance::Init()
 {
 	Super::Init();
 
 	UAbilitySystemGlobals::Get().InitGlobalData();
-
-	GetMGameTables();
 	
 	if (!UGameplayStatics::DoesSaveGameExist(TEXT("MSaveGame"), 0))
 	{
@@ -55,15 +51,3 @@ void UMGameInstance::SetLoginInfo(const FString& InUserID, const FString& InUser
 	UserName = InUserName;
 }
 
-UMGameTables* UMGameInstance::GetMGameTables()
-{
-	if (!GameTables)
-	{
-		UMGameTables* NewOne = NewObject<UMGameTables>();
-		NewOne->AddToRoot();
-		NewOne->Init();
-		GameTables = NewOne;
-	}
-	
-	return GameTables;
-}

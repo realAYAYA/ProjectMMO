@@ -4,11 +4,25 @@
 
 #include "Modules/ModuleManager.h"
 
-class FGameTablesModule : public IModuleInterface
+class UGameTables;
+
+class GAMETABLES_API FGameTablesModule : public IModuleInterface
 {
+	
 public:
 
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+	
+	static FGameTablesModule& Get()
+	{
+		return FModuleManager::LoadModuleChecked<FGameTablesModule>("GameTables");
+	}
+
+	UGameTables* GetGameTables();
+
+private:
+
+	UGameTables* GameTables = nullptr;
 };

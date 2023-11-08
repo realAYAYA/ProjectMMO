@@ -2,8 +2,21 @@
 
 #include "MBlueprintLibrary.h"
 
+
 #include "MGameInstance.h"
-#include "MGameTables/MGameTables.h"
+
+#include "GameTablesModule.h"
+#include "GameTables.h"
+#include "GameMessage.h"
+
+FString UMBlueprintLibrary::TestFunc()
+{
+	const FLoginGameReq A;
+
+	FString Result = TEXT("---") + FLoginGameReq::StaticStruct()->GetStructCPPName();
+
+	return Result;
+}
 
 UMGameInstance* UMBlueprintLibrary::GetMGameInstance(const UObject* WorldContextObject)
 {
@@ -11,13 +24,12 @@ UMGameInstance* UMBlueprintLibrary::GetMGameInstance(const UObject* WorldContext
 	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
 }
 
-UMGameTables* UMBlueprintLibrary::GetMGameTables(const UObject* WorldContextObject)
+UGameTables* UMBlueprintLibrary::GetMGameTables(const UObject* WorldContextObject)
 {
-	if (UMGameInstance* GameInstance = GetMGameInstance(WorldContextObject))
+	if (const UMGameInstance* GameInstance = GetMGameInstance(WorldContextObject))
 	{
-		return GameInstance->GetMGameTables();
+		return FGameTablesModule::Get().GetGameTables();
 	}
 	
 	return nullptr;
 }
-

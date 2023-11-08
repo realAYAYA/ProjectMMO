@@ -8,7 +8,7 @@
 #include "MGameInstance.generated.h"
 
 class AMPlayerState;
-class UMGameTables;
+class UGameTables;
 class UMSaveGame;
 
 /**
@@ -34,9 +34,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProjectM")
 	UMSaveGame* SaveGame;
-
-	UFUNCTION()
-	UMGameTables* GetMGameTables();
 	
 	virtual void Init() override;
 
@@ -44,8 +41,4 @@ public:
 
 	static UMGameInstance* GetMGameInstance(const UWorld* World);
 	
-private:
-	
-	UPROPERTY()
-	UMGameTables* GameTables;
 };
