@@ -13,7 +13,7 @@ void UMGameServer::Tick(float DeltaTime)
 
 bool UMGameServer::IsTickable() const
 {
-	return FTickableGameObject::IsTickable();
+	return true;
 }
 
 TStatId UMGameServer::GetStatId() const
@@ -52,6 +52,8 @@ void UMGameServer::Stop()
 		WebSocketServer.Reset();
 
 		UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));
+
+		return;
 	}
 
 	UE_LOG(LogMGameServer, Display, TEXT("Server was not running"));

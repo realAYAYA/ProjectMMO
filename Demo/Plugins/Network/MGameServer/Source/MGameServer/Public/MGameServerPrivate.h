@@ -3,7 +3,6 @@
 #pragma once
 
 #include "RedisClient.h"
-#include "RedisClient.h"
 #include "Modules/ModuleManager.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMGameServer, Log, All);
@@ -18,6 +17,8 @@ public:
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+
+	void HandleCorePreExit();
 
 	void Start();
 	void Shutdown();
@@ -45,4 +46,4 @@ private:
 	FDateTime NextDailyRefreshTime{0};
 };
 
-extern FMGameServerModule* MGameServerModule;
+extern FMGameServerModule* GGameServerModule;

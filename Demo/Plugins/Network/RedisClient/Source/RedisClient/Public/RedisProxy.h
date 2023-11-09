@@ -5,11 +5,13 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RedisProxy.generated.h"
 
+class FRedisClient;
+
 /**
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class REDISCLIENT_API URedisProxy : public UObject
+class REDISCLIENT_API URedisProxy : public UObject, public FTickableGameObject
 {
 	GENERATED_BODY()
 
@@ -22,26 +24,33 @@ public:
 	FString Password;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Redis")
-	int32 Port;
+	int32 Port = 0;
 	
 	URedisProxy();
 
 	UFUNCTION(BlueprintCallable, Category = "Redis")
-	bool Connect(const FString& InIP, const FString& InPassword, const int32 InPort);
+	bool ConnectNow();
+	
+	UFUNCTION(BlueprintCallable, Category = "Redis")
+	bool Connect(const FString& InIP, const FString& InPassword, const int32 InPort = 6379);
 
 	UFUNCTION(BlueprintCallable, Category = "Redis")
-	bool Disconnect();
+	void Disconnect();
 
+	/** Please check the FRedisClient*/
 	UFUNCTION(BlueprintCallable, Category = "Redis")
 	bool ExecuteCmd(const FString& Cmd);
 
 protected:
 
-	//virtual void Tick()// Todo tick重连，配置重连时间间隔
+	virtual void Tick(float DeltaTime) override;
+	virtual bool IsTickable() const override;
+	virtual TStatId GetStatId() const override;
 
 private:
 	
-	TUniquePtr<class FRedisClient> RedisClient;
+	TUniquePtr<FRedisClient> RedisClient;
 
-	FDateTime LastTime;
+	FDateTime LastCheckTime;
 };
+

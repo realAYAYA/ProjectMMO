@@ -13,14 +13,20 @@ const FString RedisIp = TEXT("106.54.222.137");
 const int32 RedisPort = 6379;
 const FString RedisPassword = TEXT("123456");
 
+FMGameServerModule* GGameServerModule = nullptr;
+
 void FMGameServerModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 
+	FCoreDelegates::OnPreExit.AddRaw(this, &FMGameServerModule::HandleCorePreExit);
+	
 	RedisClient = MakeUnique<FRedisClient>();
 
 	Server = NewObject<UMGameServer>();
 	Server->AddToRoot();// 不会被GC
+
+	GGameServerModule = this;
 }
 
 void FMGameServerModule::ShutdownModule()
@@ -29,9 +35,27 @@ void FMGameServerModule::ShutdownModule()
 	// we call this function before unloading the module.
 
 	// 注意，这里的代码能会有模块依赖问题（所依赖的模块已经被提前卸载）
-	// 清理代码最好放在 FMGameServerModule::Shutdown() 中
+	// 清理代码最好放在 FMGameServerModule::HandleCorePreExit() 中
+	
+	// 清空Tick
+	if (TickDelegateHandle.IsValid())
+	{
+		FTSTicker::GetCoreTicker().RemoveTicker(TickDelegateHandle);
+		TickDelegateHandle.Reset();
+	}
 
+	GGameServerModule = nullptr;
+}
+
+void FMGameServerModule::HandleCorePreExit()
+{
 	Shutdown();
+
+	if (Server)
+	{
+		Server->RemoveFromRoot();// 开启GC
+		Server = nullptr;
+	}
 }
 
 void FMGameServerModule::Start()
@@ -52,7 +76,6 @@ void FMGameServerModule::Start()
 	RedisClient->ConnectToRedis(RedisIp, RedisPort, RedisPassword);
 
 	// Todo 各种全区服功能模块的初始化
-	
 }
 
 void FMGameServerModule::Shutdown()
@@ -60,11 +83,9 @@ void FMGameServerModule::Shutdown()
 	// 全区服功能模块PreShutdown（依赖网络服务）
 	
 	// 服务器关停
-	if (Server)
+	if (Server->IsRunning())
 	{
 		Server->Stop();
-		Server->RemoveFromRoot();// 开启GC
-		Server = nullptr;
 	}
 	
 	// 全区服功能模块Shutdown

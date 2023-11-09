@@ -59,12 +59,17 @@ void UMPlayer::SetCurWorldId(uint64 InWorldId)
 {
 }
 
-int64 UMPlayer::GetCurrentWorldID() const
+void UMPlayer::EnterWorld(const FGuid& WorldID) const
+{
+	
+}
+
+uint64 UMPlayer::GetCurrentWorldID() const
 {
 	return 0;
 }
 
-int32 UMPlayer::GetCurrentWorldCfgID() const
+uint32 UMPlayer::GetCurrentWorldCfgID() const
 {
 	return 0;
 }

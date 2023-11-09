@@ -41,9 +41,10 @@ public:
 	void Save();
 
 	void SetCurWorldId(uint64 InWorldId);
-	
-	int64 GetCurrentWorldID() const;  // 获得当前所在场景Id
-	int32 GetCurrentWorldCfgID() const;  // 获得当前所在场景Id
+
+	void EnterWorld(const FGuid& WorldID) const;
+	uint64 GetCurrentWorldID() const;  // 获得当前所在场景Id
+	uint32 GetCurrentWorldCfgID() const;  // 获得当前所在场景ID
 	UMWorld* GetCurrentWorld() const;  // 获得当前所在场景对象
 	
 private:

@@ -899,8 +899,11 @@ bool FZRedisOp::SaveSeptGlobalData(const idlezt::SeptGlobalSaveData& InData)
 URedisProxy::URedisProxy()
 {
 	RedisClient = MakeUnique<FRedisClient>();
-	Port = 0;
-	LastTime = FDateTime::Now();
+}
+
+bool URedisProxy::ConnectNow()
+{
+	return RedisClient->ConnectToRedis(IP, Port, Password);
 }
 
 bool URedisProxy::Connect(const FString& InIP, const FString& InPassword, const int32 InPort)
@@ -908,13 +911,13 @@ bool URedisProxy::Connect(const FString& InIP, const FString& InPassword, const 
 	IP = InIP;
 	Password = InPassword;
 	Port = InPort;
-	RedisClient->ConnectToRedis(IP, Port, Password);
-	return false;
+	return RedisClient->ConnectToRedis(IP, Port, Password);
 }
 
-bool URedisProxy::Disconnect()
+void URedisProxy::Disconnect()
 {
-	return true;
+	RedisClient->DisconnectRedis();
+	LastCheckTime = 0;
 }
 
 bool URedisProxy::ExecuteCmd(const FString& Cmd)
@@ -922,24 +925,32 @@ bool URedisProxy::ExecuteCmd(const FString& Cmd)
 	return false;
 }
 
-/**
-bool URedisProxy::Tick(float)
+void URedisProxy::Tick(float DeltaTime)
 {
-	LastTickTime = Now;
+	if (LastCheckTime.GetTicks() == 0)
+		return;
 	
-	if (Now > NextRedisAliveCheckTime)
+	const FDateTime Now = FDateTime::UtcNow();
+	if ((Now - LastCheckTime).GetTotalSeconds() > 5)
 	{
-		NextRedisAliveCheckTime = Now + FTimespan::FromSeconds(5);
 		if (RedisClient)
 		{
 			if (!RedisClient->ExecCommand("PING"))
 			{
-				FString RedisIp = FZGameTablesModule::Get().GetGameTables()->GameServiceConfig.RedisIp;
-				int32 RedisPort = FZGameTablesModule::Get().GetGameTables()->GameServiceConfig.RedisPort;
-				FString RedisPassword = FZGameTablesModule::Get().GetGameTables()->GameServiceConfig.RedisPassword;
-				RedisClient->ConnectToRedis(RedisIp, RedisPort, RedisPassword);
+				RedisClient->ConnectToRedis(IP, Port, Password);
 			}
 		}
+
+		LastCheckTime = Now;
 	}
 }
-*/
+
+bool URedisProxy::IsTickable() const
+{
+	return true;
+}
+
+TStatId URedisProxy::GetStatId() const
+{
+	RETURN_QUICK_DECLARE_CYCLE_STAT(URedisProxy, STATGROUP_Tickables);
+}
