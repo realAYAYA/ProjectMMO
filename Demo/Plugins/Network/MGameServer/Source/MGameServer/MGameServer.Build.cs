@@ -26,7 +26,8 @@ public class MGameServer : ModuleRules
 			new string[]
 			{
 				"Core", 
-				"MGameShared",
+				"MGameShared", 
+				"RedisClient"
 				// ... add other public dependencies that you statically link with here ...
 				
 			}

@@ -10,6 +10,10 @@ void UMGameSession::Initialize(INetworkingWebSocket* InWebSocket, const FGuid& I
 	RpcInterface = MakeShared<FGameRpcInterface>(&Manager);
 }
 
+void UMGameSession::Shutdown()
+{
+}
+
 void UMGameSession::BeginDestroy()
 {
 	UObject::BeginDestroy();
@@ -22,7 +26,7 @@ void UMGameSession::BeginDestroy()
 
 void UMGameSession::Send(const FGameMessage& InMessage)
 {
-	Manager.SendNotify(WebSocket ,InMessage);
+	Manager.SendNotify(WebSocket, InMessage);
 
 	LastSentTime.Store(FDateTime::UtcNow().GetTicks());
 }

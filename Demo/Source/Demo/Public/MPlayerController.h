@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 
-#include "MGameTypes.h"
+#include "MMOGameTypes.h"
 
 #include "MPlayerController.generated.h"
 

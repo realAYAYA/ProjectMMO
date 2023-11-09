@@ -62,7 +62,7 @@ struct FLoginGameReq : public FGameMessage
 	GENERATED_CUSTOM_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FString UserName;
+	FString Account;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FString ClientVersion;

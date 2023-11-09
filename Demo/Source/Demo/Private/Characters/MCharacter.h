@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "AbilitySystemInterface.h"
-#include "MGameTypes.h"
+#include "MMOGameTypes.h"
 #include "Abilities/GameplayAbility.h"
 #include "MCharacter.generated.h"
 

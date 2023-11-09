@@ -19,7 +19,8 @@ public class Demo : ModuleRules
 			"EnhancedInput", 
 			"GameplayAbilities",
 			
-			"GameTables"
+			"GameTables", 
+			"MGameShared"
 		});
 		
 		

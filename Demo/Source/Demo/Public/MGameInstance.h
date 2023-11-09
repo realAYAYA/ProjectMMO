@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MGameTypes.h"
 #include "Engine/GameInstance.h"
 #include "MGameInstance.generated.h"
 

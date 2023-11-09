@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MGameTypes.h"
+
+#include "MMOGameTypes.h"
 #include "RpcObject.generated.h"
 
 /**

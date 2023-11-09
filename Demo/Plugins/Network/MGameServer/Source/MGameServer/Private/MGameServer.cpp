@@ -132,7 +132,8 @@ void UMGameServer::OnClientConnected(INetworkingWebSocket* InWebSocket)
 
 bool UMGameServer::IsRunning() const
 {
-	return WebSocketServer && WebSocketServer.IsValid();
+	return WebSocketServer && WebSocketServer.Get() && WebSocketServer.IsValid();
+	
 }
 
 void UMGameServer::OnConnected(const FGuid InID)

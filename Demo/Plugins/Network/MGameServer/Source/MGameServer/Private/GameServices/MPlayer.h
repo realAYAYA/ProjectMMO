@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameMessage.h"
+#include "MGameTypes.h"
 
 #include "MPlayer.generated.h"
 
@@ -47,13 +48,11 @@ public:
 	
 private:
 
-	const uint64 UserId = 0;
-	const FString Account;
-
 	UPROPERTY()
 	UMGameSession* Session = nullptr;
 	
 	void OnOnline();
 	void OnOffline();
-	
+
+	FMPlayerData Data;
 };

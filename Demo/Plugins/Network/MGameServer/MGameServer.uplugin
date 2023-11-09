@@ -33,6 +33,10 @@
 		{
 			"Name":"WebSocketNetworking",
 			"Enabled":true
+		},
+		{
+			"Name":"RedisClient",
+			"Enabled":true
 		}
 	]
 }

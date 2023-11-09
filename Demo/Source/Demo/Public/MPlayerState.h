@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MGameTypes.h"
 #include "GameFramework/PlayerState.h"
 
-#include "MGameTypes.h"
+#include "MMOGameTypes.h"
 
 #include "MPlayerState.generated.h"
 
@@ -46,9 +47,9 @@ public:
 	// Todo 聊天模块 - 服务器微服务
 	// Todo 拍卖行 - 服务器微服务
 	
-	const FMUserData& GetUserData() const { return UserData; }
+	const FMPlayerData& GetUserData() const { return UserData; }
 
-	void SetUserData(const FMUserData& InData) { UserData = InData; }
+	void SetUserData(const FMPlayerData& InData) { UserData = InData; }
 	
 protected:
 
@@ -59,5 +60,5 @@ protected:
 private:
 
 	UPROPERTY()
-	FMUserData UserData;
+	FMPlayerData UserData;
 };

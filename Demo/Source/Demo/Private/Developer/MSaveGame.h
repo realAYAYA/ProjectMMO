@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MGameTypes.h"
 #include "GameFramework/SaveGame.h"
 
-#include "MGameTypes.h"
+#include "MMOGameTypes.h"
 
 #include "MSaveGame.generated.h"
 
@@ -30,15 +31,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	bool CreateUser(const FString& InID, const FString& InName);
 
-	bool CreateUser(const FMUserData& InData);
+	bool CreateUser(const FMPlayerData& InData);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void RemoveUser(const FString& InID);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FMUserData FindUserData(const FString& InID);
+	FMPlayerData FindUserData(const FString& InID);
 	
-	FMUserData* FindUserDataRef(const FString& InID);
+	FMPlayerData* FindUserDataRef(const FString& InID);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	FRoleData GetRoleData(const FString& InID, const FString& InName);
@@ -64,7 +65,7 @@ private:
 	int32 FindRoleIndex(const int32 Index, const FString& InName);
 	
 	UPROPERTY()
-	TArray<FMUserData> UserData;// SteamID, SteamName
+	TArray<FMPlayerData> UserData;// SteamID, SteamName
 	
 	// Todo 游戏进度
 	

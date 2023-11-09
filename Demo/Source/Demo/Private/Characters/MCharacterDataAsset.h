@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "MGameTypes.h"
+#include "MMOGameTypes.h"
 #include "MCharacterDataAsset.generated.h"
 
 /**
@@ -16,8 +16,8 @@ class UMCharacterDataAsset : public UDataAsset
 	GENERATED_BODY()
 
 public:
+	
 	UPROPERTY(EditDefaultsOnly)
 	FCharacterData CharacterData;
-
 	
 };

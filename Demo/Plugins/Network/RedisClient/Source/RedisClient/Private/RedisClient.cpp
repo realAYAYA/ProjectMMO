@@ -93,13 +93,13 @@ bool FRedisClient::ConnectToRedis(const FString& InHost, int32 InPort, const FSt
 	RedisContextPtr = redisConnectWithTimeout(TCHAR_TO_ANSI(*Host), Port, TimeOut);
 	if (!RedisContextPtr)
 	{
-		UE_LOG(LogRedisClient, Error, TEXT("ConnectFailed!  Host=%s Port=%d"), *Host, Port);
+		UE_LOG(LogRedisClient, Error, TEXT("ConnectFailed!  Host = %s Port = %d"), *Host, Port);
 		return false;
 	}
 	
 	if (RedisContextPtr->err)
 	{
-		UE_LOG(LogRedisClient, Error, TEXT("ConnectFailed! Host=%s Port=%d Error=%d"), *Host, Port, RedisContextPtr->err);
+		UE_LOG(LogRedisClient, Error, TEXT("ConnectFailed! Host = %s Port = %d Error = %d"), *Host, Port, RedisContextPtr->err);
 		redisFree(RedisContextPtr);
 		RedisContextPtr = nullptr;
 		return false;

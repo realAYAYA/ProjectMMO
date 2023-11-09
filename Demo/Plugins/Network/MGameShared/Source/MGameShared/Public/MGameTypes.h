@@ -8,26 +8,6 @@
 
 #include "MGameTypes.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FOnRpcResult, const ERpcErrorCode, bOk);
-
-/** 玩家离线后，游戏中角色身上Buff快照数据 */
-USTRUCT(BlueprintType) 
-struct FMBuffSnapShoot
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	int32 ID = 0;
-
-	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	int32 RemainingTime = 0;
-
-	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	int32 Stack = 0;
-
-	// Todo 从玩家AbilityComponent上读取当前所有效果，及其运行数据
-};
-
 /** 道具数据*/
 USTRUCT(BlueprintType) 
 struct FMItemData
@@ -52,9 +32,9 @@ struct FMItemData
 
 	// 装备位置，如果是装备的话
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	int32 Slot = 0;
+	EEquipSlot Slot = EEquipSlot::Unknown;
 	
-	// 武器属性字段，附魔，质变
+	// 武器属性字段，附魔，质变，配置Id
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	int32 Enchanting = 0;
 	
@@ -117,9 +97,9 @@ struct FRoleData
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	FMInventoryData InventoryData;
 	
-	// Todo 天赋数据（种族天赋）、外观数据
+	// Todo 天赋数据（种族天赋）
 	
-	// Todo 其它功能点数据：军衔、副职业（合成）
+	// Todo 其它功能点数据：外观数据、副职业（合成）
 
 	// Todo 离线缓存
 	
@@ -132,19 +112,19 @@ struct FRoleData
 
 /** 用户整体数据*/
 USTRUCT(BlueprintType)
-struct FMUserData
+struct FMPlayerData
 {
 	GENERATED_USTRUCT_BODY()
 
 	// 用户ID
 	UPROPERTY()
-	FString UserID;
+	uint64 ID;
+	
+	// 账户名Steam Epic PS4 Switch, etc
+	UPROPERTY()
+	FString Account;
 
-	// 用户名
-	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	FString UserName;
-
-	// 用户角色数据
+	// 角色数据
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	TArray<FRoleData> RoleData;
 
@@ -186,15 +166,3 @@ struct FCreateRoleParams
 	// Todo 外观数据
 };
 
-// Todo Delete
-USTRUCT(BlueprintType)
-struct FCharacterData
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<class UGameplayEffect>> Effects;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<class UGameplayAbility>> Abilities;
-};

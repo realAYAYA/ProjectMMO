@@ -6,9 +6,8 @@ bool UMSaveGame::CreateUser(const FString& InID, const FString& InName)
 	if (INDEX_NONE != FindUserIndex(InID))
 		return false;
 
-	FMUserData Data;
-	Data.UserID = InID;
-	Data.UserName = InName;
+	FMPlayerData Data;
+	Data.Account = InID;
 	Data.CreateDate = FDateTime::Now().GetTicks();
 
 	UserData.Add(Data);
@@ -16,9 +15,9 @@ bool UMSaveGame::CreateUser(const FString& InID, const FString& InName)
 	return true;
 }
 
-bool UMSaveGame::CreateUser(const FMUserData& InData)
+bool UMSaveGame::CreateUser(const FMPlayerData& InData)
 {
-	if (INDEX_NONE != FindUserIndex(InData.UserID))
+	if (INDEX_NONE != FindUserIndex(InData.Account))
 		return false;
 
 	UserData.Add(InData);
@@ -32,16 +31,16 @@ void UMSaveGame::RemoveUser(const FString& InID)
 		UserData.RemoveAt(Index);
 }
 
-FMUserData UMSaveGame::FindUserData(const FString& InID)
+FMPlayerData UMSaveGame::FindUserData(const FString& InID)
 {
 	const int32 Index = FindUserIndex(InID);
 	if (INDEX_NONE == Index)
-		return FMUserData();
+		return FMPlayerData();
 
 	return UserData[Index];
 }
 
-FMUserData* UMSaveGame::FindUserDataRef(const FString& InID)
+FMPlayerData* UMSaveGame::FindUserDataRef(const FString& InID)
 {
 	const int32 Index = FindUserIndex(InID);
 	if (INDEX_NONE == Index)
@@ -129,8 +128,8 @@ int32 UMSaveGame::FindUserIndex(const FString& InID)
 {
 	for (int32 i = 0; i < UserData.Num(); i++)
 	{
-		const FMUserData& Data = UserData[i];
-		if (Data.UserID == InID)
+		const FMPlayerData& Data = UserData[i];
+		if (Data.Account == InID)
 		{
 			return i;
 		}

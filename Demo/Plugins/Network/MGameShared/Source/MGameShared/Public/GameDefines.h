@@ -35,6 +35,6 @@ enum class ELoginGameRetCode : uint8
 {
 	Ok				UMETA(DisplayName = "Ok"),
 	UnKnow			UMETA(DisplayName = "UnKnow"),
-	NoRole			UMETA(DisplayName = "NoRole"),
+	NeedUpdate		UMETA(DisplayName = "NoRole"),
 	DuplicateLogin	UMETA(DisplayName = "DuplicateLogin"),
 };

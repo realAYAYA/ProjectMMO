@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "RedisClient.h"
+#include "RedisClient.h"
 #include "Modules/ModuleManager.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogMGameServer, Log, All);
@@ -21,7 +23,7 @@ public:
 	void Shutdown();
 	bool IsRunning() const;
 
-	// RedisClient;
+	TUniquePtr<FRedisClient> RedisClient;
 
 private:
 

@@ -8,10 +8,19 @@
 
 DEFINE_LOG_CATEGORY(LogMGameServer);
 
+
+const FString RedisIp = TEXT("106.54.222.137");
+const int32 RedisPort = 6379;
+const FString RedisPassword = TEXT("123456");
+
 void FMGameServerModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
-	
+
+	RedisClient = MakeUnique<FRedisClient>();
+
+	Server = NewObject<UMGameServer>();
+	Server->AddToRoot();// 不会被GC
 }
 
 void FMGameServerModule::ShutdownModule()
@@ -37,11 +46,10 @@ void FMGameServerModule::Start()
 	// 创建服务器并启动
 	//FString ListenIp = FZGameTablesModule::Get().GetGameTables()->GameServiceConfig.ListenIp;
 	//int32 ListenPort = FZGameTablesModule::Get().GetGameTables()->GameServiceConfig.ListenPort;
-	Server = NewObject<UMGameServer>();
-	Server->AddToRoot();// 不会被GC
 	Server->Start(10086);
 
 	// 初始化数据库并连接
+	RedisClient->ConnectToRedis(RedisIp, RedisPort, RedisPassword);
 
 	// Todo 各种全区服功能模块的初始化
 	
@@ -62,6 +70,7 @@ void FMGameServerModule::Shutdown()
 	// 全区服功能模块Shutdown
 
 	// 数据库关停
+	RedisClient->DisconnectRedis();
 
 	// 清空Tick
 	if (TickDelegateHandle.IsValid())
@@ -100,6 +109,18 @@ bool FMGameServerModule::Tick(float)
 		// Todo 心跳机制，检查数据库连接，检查客户端连接
 		Server->DoAliveCheck(Now);
 		Server->DoPrintStats(Now);
+	}
+
+	if (Now > NextRedisAliveCheckTime)
+	{
+		NextRedisAliveCheckTime = Now + FTimespan::FromSeconds(5);
+		if (RedisClient)
+		{
+			if (!RedisClient->ExecCommand("PING"))
+			{
+				RedisClient->ConnectToRedis(RedisIp, RedisPort, RedisPassword);
+			}
+		}
 	}
 
 	// 全区服功能模块Tick

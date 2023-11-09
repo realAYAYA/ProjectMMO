@@ -19,6 +19,7 @@ public:
 	UMGameSession() {}
 	
 	void Initialize(INetworkingWebSocket* InWebSocket, const FGuid& InID);
+	void Shutdown();
 
 	virtual void BeginDestroy() override;
 
@@ -28,9 +29,7 @@ public:
 	void OnConnected();
 	
 	void OnReceive(void* InData, const int32 Size);
-
-	void Shutdown() {}
-
+	
 	virtual void Offline() {}
 
 	UPROPERTY()
@@ -49,6 +48,8 @@ public:
 
 	FDateTime GetLastSentTime() const { return LastSentTime.Load(); }
 	FDateTime GetLastReceivedTime() const { return LastReceivedTime.Load(); }
+
+private:
 	
 	TAtomic<int64> LastSentTime{0};	// 最后发送数据时间
 	TAtomic<int64> LastReceivedTime{0};// 最后接受数据时间
