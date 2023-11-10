@@ -18,14 +18,16 @@ public:
 	
 	virtual ~UMPlayer() override;
 
-	bool Init(int64 InUserId, const FString& InAccount, int64 InRoleId);
+	bool Init(const uint64 InPlayerId, const FString& InAccount);
 	void Cleanup();
 
 	void Online(UMGameSession* InSession);
-	void Offline(UMGameSession* InSession);
+	void Offline(const UMGameSession* InSession);
 
-	UMGameSession* GetSession();
+	UMGameSession* GetSession() const;
 	FGuid GetConnId() const;
+
+	uint64 GetPlayerId() const { return PlayerId; }
 
 	void SendToMe(const FGameMessage& InMessage) const;
 
@@ -46,6 +48,7 @@ public:
 	uint64 GetCurrentWorldID() const;  // 获得当前所在场景Id
 	uint32 GetCurrentWorldCfgID() const;  // 获得当前所在场景ID
 	UMWorld* GetCurrentWorld() const;  // 获得当前所在场景对象
+	void UpdateLastWorldInfo();
 	
 private:
 
@@ -55,5 +58,9 @@ private:
 	void OnOnline();
 	void OnOffline();
 
+	uint64 PlayerId = 0;
+
+	FString Account;
+	
 	FMPlayerData Data;
 };

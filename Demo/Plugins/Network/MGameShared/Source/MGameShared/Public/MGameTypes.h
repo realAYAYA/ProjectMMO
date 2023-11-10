@@ -8,6 +8,20 @@
 
 #include "MGameTypes.generated.h"
 
+#define IMPLEMENT_SERIALIZE_FUNCTION() \
+void SerializeToArray(TArray<uint8>& Data) const \
+{ \
+	FMemoryWriter Writer(Data, false); \
+	UScriptStruct* DataType = StaticStruct(); \
+	DataType->SerializeTaggedProperties(Writer, (uint8*)this, DataType, nullptr); \
+} \
+void ParseFromArray(const TArray<uint8>& Data) const \
+{ \
+	FMemoryReader Reader(Data, false); \
+	UScriptStruct* DataType = StaticStruct(); \
+	DataType->SerializeTaggedProperties(Reader, (uint8*)this, DataType, nullptr); \
+} \
+
 /** 道具数据*/
 USTRUCT(BlueprintType) 
 struct FMItemData
@@ -37,7 +51,6 @@ struct FMItemData
 	// 武器属性字段，附魔，质变，配置Id
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	int32 Enchanting = 0;
-	
 };
 
 /** 背包数据*/
@@ -60,8 +73,12 @@ USTRUCT(BlueprintType)
 struct FRoleData
 {
 	GENERATED_USTRUCT_BODY()
+
+	//角色ID
+	UPROPERTY()
+	uint64 ID;
 	
-	// 用户名
+	// 角色名
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	FString RoleName;
 
@@ -116,6 +133,8 @@ struct FMPlayerData
 {
 	GENERATED_USTRUCT_BODY()
 
+	IMPLEMENT_SERIALIZE_FUNCTION()
+	
 	// 用户ID
 	UPROPERTY()
 	uint64 ID;
@@ -128,6 +147,10 @@ struct FMPlayerData
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	TArray<FRoleData> RoleData;
 
+	// 上次在线时间戳
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int64 LastOnlineTime = 0;
+	
 	// 账户创建时间
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	int64 CreateDate = 0;
@@ -166,3 +189,37 @@ struct FCreateRoleParams
 	// Todo 外观数据
 };
 
+/** 登录节目角色数据预览*/
+USTRUCT(BlueprintType)
+struct FPreviewRoleData
+{
+	GENERATED_USTRUCT_BODY()
+
+	// 角色名
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FString RoleName;
+
+	// 性别
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	EGender Gender = EGender::None;
+
+	// 种族
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	ERace Race = ERace::None;
+	
+	// 种族分支
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	int32 RaceBranch = 0;
+
+	// 出身
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	EBirth Birth = EBirth::None;
+
+	// 职业
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	ERoleClass Class = ERoleClass::None;
+
+	// Todo 外观数据
+	// Todo 装扮（备）数据
+	// Todo 其它特效
+};

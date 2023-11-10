@@ -78,8 +78,9 @@ struct FLoginGameAck : public FGameMessage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	ELoginGameRetCode Ret = ELoginGameRetCode::UnKnow;
 
+	// 角色预览数据
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	bool bReLogin = false;
+	TArray<int32> RolePreviewData;
 };
 
 //////////////////////////////////////////////////客户端专用通知消息类型////////////////////////////////////////////////////

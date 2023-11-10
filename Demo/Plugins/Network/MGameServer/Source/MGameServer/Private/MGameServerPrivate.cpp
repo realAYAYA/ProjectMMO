@@ -3,6 +3,7 @@
 #include "MGameServerPrivate.h"
 
 #include "MGameServer.h"
+#include "GameServices/MPlayerManager.h"
 
 #define LOCTEXT_NAMESPACE "FMWebSocketServerModule"
 
@@ -75,7 +76,8 @@ void FMGameServerModule::Start()
 	// 初始化数据库并连接
 	RedisClient->ConnectToRedis(RedisIp, RedisPort, RedisPassword);
 
-	// Todo 各种全区服功能模块的初始化
+	// 全区服功能模块的初始化
+	UMPlayerManager::Get()->Init();
 }
 
 void FMGameServerModule::Shutdown()
@@ -89,6 +91,7 @@ void FMGameServerModule::Shutdown()
 	}
 	
 	// 全区服功能模块Shutdown
+	UMPlayerManager::Get()->Shutdown();
 
 	// 数据库关停
 	RedisClient->DisconnectRedis();
@@ -146,6 +149,8 @@ bool FMGameServerModule::Tick(float)
 
 	// 全区服功能模块Tick
 	const FDateTime LocalNow = FDateTime::Now();
+	
+	UMPlayerManager::Get()->Tick(DeltaTime);
 	
 	return true;
 }

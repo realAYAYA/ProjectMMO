@@ -962,7 +962,7 @@ bool FRedisClient::HGet(const FString& InKey, const FString& InField, FString& O
 	return bResult;
 }
 
-bool FRedisClient::HSetBin(const FString& InKey, const FString& InField, const TArray<char>& InValue)
+bool FRedisClient::HSetBin(const FString& InKey, const FString& Field, const TArray<char>& InValue)
 {
 	bool bResult = false;
 
@@ -972,10 +972,10 @@ bool FRedisClient::HSetBin(const FString& InKey, const FString& InField, const T
 		return bResult;
 	}
 
-	RedisReplyPtr = (redisReply*)redisCommand(RedisContextPtr, "HSET %s %s %b", TCHAR_TO_ANSI(*InKey), TCHAR_TO_ANSI(*InField), InValue.GetData(), size_t(InValue.Num()));
+	RedisReplyPtr = (redisReply*)redisCommand(RedisContextPtr, "HSET %s %s %b", TCHAR_TO_ANSI(*InKey), TCHAR_TO_ANSI(*Field), InValue.GetData(), size_t(InValue.Num()));
 	if (!RedisReplyPtr)
 	{
-		UE_LOG(LogRedisClient, Error, TEXT("%s 返回失败 Key=%s Field=%s"), ANSI_TO_TCHAR(__FUNCTION__), *InKey, *InField);
+		UE_LOG(LogRedisClient, Error, TEXT("%s 返回失败 Key=%s Field=%s"), ANSI_TO_TCHAR(__FUNCTION__), *InKey, *Field);
 		return bResult;
 	}
 	
@@ -985,7 +985,7 @@ bool FRedisClient::HSetBin(const FString& InKey, const FString& InField, const T
 	}
 	else
 	{
-		UE_LOG(LogRedisClient, Error, TEXT("%s 返回失败 Key=%s Field=%s ReplyType=%d"), ANSI_TO_TCHAR(__FUNCTION__), *InKey, *InField, RedisReplyPtr->type);
+		UE_LOG(LogRedisClient, Error, TEXT("%s 返回失败 Key=%s Field=%s ReplyType=%d"), ANSI_TO_TCHAR(__FUNCTION__), *InKey, *Field, RedisReplyPtr->type);
 	}
 
 	freeReplyObject(RedisReplyPtr);
@@ -994,7 +994,7 @@ bool FRedisClient::HSetBin(const FString& InKey, const FString& InField, const T
 	return bResult;		
 }
 
-bool FRedisClient::HGetBin(const FString& InKey, const FString& InField, TArray<char>& OutValue)
+bool FRedisClient::HGetBin(const FString& InKey, const FString& Field, TArray<char>& OutValue)
 {
 	bool bResult = false;
 
@@ -1004,10 +1004,10 @@ bool FRedisClient::HGetBin(const FString& InKey, const FString& InField, TArray<
 		return bResult;
 	}
 
-	RedisReplyPtr = (redisReply*)redisCommand(RedisContextPtr, "HGET %s %s", TCHAR_TO_ANSI(*InKey), TCHAR_TO_ANSI(*InField));
+	RedisReplyPtr = (redisReply*)redisCommand(RedisContextPtr, "HGET %s %s", TCHAR_TO_ANSI(*InKey), TCHAR_TO_ANSI(*Field));
 	if (!RedisReplyPtr)
 	{
-		UE_LOG(LogRedisClient, Error, TEXT("%s 返回失败 Key=%s Field=%s"), ANSI_TO_TCHAR(__FUNCTION__), *InKey, *InField);
+		UE_LOG(LogRedisClient, Error, TEXT("%s 返回失败 Key=%s Field=%s"), ANSI_TO_TCHAR(__FUNCTION__), *InKey, *Field);
 		return bResult;
 	}
 	
@@ -1018,7 +1018,7 @@ bool FRedisClient::HGetBin(const FString& InKey, const FString& InField, TArray<
 	}
 	else
 	{
-		UE_LOG(LogRedisClient, Error, TEXT("%s 返回失败 Key=%s Field=%s ReplyType=%d"), ANSI_TO_TCHAR(__FUNCTION__), *InKey, *InField, RedisReplyPtr->type);
+		UE_LOG(LogRedisClient, Error, TEXT("%s 返回失败 Key=%s Field=%s ReplyType=%d"), ANSI_TO_TCHAR(__FUNCTION__), *InKey, *Field, RedisReplyPtr->type);
 	}
 
 	freeReplyObject(RedisReplyPtr);
