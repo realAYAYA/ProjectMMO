@@ -6,7 +6,7 @@ UMWorld::~UMWorld()
 {
 }
 
-bool UMWorld::Init(int64 InUserId, const FString& InAccount, int64 InRoleId)
+bool UMWorld::Init()
 {
 	return false;
 }
@@ -17,15 +17,20 @@ void UMWorld::Cleanup()
 
 void UMWorld::Online(UMGameSession* InSession)
 {
+	Session = InSession;
+	Session->World = this;
 }
 
 void UMWorld::Offline(UMGameSession* InSession)
 {
+	Save();
+	
+	Session = nullptr;
 }
 
 bool UMWorld::IsOnline() const
 {
-	return true;
+	return Session != nullptr;
 }
 
 UMGameSession* UMWorld::GetSession() const
@@ -35,7 +40,12 @@ UMGameSession* UMWorld::GetSession() const
 
 FGuid UMWorld::GetConnId() const
 {
-	return Session->ID;
+	if (Session)
+		return Session->ID;
+	else
+	{
+		return FGuid();
+	}
 }
 
 bool UMWorld::Load()
@@ -43,7 +53,12 @@ bool UMWorld::Load()
 	return true;
 }
 
-void UMWorld::Save()
+bool UMWorld::Save()
+{
+	return false;
+}
+
+void UMWorld::Reset()
 {
 }
 

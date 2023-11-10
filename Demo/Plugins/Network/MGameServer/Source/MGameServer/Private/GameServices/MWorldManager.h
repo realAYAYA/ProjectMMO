@@ -28,6 +28,8 @@ public:
 
 	bool Tick(float DeltaTime);
 
+	UMWorld* CreateWorld();
+
 	// 数据填充方法
 	//void Fill(const UZRole* Role);
 

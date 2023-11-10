@@ -8,18 +8,21 @@
 ////////////////////////////////////////////////DS服务器专用消息类型///////////////////////////////////////////////////////
 // 仅用于DS与WebSocket服务器直接通信
 
+// DS进程启动完成后发回消息
 USTRUCT()
 struct FLoginAsDSReq : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 
 	GENERATED_CUSTOM_BODY()
-	
-	UPROPERTY()
-	int32 Token = 0;
 
+	// 验证码
 	UPROPERTY()
-	FString ClientVersion;
+	uint64 Token = 0;
+
+	// DS进程是否启动成功，并初始化完成
+	UPROPERTY()
+	bool bSucceed = false;
 };
 
 USTRUCT()
@@ -29,28 +32,82 @@ struct FLoginAsDSAck : public FGameMessage
 
 	GENERATED_CUSTOM_BODY()
 
+	// DS收到则将自己置为活跃状态，接收进入玩家
 	UPROPERTY()
-	ELoginGameRetCode Ret = ELoginGameRetCode::UnKnow;
+	bool bOk = false;
+};
 
-	UPROPERTY()
-	bool bReady = false;
+// DS进程请求关闭自己 
+USTRUCT()
+struct FCloseMeReq : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+	
 };
 
 USTRUCT()
-struct FShutMeDownDSReq : public FGameMessage
+struct FCloseMeAck : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 
 	GENERATED_CUSTOM_BODY()
 	
 	UPROPERTY()
-	ELoginGameRetCode Ret = ELoginGameRetCode::UnKnow;
-
-	UPROPERTY()
-	bool bReady = false;
+	bool bAllow = false;
 };
 
-// Todo 请求关卡进度，保存关卡进度，请求入驻玩家数据，上传玩家数据，玩家离开关卡
+// 下载玩家数据
+USTRUCT()
+struct FDSUpdatePlayerDataReq : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	// 玩家数据
+	UPROPERTY()
+	bool bAllow = false;
+};
+
+USTRUCT()
+struct FDSUpdatePlayerDataAck : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	// 角色数据
+	UPROPERTY()
+	bool bOk = false;
+};
+
+// 更新玩家数据，失败多次会被踢出游戏
+USTRUCT()
+struct FDSGetPlayerDataReq : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	// 玩家数据，id，角色id
+	UPROPERTY()
+	bool bSucceed = false;
+};
+
+USTRUCT()
+struct FDSGetPlayerDataAck : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+	
+	UPROPERTY()
+	bool bOk = false;
+};
+
+// Todo 请求关卡进度，保存关卡进度，请求入驻玩家数据，，玩家离开关卡
 
 //////////////////////////////////////////////////客户端专用消息类型///////////////////////////////////////////////////////
 

@@ -15,7 +15,7 @@ void UCharToChar(const TArray<uint8>& From, TArray<char>& To)
 	To.SetNum(From.Num());
 	for (const uint8& E : From)
 	{
-		To.Add(E);
+		To.Add(static_cast<char>(E));
 	}
 }
 
@@ -24,7 +24,7 @@ void CharToUChar(const TArray<char>& From, TArray<uint8>& To)
 	To.SetNum(From.Num());
 	for (const char& E : From)
 	{
-		To.Add(E);
+		To.Add(static_cast<uint8>(E));
 	}
 }
 

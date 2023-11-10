@@ -15,7 +15,7 @@ public:
 	
 	virtual ~UMWorld() override;
 
-	bool Init(int64 InUserId, const FString& InAccount, int64 InRoleId);
+	bool Init();
 	void Cleanup();
 
 	void Online(UMGameSession* InSession);
@@ -31,18 +31,20 @@ public:
 	bool Load();
 	
 	/** 存档 */
-	void Save();
+	bool Save();
+
+	void Reset(); // 重置世界/副本
 
 private:
 
 	void OnOnline();
 	void OnOffline();
 
-	const uint64 UserId = 0;
+	const uint64 WorldId = 0;
 	// DSProcessHandle;
 
 	UPROPERTY()
 	UMGameSession* Session = nullptr;
 
-	
+	// Data;// 存储了世界/副本信息 以及某些进度
 };

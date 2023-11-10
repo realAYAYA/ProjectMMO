@@ -16,7 +16,7 @@ M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 
 	Ack.Ret = ELoginGameRetCode::UnKnow;
 	
-	// 重复请求登录
+	// 重复请求登录，如果是新Session，下文还会进行顶号判定
 	if (Player)
 	{
 		return;

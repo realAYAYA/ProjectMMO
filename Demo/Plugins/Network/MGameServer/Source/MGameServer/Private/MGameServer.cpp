@@ -49,6 +49,14 @@ void UMGameServer::Stop()
 {
 	if (IsRunning())
 	{
+		for (const auto& Conn : Connections)
+		{
+			UMGameSession* Session = Conn.Value;
+			Session->Shutdown();
+		}
+
+		Connections.Empty();
+		
 		WebSocketServer.Reset();
 
 		UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));
@@ -172,12 +180,11 @@ void UMGameServer::OnClosed(const FGuid InID)
 	const UMGameSession* Connection = *Connections.Find(InID);
 	if (Connection && Connection->WebSocket)
 	{
-		const bool bOk = WebSocketClientClosedCallBack.ExecuteIfBound(InID);
-		if (!bOk)
-			UE_LOG(LogMGameServer, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
+		if (IsValid(WebSocketClientClosedCallBack.GetUObject()))
+			WebSocketClientClosedCallBack.Execute(InID);
 		
 		Connections.Remove(InID);
 	}
-
+	
 	UE_LOG(LogMGameServer, Display, TEXT("%s"), *FString(__FUNCTION__));
 }

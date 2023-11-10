@@ -1,6 +1,8 @@
 #include "MGameSession.h"
 
 #include "GameSessionHelper.h"
+#include "GameServices/MPlayer.h"
+#include "GameServices/MWorld.h"
 
 void UMGameSession::Initialize(INetworkingWebSocket* InWebSocket, const FGuid& InID)
 {
@@ -12,6 +14,11 @@ void UMGameSession::Initialize(INetworkingWebSocket* InWebSocket, const FGuid& I
 
 void UMGameSession::Shutdown()
 {
+	if (Player)
+		Player->Offline(this);
+
+	if (World)
+		World->Offline(this);
 }
 
 void UMGameSession::BeginDestroy()

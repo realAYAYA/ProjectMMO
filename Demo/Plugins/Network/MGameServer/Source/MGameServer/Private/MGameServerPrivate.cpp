@@ -55,6 +55,7 @@ void FMGameServerModule::HandleCorePreExit()
 	if (Server)
 	{
 		Server->RemoveFromRoot();// 开启GC
+		Server->ConditionalBeginDestroy();
 		Server = nullptr;
 	}
 }

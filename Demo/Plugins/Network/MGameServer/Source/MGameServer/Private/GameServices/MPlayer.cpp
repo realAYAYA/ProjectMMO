@@ -1,6 +1,7 @@
 #include "MPlayer.h"
 
 #include "MGameSession.h"
+#include "MPlayerManager.h"
 #include "RedisOp.h"
 
 UMPlayer::~UMPlayer()
@@ -21,6 +22,7 @@ void UMPlayer::Cleanup()
 void UMPlayer::Online(UMGameSession* InSession)
 {
 	Session = InSession;
+	Session->Player = this;
 }
 
 void UMPlayer::Offline(const UMGameSession* InSession)
@@ -33,7 +35,9 @@ void UMPlayer::Offline(const UMGameSession* InSession)
 
 	Data.LastOnlineTime = FDateTime::UtcNow().GetTicks();  // 更新离线时间
 	
-	//MarkNeedSave(true);
+	Save();//MarkNeedSave(true);
+
+	UMPlayerManager::Get()->DeletePlayer(this);
 }
 
 UMGameSession* UMPlayer::GetSession() const
