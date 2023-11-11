@@ -4,10 +4,14 @@
 #include "GameMessage.h"
 #include "NetFwd.h"
 
-class MRPC_API FClientRpcManager
+class MRPC_API FClientRpcManager : FTickableGameObject
 {
 	
 public:
+
+	virtual void Tick(float DeltaTime) override;
+	virtual bool IsTickable() const override;
+	virtual TStatId GetStatId() const override;
 	
 	typedef TFunction<void(const ERpcErrorCode, const FNetworkMessage&)> FResponseCallback;
 	void SendRequest(const FConnectionPtr& InConn, const FGameMessage& InMessage, const FResponseCallback& Callback);
@@ -31,11 +35,12 @@ private:
 	
 	TMap<uint64, FRequestPendingData> AllRequestPending;
 
+	FDateTime LastCheckAliveTime;
+
 	// Notify message from server
 	struct FNotifyPendingData
 	{
 		FNotifyCallback Callback;
-		int64 ExpireTimestamp = 0;
 	};
 	
 	TMap<uint64, FNotifyPendingData> AllNotifyPending;

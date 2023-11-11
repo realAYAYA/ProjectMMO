@@ -22,6 +22,43 @@ bool CheckBodyLength(const TArray<uint8>& Data)
 	return true;
 }
 
+void FClientRpcManager::Tick(float DeltaTime)
+{
+	const FDateTime Now = FDateTime::UtcNow();
+	if ((Now - LastCheckAliveTime).GetTotalSeconds() > 10)
+	{
+		TArray<uint64> Keys;
+		for (const auto& Tuple : AllRequestPending)
+		{
+			const FRequestPendingData& PendingData = Tuple.Value;
+			if ((Now - FDateTime(PendingData.ExpireTimestamp)).GetTotalSeconds() > 10)
+			{
+				Keys.Add(Tuple.Key);
+
+				// 触发超时
+				PendingData.Callback(ERpcErrorCode::TimeOut, FNetworkMessage());
+			}
+		}
+
+		for (const uint64 Key : Keys)
+		{
+			AllRequestPending.Remove(Key);
+		}
+		
+		LastCheckAliveTime = Now;
+	}
+}
+
+bool FClientRpcManager::IsTickable() const
+{
+	return true;
+}
+
+TStatId FClientRpcManager::GetStatId() const
+{
+	RETURN_QUICK_DECLARE_CYCLE_STAT(FClientRpcManager, STATGROUP_Tickables);
+}
+
 void FClientRpcManager::SendRequest(
 	const FConnectionPtr& InConn,
 	const FGameMessage& InMessage,
@@ -48,7 +85,7 @@ void FClientRpcManager::SendRequest(
 	FRequestPendingData Data;
 	Data.SerialNum = SerialNum;
 	Data.Callback = Callback;
-	Data.ExpireTimestamp = 0;
+	Data.ExpireTimestamp = FDateTime::UtcNow().GetTicks();
 	AllRequestPending.Emplace(SerialNum, std::move(Data));
 }
 
@@ -59,7 +96,6 @@ void FClientRpcManager::DispatchNotify(
 {
 	FNotifyPendingData Data;
 	Data.Callback = Callback;
-	Data.ExpireTimestamp = 0;
 
 	AllNotifyPending.Emplace(TypeID, std::move(Data));
 }
