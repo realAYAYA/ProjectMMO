@@ -52,18 +52,18 @@ void UMGameInstance::LoginToWebSocketServer()
 {
 	if (!IsRunningDedicatedServer())
 	{
-		return;
+		//return;
 	}
 	
 	if (UMGameClientSubsystem* Client = GetSubsystem<UMGameClientSubsystem>())
 	{
 		Client->GetOnConnectedCallback().BindUFunction(this, TEXT("GetReady"));
 
-		Client->CreateSocket(TEXT(""), TEXT("10086"));
+		Client->CreateSocket(TEXT("ws://127.0.0.1:10086"), TEXT(""));
 	}
 }
 
-void UMGameInstance::GetReady(bool bOk)
+void UMGameInstance::GetReady()
 {
 	// Todo 如果是DS服务器，发起请求连接至WebSocket服务器
 	if (const UGameRpcClient* Stub = GetClientRpcStub())
@@ -71,6 +71,7 @@ void UMGameInstance::GetReady(bool bOk)
 		//GetToken();
 		//
 		FLoginAsDSReq Req;
+		Req.Token = 123456;
 		Stub->LoginAsDS(Req, [this](ERpcErrorCode Code, const FLoginAsDSAck& Ack)
 		{
 			if (Code == ERpcErrorCode::Ok && Ack.bOk)

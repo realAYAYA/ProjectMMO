@@ -46,7 +46,8 @@ public:
 	void LoginToWebSocketServer();
 	
 	// DS服务器准备就绪
-	void GetReady(bool bOk);
+	UFUNCTION()
+	void GetReady();
 	
 	// DS服务器准备就绪
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
