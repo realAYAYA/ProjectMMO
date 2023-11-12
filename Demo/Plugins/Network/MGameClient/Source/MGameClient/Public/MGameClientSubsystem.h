@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_DELEGATE(FOnDisConnectServer);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnErrorCallback, const FString&, Error);
 
 UCLASS()
-class UMGameClientSubsystem : public UGameInstanceSubsystem
+class MGAMECLIENT_API UMGameClientSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
@@ -33,6 +33,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "CreateSocket")
 	void K2_CreateSocket(const FString& ServerURL, const FString& ServerProtocol, const FOnConnectServer& Callback);
 
+	FOnConnectServer& GetOnConnectedCallback() { return OnConnectedServer; }
 	void CreateSocket(const FString& ServerURL, const FString& ServerProtocol);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
@@ -40,6 +41,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnErrorCallback OnErrorCallback;
+
+	bool IsConnected() const { return Connection != nullptr; }
 
 protected:
 	

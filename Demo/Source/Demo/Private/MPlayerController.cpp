@@ -4,7 +4,7 @@
 #include "MPlayerController.h"
 
 #include "Demo.h"
-#include "DemoGameMode.h"
+#include "..\Public\MGameModeBase.h"
 #include "MGameInstance.h"
 #include "MPlayerState.h"
 #include "Characters/MCharacter.h"

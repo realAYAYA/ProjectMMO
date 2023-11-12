@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "MGameInstance.generated.h"
 
+class UGameRpcClient;
 class AMPlayerState;
 class UGameTables;
 class UMSaveGame;
@@ -39,5 +40,22 @@ public:
 	virtual void BeginDestroy() override;
 
 	static UMGameInstance* GetMGameInstance(const UWorld* World);
+
+	// DS server
+
+	void LoginToWebSocketServer();
 	
+	// DS服务器准备就绪
+	void GetReady(bool bOk);
+	
+	// DS服务器准备就绪
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	bool IsReady() const { return bReady; }
+
+	UGameRpcClient* GetClientRpcStub() const;
+
+private:
+
+	//WorldInfo;// 关卡/副本信息
+	bool bReady = false;
 };

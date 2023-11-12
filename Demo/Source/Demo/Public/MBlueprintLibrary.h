@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameRpcClient.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MBlueprintLibrary.generated.h"
 
@@ -29,4 +30,8 @@ public:
 	/** Excel配置 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static class UGameTables* GetMGameTables(const UObject* WorldContextObject);
+
+	/** Excel配置 */
+	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
+	static UGameRpcClient* GetClientRpcStub(const UObject* WorldContextObject);
 };

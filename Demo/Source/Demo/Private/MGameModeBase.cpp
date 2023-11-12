@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "DemoGameMode.h"
+#include "MGameModeBase.h"
 
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/GameStateBase.h"
@@ -56,4 +56,10 @@ TArray<AMPlayerState*> AMGameMode::GetAllPlayerStates() const
 	}
 
 	return Array;
+}
+
+void AMGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	
 }

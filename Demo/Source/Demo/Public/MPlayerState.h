@@ -6,8 +6,6 @@
 #include "MGameTypes.h"
 #include "GameFramework/PlayerState.h"
 
-#include "MMOGameTypes.h"
-
 #include "MPlayerState.generated.h"
 
 /**

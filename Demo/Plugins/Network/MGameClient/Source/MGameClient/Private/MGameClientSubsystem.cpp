@@ -29,6 +29,7 @@ void UMGameClientSubsystem::K2_CreateSocket(const FString& ServerURL, const FStr
 	if (Connection && IsValid(OnConnectedServer.GetUObject()))
 	{
 		OnConnectedServer.Execute(false);// 连接已存在
+		OnConnectedServer.Clear();
 		return;
 	}
 	
@@ -41,6 +42,7 @@ void UMGameClientSubsystem::CreateSocket(const FString& ServerURL, const FString
 	if (!Connection && IsValid(OnConnectedServer.GetUObject()))
 	{
 		OnConnectedServer.Execute(false);
+		OnConnectedServer.Clear();
 		return;
 	}
 	
@@ -67,13 +69,20 @@ void UMGameClientSubsystem::OnConnected()
 	GameRpcClient->Setup(&RpcManager, Connection);
 	
 	if (!OnConnectedServer.ExecuteIfBound(true))
+	{
 		UE_LOG(LogMGameClient, Warning, TEXT("%s : InValid Callback"), *FString(__FUNCTION__));
+	}
+
+	OnConnectedServer.Clear();
 }
 
 void UMGameClientSubsystem::OnConnectionError(const FString& Error)
 {
 	if (IsValid(OnConnectedServer.GetUObject()))
+	{
 		OnConnectedServer.Execute(false);
+		OnConnectedServer.Clear();
+	}
 	
 	OnErrorCallback.Broadcast(Error);
 	

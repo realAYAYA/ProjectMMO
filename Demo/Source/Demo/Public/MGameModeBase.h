@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "DemoGameMode.generated.h"
+#include "MGameModeBase.generated.h"
 
 class AMPlayerState;
 
@@ -25,4 +25,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ProjecetM")
 	TArray<AMPlayerState*> GetAllPlayerStates() const;
+	
+	virtual void BeginPlay() override;
 };
