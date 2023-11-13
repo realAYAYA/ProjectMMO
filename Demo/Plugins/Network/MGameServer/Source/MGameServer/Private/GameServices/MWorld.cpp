@@ -8,7 +8,7 @@ UMWorld::~UMWorld()
 
 bool UMWorld::Init()
 {
-	return false;
+	return true;
 }
 
 void UMWorld::Cleanup()

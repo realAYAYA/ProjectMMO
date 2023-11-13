@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 
 #include "MMacros.h"
+#include "MPlayer.h"
 #include "MWorldManager.generated.h"
 
 class UMWorld;
@@ -28,11 +29,18 @@ public:
 
 	bool Tick(float DeltaTime);
 
+	// 生产基础大世界
 	UMWorld* CreateWorld();
+
+	// 临时测试用主关卡
+	UPROPERTY()
+	UMWorld* MainWorld = nullptr;
+
+	// 创建地下城
+	UMWorld* CreateDungeon(const UMPlayer* Player);
 
 	// 数据填充方法
 	//void Fill(const UZRole* Role);
 
-	UPROPERTY()
-	UMWorld* MainWorld = nullptr;
+	
 };

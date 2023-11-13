@@ -33,7 +33,7 @@ void UMPlayerManager::Tick(float DeltaTime)
 {
 	// Todo 玩家延迟离线，DS中离线时要保证这边还在线，假如玩家掉线后，有40s反应时间 通知玩家所在DS，赶紧上传最后的存档
 	const FDateTime Now = FDateTime::UtcNow();
-	if ((Now - LastProcessTime).GetTotalSeconds() > 40)
+	if ((Now - LastProcessTime).GetTotalSeconds() > 20)
 	{
 		ProcessJunk();
 

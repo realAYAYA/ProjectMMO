@@ -11,6 +11,10 @@ UMWorldManager::~UMWorldManager()
 void UMWorldManager::Init()
 {
 	LoadData();
+
+	// Todo
+	// 创建固定的几个大世界公共区域
+	// 管理玩家副本
 }
 
 void UMWorldManager::Shutdown()
@@ -53,6 +57,12 @@ UMWorld* UMWorldManager::CreateWorld()
 	
 	/*if (!AddPlayer(Player))
 		return nullptr;*/
+	MainWorld = World;
 	
 	return World;
+}
+
+UMWorld* UMWorldManager::CreateDungeon(const UMPlayer* Player)
+{
+	return nullptr;
 }

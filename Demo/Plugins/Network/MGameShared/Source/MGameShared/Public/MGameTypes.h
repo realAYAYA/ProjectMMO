@@ -223,3 +223,37 @@ struct FPreviewRoleData
 	// Todo 装扮（备）数据
 	// Todo 其它特效
 };
+
+/* 关卡/副本进度数据*/
+USTRUCT(BlueprintType)
+struct FLevelData
+{
+	GENERATED_USTRUCT_BODY()
+
+	// 唯一ID
+	UPROPERTY()
+	uint64 ID;
+
+	// 配置
+	UPROPERTY()
+	int32 CfgID = 0;
+
+	// 副本进度数据
+	UPROPERTY()
+	int32 Progress = 0;
+	
+	// 创建时间
+	UPROPERTY()
+	int64 CreateTime = 0;
+};
+
+/* 关卡/副本服务器缓存数据*/
+USTRUCT(BlueprintType)
+struct FLevelSaveData
+{
+	GENERATED_USTRUCT_BODY()
+
+	// 存储->转为TMap
+	UPROPERTY()
+	TArray<FLevelData> LevelData;
+};
