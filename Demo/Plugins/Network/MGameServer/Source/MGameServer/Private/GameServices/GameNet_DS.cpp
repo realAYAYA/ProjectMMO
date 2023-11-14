@@ -1,5 +1,7 @@
 #include "MGameSession.h"
 #include "GameSessionHelper.h"
+#include "MWorld.h"
+#include "MWorldManager.h"
 
 // 仅用于DS与WebSocket之间的通信，客户端禁止调用这些方法
 
@@ -14,9 +16,15 @@ M_GAME_RPC_HANDLE(GameRpc, LoginAsDS, InSession, Req, Ack)
 	// 6. 玩家如何进入地下城或大世界？正常的公共区域大世界有着固定ID，玩家请求进入即可，也可以指定地下城ID进入（当然会有一系列许可检定）
 	
 	UMWorld* World = InSession->World;
+	World = UMWorldManager::Get()->CreateWorld();
 	if (!World)
 	{
 		return;
 	}
-	
+
+	World->Online(InSession);
+
+	Ack.bOk = true;
 }
+
+// Todo DS服务器拉取玩家角色数据

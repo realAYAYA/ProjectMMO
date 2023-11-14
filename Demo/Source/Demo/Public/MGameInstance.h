@@ -25,11 +25,11 @@ public:
 	void SetLoginInfo(const FString& InUserID, const FString& InUserName);
 
 	// Steam, Epic, PS4 : ID
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProjectM")
 	FString UserID;
 	
 	// Steam, Epic, PS4 : USerName
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProjectM")
 	FString UserName;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProjectM")
@@ -43,7 +43,9 @@ public:
 
 	// DS server
 
-	void LoginToWebSocketServer();
+	// Todo 后期不需要蓝图调用该方法，DS专用
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	void LoginServer();
 	
 	// DS服务器准备就绪
 	UFUNCTION()

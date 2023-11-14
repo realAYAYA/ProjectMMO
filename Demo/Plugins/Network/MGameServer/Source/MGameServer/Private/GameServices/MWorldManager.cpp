@@ -20,6 +20,8 @@ void UMWorldManager::Init()
 void UMWorldManager::Shutdown()
 {
 	SaveData();
+
+	MainWorld->Offline(nullptr);
 }
 
 void UMWorldManager::Cleanup()

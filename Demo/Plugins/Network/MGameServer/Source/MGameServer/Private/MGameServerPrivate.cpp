@@ -4,6 +4,7 @@
 
 #include "MGameServer.h"
 #include "GameServices/MPlayerManager.h"
+#include "GameServices/MWorldManager.h"
 
 #define LOCTEXT_NAMESPACE "FMWebSocketServerModule"
 
@@ -93,6 +94,7 @@ void FMGameServerModule::Shutdown()
 	
 	// 全区服功能模块Shutdown
 	UMPlayerManager::Get()->Shutdown();
+	UMWorldManager::Get()->Shutdown();
 
 	// 数据库关停
 	RedisClient->DisconnectRedis();

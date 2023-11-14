@@ -26,8 +26,6 @@ void UMGameInstance::Init()
 		if (!SaveGame)
 			SaveGame = NewObject<UMSaveGame>(this);
 	}
-
-	LoginToWebSocketServer();
 }
 
 void UMGameInstance::BeginDestroy()
@@ -48,7 +46,7 @@ UMGameInstance* UMGameInstance::GetMGameInstance(const UWorld* World)
 	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
 }
 
-void UMGameInstance::LoginToWebSocketServer()
+void UMGameInstance::LoginServer()
 {
 	if (!IsRunningDedicatedServer())
 	{

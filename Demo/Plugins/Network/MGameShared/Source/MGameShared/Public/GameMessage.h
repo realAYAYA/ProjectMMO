@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFwd.h"
+#include "MGameTypes.h"
 #include "GameMessage.generated.h"
 
 ////////////////////////////////////////////////DS服务器专用消息类型///////////////////////////////////////////////////////
@@ -58,34 +59,40 @@ struct FCloseMeAck : public FGameMessage
 	bool bAllow = false;
 };
 
-// 下载玩家数据
+// 拉取玩家数据
 USTRUCT()
-struct FDSUpdatePlayerDataReq : public FGameMessage
+struct FPullRoleDataReq : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 
 	GENERATED_CUSTOM_BODY()
-
-	// 玩家数据
+	
 	UPROPERTY()
-	bool bAllow = false;
+	uint64 PlayerID = 0;
+
+	// 需要请求的角色名称
+	UPROPERTY()
+	FString RoleName;
 };
 
 USTRUCT()
-struct FDSUpdatePlayerDataAck : public FGameMessage
+struct FPullRoleDataAck : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 
 	GENERATED_CUSTOM_BODY()
+	
+	UPROPERTY()
+	bool bOk = false;
 
 	// 角色数据
 	UPROPERTY()
-	bool bOk = false;
+	FRoleData RoleData;
 };
 
-// 更新玩家数据，失败多次会被踢出游戏
+// DS提交玩家数据
 USTRUCT()
-struct FDSGetPlayerDataReq : public FGameMessage
+struct FCommitRoleDataReq : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -97,7 +104,7 @@ struct FDSGetPlayerDataReq : public FGameMessage
 };
 
 USTRUCT()
-struct FDSGetPlayerDataAck : public FGameMessage
+struct FCommitRoleDataAck : public FGameMessage
 {
 	GENERATED_USTRUCT_BODY()
 

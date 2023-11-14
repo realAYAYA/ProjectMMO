@@ -23,6 +23,8 @@ void UMWorld::Online(UMGameSession* InSession)
 
 void UMWorld::Offline(UMGameSession* InSession)
 {
+	check(Session == InSession);
+	
 	Save();
 	
 	Session = nullptr;
