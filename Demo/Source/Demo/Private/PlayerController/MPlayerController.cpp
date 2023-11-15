@@ -20,7 +20,7 @@ void AMPlayerController::K2_Login(const FString& Account, const FOnLoginResult& 
 	AMPlayerState* PS = GetMPlayerState();
 	if (!RPC || !PS)
 	{
-		Callback.Execute(ELoginGameRetCode::UnKnow);
+		Callback.Execute(ELoginGameRetCode::UnKnow, TArray<FPreviewRoleData>());
 		return;
 	}
 	
@@ -31,7 +31,7 @@ void AMPlayerController::K2_Login(const FString& Account, const FOnLoginResult& 
 	{
 		if (ErrorCode != ERpcErrorCode::Ok)
 		{
-			Callback.Execute(ELoginGameRetCode::UnKnow);
+			Callback.Execute(ELoginGameRetCode::UnKnow, TArray<FPreviewRoleData>());
 			return;
 		}
 
@@ -40,7 +40,7 @@ void AMPlayerController::K2_Login(const FString& Account, const FOnLoginResult& 
 			PS->SetPlayerID(Ack.PlayerID);
 		}
 
-		Callback.Execute(Ack.Ret);
+		Callback.Execute(Ack.Ret, Ack.RolePreviewData);
 	});
 }
 

@@ -12,7 +12,7 @@
 class AMPlayerState;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPCNotice, const FString&, NewMessage);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FOnLoginResult, const ELoginGameRetCode, RetCode);// Todo 角色预览数据
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginResult, const ELoginGameRetCode, RetCode, const TArray<FPreviewRoleData>&, PreviewData);// Todo 角色预览数据
 
 /**
  * 项目基类PC
