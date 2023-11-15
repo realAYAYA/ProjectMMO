@@ -6,7 +6,7 @@
 #include "AbilitySystemGlobals.h"
 #include "Demo.h"
 #include "MGameClientSubsystem.h"
-#include "../../../Plugins/Network/MRpc/Source/MRpc/Public/GameRpcClient.h"
+#include "GameRpcClient.h"
 #include "Developer/MSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 
