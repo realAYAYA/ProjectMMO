@@ -20,17 +20,6 @@ enum class ERpcErrorCode : uint8
 };
 
 UENUM(BlueprintType)
-enum class EOpErrorCode : uint8
-{
-	Ok				UMETA(DisplayName = "正常"),
-	NotEnough		UMETA(DisplayName = "数量不足"),
-	BadParam		UMETA(DisplayName = "参数非法"),
-	
-	InValidConfig	UMETA(DisplayName = "无效配置"),
-	Unknown			UMETA(DisplayName = "未知错误"),
-};
-
-UENUM(BlueprintType)
 enum class ELoginGameRetCode : uint8
 {
 	Ok				UMETA(DisplayName = "Ok"),

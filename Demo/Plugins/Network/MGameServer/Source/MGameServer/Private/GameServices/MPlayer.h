@@ -27,7 +27,7 @@ public:
 	UMGameSession* GetSession() const;
 	FGuid GetConnId() const;
 
-	uint64 GetPlayerId() const { return PlayerId; }
+	uint64 GetPlayerID() const { return PlayerId; }
 
 	void SendToMe(const FGameMessage& InMessage) const;
 

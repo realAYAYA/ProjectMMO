@@ -70,7 +70,7 @@ bool UMPlayer::IsOnline() const
 
 bool UMPlayer::Load()
 {
-	FRedisOp::LoadPlayerData(GetPlayerId(), &Data);
+	FRedisOp::LoadPlayerData(GetPlayerID(), &Data);
 
 	// 没有数据就当作新号初始化
 	if (Data.ID == 0)
@@ -93,7 +93,7 @@ void UMPlayer::Save()
 	
 	// Todo 功能模块SaveData
 
-	FRedisOp::SavePlayerData(GetPlayerId(), Data);
+	FRedisOp::SavePlayerData(GetPlayerID(), Data);
 }
 
 void UMPlayer::SetCurWorldId(uint64 InWorldId)

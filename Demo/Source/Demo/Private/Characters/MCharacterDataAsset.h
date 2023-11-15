@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "MMOGameTypes.h"
+#include "..\..\Public\MGameCommon.h"
 #include "MCharacterDataAsset.generated.h"
 
 /**

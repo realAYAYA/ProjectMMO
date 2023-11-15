@@ -76,7 +76,7 @@ struct FRoleData
 
 	//角色ID
 	UPROPERTY()
-	uint64 ID;
+	uint64 ID = 0;
 	
 	// 角色名
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")

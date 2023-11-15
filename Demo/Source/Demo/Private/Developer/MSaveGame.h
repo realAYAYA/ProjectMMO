@@ -6,7 +6,7 @@
 #include "MGameTypes.h"
 #include "GameFramework/SaveGame.h"
 
-#include "MMOGameTypes.h"
+#include "..\..\Public\MGameCommon.h"
 
 #include "MSaveGame.generated.h"
 

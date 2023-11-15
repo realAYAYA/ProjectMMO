@@ -23,6 +23,18 @@ public:
     FLoginAsDSCallback OnLoginAsDS;
     
     /**
+     * DS拉取玩家数据
+    */
+    typedef TFunction<void(const FPullRoleDataReq&, FPullRoleDataAck&)> FPullRoleDataCallback;
+    FPullRoleDataCallback OnPullRoleData;
+    
+    /**
+     * DS提交玩家数据
+    */
+    typedef TFunction<void(const FCommitRoleDataReq&, FCommitRoleDataAck&)> FCommitRoleDataCallback;
+    FCommitRoleDataCallback OnCommitRoleData;
+    
+    /**
      * 登录游戏
     */
     typedef TFunction<void(const FLoginGameReq&, FLoginGameAck&)> FLoginGameCallback;

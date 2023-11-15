@@ -12,9 +12,9 @@ AMPlayerState::AMPlayerState(const FObjectInitializer& ObjectInitializer)
 	InventoryModule = NewObject<UInventory>();
 }
 
-int32 AMPlayerState::GetRoleNum() const
+void AMPlayerState::LoadData(const FRoleData& InData)
 {
-	return UserData.RoleData.Num();
+	RoleData = InData;
 }
 
 void AMPlayerState::CopyProperties(APlayerState* PlayerState)
@@ -25,6 +25,8 @@ void AMPlayerState::CopyProperties(APlayerState* PlayerState)
 void AMPlayerState::Reset()
 {
 	Super::Reset();
+
+	MPlayerID = 0;
 }
 
 void AMPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
@@ -34,8 +36,7 @@ void AMPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutL
 	FDoRepLifetimeParams SharedParams;
 	SharedParams.bIsPushBased = true;
 	
-	DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerState, UserID, SharedParams);
-	DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerState, UserName, SharedParams);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMPlayerState, MPlayerID, SharedParams);
 
 	//SharedParams.Condition = COND_InitialOnly;
 }

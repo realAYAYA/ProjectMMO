@@ -100,7 +100,11 @@ struct FCommitRoleDataReq : public FGameMessage
 
 	// 玩家数据，id，角色id
 	UPROPERTY()
-	bool bSucceed = false;
+	uint64 PlayerID = 0;
+	
+	// 角色数据
+	UPROPERTY()
+	FRoleData RoleData;
 };
 
 USTRUCT()
@@ -141,6 +145,9 @@ struct FLoginGameAck : public FGameMessage
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	ELoginGameRetCode Ret = ELoginGameRetCode::UnKnow;
+	
+	UPROPERTY()
+	uint64 PlayerID = 0;
 
 	// 角色预览数据
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")

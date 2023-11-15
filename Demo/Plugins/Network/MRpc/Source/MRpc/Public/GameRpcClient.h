@@ -12,6 +12,10 @@ class FClientRpcManager;
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginAsDSResult, ERpcErrorCode, InErrorCode, FLoginAsDSAck, InData);
 
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnPullRoleDataResult, ERpcErrorCode, InErrorCode, FPullRoleDataAck, InData);
+
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnCommitRoleDataResult, ERpcErrorCode, InErrorCode, FCommitRoleDataAck, InData);
+
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginGameResult, ERpcErrorCode, InErrorCode, FLoginGameAck, InData);
 
 
@@ -36,6 +40,24 @@ public:
     
     typedef TFunction<void(ERpcErrorCode, const FLoginAsDSAck&)> FOnLoginAsDSResultFunction;
     void LoginAsDS(const FLoginAsDSReq& InReqMessage, const FOnLoginAsDSResultFunction& InCallback) const;
+
+    /**
+     * DS拉取玩家数据
+    */
+    UFUNCTION(BlueprintCallable, Category = "PorjectM", DisplayName="PullRoleData")
+    void K2_PullRoleData(const FPullRoleDataReq& InParams, const FOnPullRoleDataResult& InCallback);
+    
+    typedef TFunction<void(ERpcErrorCode, const FPullRoleDataAck&)> FOnPullRoleDataResultFunction;
+    void PullRoleData(const FPullRoleDataReq& InReqMessage, const FOnPullRoleDataResultFunction& InCallback) const;
+
+    /**
+     * DS提交玩家数据
+    */
+    UFUNCTION(BlueprintCallable, Category = "PorjectM", DisplayName="CommitRoleData")
+    void K2_CommitRoleData(const FCommitRoleDataReq& InParams, const FOnCommitRoleDataResult& InCallback);
+    
+    typedef TFunction<void(ERpcErrorCode, const FCommitRoleDataAck&)> FOnCommitRoleDataResultFunction;
+    void CommitRoleData(const FCommitRoleDataReq& InReqMessage, const FOnCommitRoleDataResultFunction& InCallback) const;
 
     /**
      * 登录游戏

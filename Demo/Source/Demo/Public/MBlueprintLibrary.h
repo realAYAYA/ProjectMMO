@@ -31,7 +31,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static class UGameTables* GetMGameTables(const UObject* WorldContextObject);
 
-	/** Excel配置 */
+	/** 客户端连接器 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static UGameRpcClient* GetClientRpcStub(const UObject* WorldContextObject);
 };

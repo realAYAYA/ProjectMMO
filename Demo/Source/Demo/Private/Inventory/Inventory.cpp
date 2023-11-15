@@ -12,7 +12,7 @@ UInventory::UInventory(const FObjectInitializer& ObjectInitializer)
 void UInventory::K2_UseItem(const int32 ID, const FOnRpcResult& InCallback)
 {
 	// Todo 检测背包数据
-	RpcManager.Add(TEXT("UseItem"), InCallback);
+	RequestPendingData.Add(TEXT("UseItem"), InCallback);
 	//InCallback.ExecuteIfBound(false);
 }
 

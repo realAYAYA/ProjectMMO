@@ -20,19 +20,16 @@ public:
 	
 	AMPlayerState(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	// Steam, Epic, PS4 : ID, to show
-	UPROPERTY(Replicated)
-	FString UserID;
-
-	// Steam, Epic, PS4 : Name, to show
-	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
-	FString UserName;
+	void LoadData(const FRoleData& InData);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
-	bool IsOnline() const { return !UserID.IsEmpty(); }
-	
-	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	int32 GetRoleNum() const;
+	bool IsOnline() const { return MPlayerID != 0; }
+
+	void SetPlayerID(const uint64 InID) { MPlayerID = InID; }// 仅登录时调用
+	uint64 GetPlayerID() const { return MPlayerID; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "ProjectM")
+	const FRoleData& GetRoleData() const { return RoleData; }
 	
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	class UInventory* InventoryModule;// Todo 背包模块
@@ -45,10 +42,6 @@ public:
 	// Todo 聊天模块 - 服务器微服务
 	// Todo 拍卖行 - 服务器微服务
 	
-	const FMPlayerData& GetUserData() const { return UserData; }
-
-	void SetUserData(const FMPlayerData& InData) { UserData = InData; }
-	
 protected:
 
 	virtual void CopyProperties(APlayerState* PlayerState) override;
@@ -58,5 +51,8 @@ protected:
 private:
 
 	UPROPERTY()
-	FMPlayerData UserData;
+	FRoleData RoleData;
+
+	UPROPERTY(Replicated)
+	uint64 MPlayerID;
 };

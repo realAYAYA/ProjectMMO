@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#include "MMOGameTypes.h"
+#include "MGameCommon.h"
 #include "RpcObject.generated.h"
 
 /**
@@ -22,5 +21,5 @@ public:
 protected:
 	
 	UPROPERTY()
-	TMap<FString, FOnRpcResult> RpcManager;
+	TMap<FString, FOnRpcResult> RequestPendingData;
 };

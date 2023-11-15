@@ -55,6 +55,72 @@ void UGameRpcClient::LoginAsDS(const FLoginAsDSReq& InReqMessage, const FOnLogin
 }
 
 
+void UGameRpcClient::K2_PullRoleData(const FPullRoleDataReq& InParams, const FOnPullRoleDataResult& InCallback)
+{
+    if (!Manager || !Connection)
+        return;
+
+    PullRoleData(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FPullRoleDataAck& InRspMessage)
+    {
+        if (IsValid(InCallback.GetUObject()))
+        {
+            InCallback.Execute(ErrorCode, InRspMessage);
+        }
+    });
+}
+
+void UGameRpcClient::PullRoleData(const FPullRoleDataReq& InReqMessage, const FOnPullRoleDataResultFunction& InCallback) const
+{   
+    if (!Manager || !Connection)
+        return;
+
+    Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
+    {
+        const FPullRoleDataAck RspMessage;
+
+        if (ErrorCode == ERpcErrorCode::Ok)
+        {
+            RspMessage.ParseFromArray(InMessage.GetBody());
+        }
+
+        InCallback(ErrorCode, RspMessage);
+    });
+}
+
+
+void UGameRpcClient::K2_CommitRoleData(const FCommitRoleDataReq& InParams, const FOnCommitRoleDataResult& InCallback)
+{
+    if (!Manager || !Connection)
+        return;
+
+    CommitRoleData(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FCommitRoleDataAck& InRspMessage)
+    {
+        if (IsValid(InCallback.GetUObject()))
+        {
+            InCallback.Execute(ErrorCode, InRspMessage);
+        }
+    });
+}
+
+void UGameRpcClient::CommitRoleData(const FCommitRoleDataReq& InReqMessage, const FOnCommitRoleDataResultFunction& InCallback) const
+{   
+    if (!Manager || !Connection)
+        return;
+
+    Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
+    {
+        const FCommitRoleDataAck RspMessage;
+
+        if (ErrorCode == ERpcErrorCode::Ok)
+        {
+            RspMessage.ParseFromArray(InMessage.GetBody());
+        }
+
+        InCallback(ErrorCode, RspMessage);
+    });
+}
+
+
 void UGameRpcClient::K2_LoginGame(const FLoginGameReq& InParams, const FOnLoginGameResult& InCallback)
 {
     if (!Manager || !Connection)

@@ -21,7 +21,8 @@ void UMWorldManager::Shutdown()
 {
 	SaveData();
 
-	MainWorld->Offline(nullptr);
+	if (MainWorld)
+		MainWorld->Offline(nullptr);
 }
 
 void UMWorldManager::Cleanup()

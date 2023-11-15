@@ -85,6 +85,7 @@ M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 		
 		// Todo 准备预览数据
 		Ack.Ret = ELoginGameRetCode::Ok;
+		Ack.PlayerID = Player->GetPlayerID();
 	}
 }
 

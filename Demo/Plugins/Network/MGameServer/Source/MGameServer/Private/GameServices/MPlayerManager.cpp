@@ -79,8 +79,8 @@ void UMPlayerManager::DeletePlayer(UMPlayer* InPlayer)
 
 	InPlayer->MarkRecycle();*/
 	
-	const uint64 Id = InPlayer->GetPlayerId();
-	const auto Ret = IndexEntities.Find(Id);
+	const uint64 ID = InPlayer->GetPlayerID();
+	const auto Ret = IndexEntities.Find(ID);
 	if (Ret && *Ret == InPlayer)
 	{
 		*Ret = nullptr;		
@@ -130,15 +130,15 @@ void UMPlayerManager::SendToAll(const FGameMessage& InMessage)
 
 bool UMPlayerManager::AddPlayer(UMPlayer* InPlayer)
 {
-	const int64 Id = InPlayer->GetPlayerId();
+	const int64 ID = InPlayer->GetPlayerID();
 	
-	if (UMPlayer** Ret = IndexEntities.Find(Id))
+	if (UMPlayer** Ret = IndexEntities.Find(ID))
 	{
 		return false;  // 该ID的角色已存在
 	}
 	else
 	{
-		IndexEntities.Add(Id, InPlayer);
+		IndexEntities.Add(ID, InPlayer);
 	}
 	
 	{
@@ -169,7 +169,7 @@ void UMPlayerManager::ProcessJunk()
 {
 	for (UMPlayer* Player : Junks)
 	{
-		IndexEntities.Remove(Player->GetPlayerId());
+		IndexEntities.Remove(Player->GetPlayerID());
 		Player->ConditionalBeginDestroy();
 	}
 	
