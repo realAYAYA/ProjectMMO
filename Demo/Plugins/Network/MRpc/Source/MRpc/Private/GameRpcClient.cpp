@@ -154,3 +154,102 @@ void UGameRpcClient::LoginGame(const FLoginGameReq& InReqMessage, const FOnLogin
 }
 
 
+void UGameRpcClient::K2_LogoutGame(const FLogoutGameReq& InParams, const FOnLogoutGameResult& InCallback)
+{
+    if (!Manager || !Connection)
+        return;
+
+    LogoutGame(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FLogoutGameAck& InRspMessage)
+    {
+        if (IsValid(InCallback.GetUObject()))
+        {
+            InCallback.Execute(ErrorCode, InRspMessage);
+        }
+    });
+}
+
+void UGameRpcClient::LogoutGame(const FLogoutGameReq& InReqMessage, const FOnLogoutGameResultFunction& InCallback) const
+{   
+    if (!Manager || !Connection)
+        return;
+
+    Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
+    {
+        const FLogoutGameAck RspMessage;
+
+        if (ErrorCode == ERpcErrorCode::Ok)
+        {
+            RspMessage.ParseFromArray(InMessage.GetBody());
+        }
+
+        InCallback(ErrorCode, RspMessage);
+    });
+}
+
+
+void UGameRpcClient::K2_CreateRole(const FCreateRoleReq& InParams, const FOnCreateRoleResult& InCallback)
+{
+    if (!Manager || !Connection)
+        return;
+
+    CreateRole(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FCreateRoleAck& InRspMessage)
+    {
+        if (IsValid(InCallback.GetUObject()))
+        {
+            InCallback.Execute(ErrorCode, InRspMessage);
+        }
+    });
+}
+
+void UGameRpcClient::CreateRole(const FCreateRoleReq& InReqMessage, const FOnCreateRoleResultFunction& InCallback) const
+{   
+    if (!Manager || !Connection)
+        return;
+
+    Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
+    {
+        const FCreateRoleAck RspMessage;
+
+        if (ErrorCode == ERpcErrorCode::Ok)
+        {
+            RspMessage.ParseFromArray(InMessage.GetBody());
+        }
+
+        InCallback(ErrorCode, RspMessage);
+    });
+}
+
+
+void UGameRpcClient::K2_EnterWorld(const FEnterWorldReq& InParams, const FOnEnterWorldResult& InCallback)
+{
+    if (!Manager || !Connection)
+        return;
+
+    EnterWorld(InParams, [InCallback](const ERpcErrorCode ErrorCode, const FEnterWorldAck& InRspMessage)
+    {
+        if (IsValid(InCallback.GetUObject()))
+        {
+            InCallback.Execute(ErrorCode, InRspMessage);
+        }
+    });
+}
+
+void UGameRpcClient::EnterWorld(const FEnterWorldReq& InReqMessage, const FOnEnterWorldResultFunction& InCallback) const
+{   
+    if (!Manager || !Connection)
+        return;
+
+    Manager->SendRequest(Connection, InReqMessage, [InCallback](const ERpcErrorCode ErrorCode, const FNetworkMessage& InMessage)
+    {
+        const FEnterWorldAck RspMessage;
+
+        if (ErrorCode == ERpcErrorCode::Ok)
+        {
+            RspMessage.ParseFromArray(InMessage.GetBody());
+        }
+
+        InCallback(ErrorCode, RspMessage);
+    });
+}
+
+

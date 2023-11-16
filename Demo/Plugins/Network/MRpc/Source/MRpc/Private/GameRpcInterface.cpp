@@ -99,4 +99,76 @@ FGameRpcInterface::FGameRpcInterface(FServerRpcManager* InManager)
             InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::Unimplemented);
         }
     });
+    InManager->AddMethod(FLogoutGameReq::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
+    {
+        const uint64 ReqSerialNum = InMessage.SerialNum;
+
+        const FLogoutGameReq ReqMessage;
+        FLogoutGameAck RspMessage;
+        ReqMessage.ParseFromArray(InMessage.GetBody());
+
+        if (InMessage.GetBody().Num() <= 0)
+		{
+			InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::UnKnow);
+            return;
+		}
+
+        if (OnLogoutGame)
+        {
+            OnLogoutGame(ReqMessage, RspMessage);
+            InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::Ok);
+        }
+        else
+        {
+            InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::Unimplemented);
+        }
+    });
+    InManager->AddMethod(FCreateRoleReq::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
+    {
+        const uint64 ReqSerialNum = InMessage.SerialNum;
+
+        const FCreateRoleReq ReqMessage;
+        FCreateRoleAck RspMessage;
+        ReqMessage.ParseFromArray(InMessage.GetBody());
+
+        if (InMessage.GetBody().Num() <= 0)
+		{
+			InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::UnKnow);
+            return;
+		}
+
+        if (OnCreateRole)
+        {
+            OnCreateRole(ReqMessage, RspMessage);
+            InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::Ok);
+        }
+        else
+        {
+            InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::Unimplemented);
+        }
+    });
+    InManager->AddMethod(FEnterWorldReq::KeyTypeID, [this, InManager](const FServerPtr& InConn, const FNetworkMessage& InMessage)
+    {
+        const uint64 ReqSerialNum = InMessage.SerialNum;
+
+        const FEnterWorldReq ReqMessage;
+        FEnterWorldAck RspMessage;
+        ReqMessage.ParseFromArray(InMessage.GetBody());
+
+        if (InMessage.GetBody().Num() <= 0)
+		{
+			InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::UnKnow);
+            return;
+		}
+
+        if (OnEnterWorld)
+        {
+            OnEnterWorld(ReqMessage, RspMessage);
+            InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::Ok);
+        }
+        else
+        {
+            InManager->SendResponse(InConn, ReqSerialNum, RspMessage, ERpcErrorCode::Unimplemented);
+        }
+    });
 }

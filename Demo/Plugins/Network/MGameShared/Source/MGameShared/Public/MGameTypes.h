@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "MGameDefine.h"
+#include "GameDefines.h"
 
 #include "MGameTypes.generated.h"
 
@@ -198,26 +198,26 @@ struct FPreviewRoleData
 	// 角色名
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FString RoleName;
+	
+	// 种族
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	ERace Race = ERace::None;
 
 	// 性别
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	EGender Gender = EGender::None;
-
-	// 种族
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	ERace Race = ERace::None;
 	
-	// 种族分支
+	// 职业
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	int32 RaceBranch = 0;
+	ERoleClass Class = ERoleClass::None;
+	
+	// 等级
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	int32 Level = 0;
 
 	// 出身
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	EBirth Birth = EBirth::None;
-
-	// 职业
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	ERoleClass Class = ERoleClass::None;
 
 	// Todo 外观数据
 	// Todo 装扮（备）数据

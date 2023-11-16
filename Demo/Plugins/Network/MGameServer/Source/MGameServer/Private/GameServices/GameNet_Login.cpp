@@ -89,5 +89,29 @@ M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 	}
 }
 
-// Todo 创建角色
-// Todo 请求进入世界
+// 登出账号
+M_GAME_RPC_HANDLE(GameRpc, LogoutGame, InSession, Req, Ack)
+{
+	UMPlayer* Player = InSession->Player;
+	if (!Player)
+		return;
+	
+}
+
+// 创建角色
+M_GAME_RPC_HANDLE(GameRpc, CreateRole, InSession, Req, Ack)
+{
+	UMPlayer* Player = InSession->Player;
+	if (!Player)
+		return;
+	
+}
+
+// 请求进入世界
+M_GAME_RPC_HANDLE(GameRpc, EnterWorld, InSession, Req, Ack)
+{
+	UMPlayer* Player = InSession->Player;
+	if (!Player)
+		return;
+	
+}

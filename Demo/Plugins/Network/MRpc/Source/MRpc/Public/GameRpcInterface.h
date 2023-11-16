@@ -40,5 +40,23 @@ public:
     typedef TFunction<void(const FLoginGameReq&, FLoginGameAck&)> FLoginGameCallback;
     FLoginGameCallback OnLoginGame;
     
+    /**
+     * 登录游戏
+    */
+    typedef TFunction<void(const FLogoutGameReq&, FLogoutGameAck&)> FLogoutGameCallback;
+    FLogoutGameCallback OnLogoutGame;
+    
+    /**
+     * 创建角色
+    */
+    typedef TFunction<void(const FCreateRoleReq&, FCreateRoleAck&)> FCreateRoleCallback;
+    FCreateRoleCallback OnCreateRole;
+    
+    /**
+     * 进入世界
+    */
+    typedef TFunction<void(const FEnterWorldReq&, FEnterWorldAck&)> FEnterWorldCallback;
+    FEnterWorldCallback OnEnterWorld;
+    
 
 };

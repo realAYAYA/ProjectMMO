@@ -88,6 +88,10 @@ struct FPullRoleDataAck : public FGameMessage
 	// 角色数据
 	UPROPERTY()
 	FRoleData RoleData;
+
+	// 出生位置
+	UPROPERTY()
+	FVector3f SpawnPosition = FVector3f();
 };
 
 // DS提交玩家数据
@@ -105,6 +109,10 @@ struct FCommitRoleDataReq : public FGameMessage
 	// 角色数据
 	UPROPERTY()
 	FRoleData RoleData;
+
+	// 更新玩家所在世界的数据
+	UPROPERTY()
+	int32 WorldData = 0;
 };
 
 USTRUCT()
@@ -154,6 +162,84 @@ struct FLoginGameAck : public FGameMessage
 	TArray<FPreviewRoleData> RolePreviewData;
 };
 
+USTRUCT(BlueprintType)
+struct FLogoutGameReq : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+	
+};
+
+USTRUCT(BlueprintType)
+struct FLogoutGameAck : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	bool Ok = false;
+};
+
+USTRUCT(BlueprintType)
+struct FCreateRoleReq : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FCreateRoleParams Params;
+};
+
+USTRUCT(BlueprintType)
+struct FCreateRoleAck : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	bool Ok = false;
+
+	// 返回角色预览数据
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FPreviewRoleData PreviewRoleData;
+};
+
+USTRUCT(BlueprintType)
+struct FEnterWorldReq : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	int32 WorldID = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FString RoleName;
+
+	// 选择出生位置
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FVector3f SpawnPosition = FVector3f();
+};
+
+USTRUCT(BlueprintType)
+struct FEnterWorldAck : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FString IP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FString Port;
+};
+
 //////////////////////////////////////////////////客户端专用通知消息类型////////////////////////////////////////////////////
 // 用于客户端与WebSocket之间的Notify类型的消息通信
 
@@ -172,4 +258,16 @@ struct FUpdateChatMessage : public FGameMessage
 	
 	UPROPERTY()
 	uint64 UserID = 0;
+};
+
+// 通知玩家离开某个世界（可能被踢出）
+USTRUCT(BlueprintType)
+struct FPlayerLeaveWorld : public FGameMessage
+{
+	GENERATED_USTRUCT_BODY()
+
+	GENERATED_CUSTOM_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	ELeaveWorldReason Reason = ELeaveWorldReason::Normal;
 };

@@ -18,6 +18,12 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnCommitRoleDataResult, ERpcErrorCode, InErr
 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginGameResult, ERpcErrorCode, InErrorCode, FLoginGameAck, InData);
 
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLogoutGameResult, ERpcErrorCode, InErrorCode, FLogoutGameAck, InData);
+
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnCreateRoleResult, ERpcErrorCode, InErrorCode, FCreateRoleAck, InData);
+
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnEnterWorldResult, ERpcErrorCode, InErrorCode, FEnterWorldAck, InData);
+
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateChatMessageResult, FUpdateChatMessage, InData);
@@ -67,6 +73,33 @@ public:
     
     typedef TFunction<void(ERpcErrorCode, const FLoginGameAck&)> FOnLoginGameResultFunction;
     void LoginGame(const FLoginGameReq& InReqMessage, const FOnLoginGameResultFunction& InCallback) const;
+
+    /**
+     * 登录游戏
+    */
+    UFUNCTION(BlueprintCallable, Category = "PorjectM", DisplayName="LogoutGame")
+    void K2_LogoutGame(const FLogoutGameReq& InParams, const FOnLogoutGameResult& InCallback);
+    
+    typedef TFunction<void(ERpcErrorCode, const FLogoutGameAck&)> FOnLogoutGameResultFunction;
+    void LogoutGame(const FLogoutGameReq& InReqMessage, const FOnLogoutGameResultFunction& InCallback) const;
+
+    /**
+     * 创建角色
+    */
+    UFUNCTION(BlueprintCallable, Category = "PorjectM", DisplayName="CreateRole")
+    void K2_CreateRole(const FCreateRoleReq& InParams, const FOnCreateRoleResult& InCallback);
+    
+    typedef TFunction<void(ERpcErrorCode, const FCreateRoleAck&)> FOnCreateRoleResultFunction;
+    void CreateRole(const FCreateRoleReq& InReqMessage, const FOnCreateRoleResultFunction& InCallback) const;
+
+    /**
+     * 进入世界
+    */
+    UFUNCTION(BlueprintCallable, Category = "PorjectM", DisplayName="EnterWorld")
+    void K2_EnterWorld(const FEnterWorldReq& InParams, const FOnEnterWorldResult& InCallback);
+    
+    typedef TFunction<void(ERpcErrorCode, const FEnterWorldAck&)> FOnEnterWorldResultFunction;
+    void EnterWorld(const FEnterWorldReq& InReqMessage, const FOnEnterWorldResultFunction& InCallback) const;
 
     
     /**
