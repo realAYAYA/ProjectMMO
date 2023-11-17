@@ -2,6 +2,7 @@
 
 #include "MGameSession.h"
 #include "MPlayerManager.h"
+#include "MTools.h"
 #include "RedisOp.h"
 
 UMPlayer::~UMPlayer()
@@ -10,7 +11,7 @@ UMPlayer::~UMPlayer()
 
 bool UMPlayer::Init(const uint64 InPlayerId, const FString& InAccount)
 {
-	PlayerId = InPlayerId;
+	PlayerID = InPlayerId;
 	Account = InAccount;
 	return true;
 }
@@ -33,9 +34,9 @@ void UMPlayer::Offline(const UMGameSession* InSession)
 
 	Session = nullptr;
 
-	Data.LastOnlineTime = FDateTime::UtcNow().GetTicks();  // 更新离线时间
+	PlayerData.LastOnlineTime = FDateTime::UtcNow().GetTicks();  // 更新离线时间
 	
-	Save();//MarkNeedSave(true);
+	Save();
 
 	UMPlayerManager::Get()->DeletePlayer(this);
 }
@@ -63,6 +64,76 @@ void UMPlayer::SendToMe(const FGameMessage& InMessage) const
 	Session->Send(InMessage);
 }
 
+bool UMPlayer::CreateRole(const FCreateRoleParams& Params)
+{
+	// Todo 建议姓名合法性，参数合法性
+
+	// 角色名已经存在
+	const uint64 ID = GenerateUID(Params.RoleName);
+	if (GetRoleDataRef(ID))
+		return false;
+	
+	FRoleData Data;
+
+	Data.RoleName = Params.RoleName;
+	Data.Class = Params.Class;
+	Data.Camp = Params.Camp;
+	Data.Gender = Params.Gender;
+	Data.Race = Params.Race;
+	Data.Birth = Params.Birth;
+
+	Data.ID = ID;
+	Data.CreateDate = FDateTime::UtcNow().GetTicks();
+	Data.Rank = 1;
+
+	PlayerData.RoleData.Add(Data);
+
+	MarkNeedSave();
+
+	return true;
+}
+
+void UMPlayer::SetCurrentRole(const uint64 ID)
+{
+	CurrentRole = GetRoleDataRef(ID);
+}
+
+void UMPlayer::SetCurrentRole(const FString& Name)
+{
+	CurrentRole = GetRoleDataRef(Name);
+}
+
+void UMPlayer::Fill(TArray<FPreviewRoleData>& Out)
+{
+	Out.Init(FPreviewRoleData(), PlayerData.RoleData.Num());
+	for (int32 i = 0; i < PlayerData.RoleData.Num(); i++)
+	{
+		RoleDataToPreview(PlayerData.RoleData[i], Out[i]);
+	}
+}
+
+FRoleData* UMPlayer::GetRoleDataRef(const uint64 ID)
+{
+	for (FRoleData& Data : PlayerData.RoleData)
+	{
+		if (Data.ID == ID)
+			return &Data;
+	}
+
+	return nullptr;
+}
+
+FRoleData* UMPlayer::GetRoleDataRef(const FString& Name)
+{
+	for (FRoleData& Data : PlayerData.RoleData)
+	{
+		if (Data.RoleName == Name)
+			return &Data;
+	}
+
+	return nullptr;
+}
+
 bool UMPlayer::IsOnline() const
 {
 	return Session != nullptr;
@@ -70,14 +141,14 @@ bool UMPlayer::IsOnline() const
 
 bool UMPlayer::Load()
 {
-	FRedisOp::LoadPlayerData(GetPlayerID(), &Data);
+	FRedisOp::LoadPlayerData(GetPlayerID(), &PlayerData);
 
 	// 没有数据就当作新号初始化
-	if (Data.ID == 0)
+	if (PlayerData.ID == 0)
 	{
-		Data.Account = Account;
-		Data.ID = PlayerId;
-		Data.CreateDate = FDateTime::Now().GetTicks();
+		PlayerData.Account = Account;
+		PlayerData.ID = PlayerID;
+		PlayerData.CreateDate = FDateTime::Now().GetTicks();
 		
 		return true;
 	}
@@ -93,7 +164,7 @@ void UMPlayer::Save()
 	
 	// Todo 功能模块SaveData
 
-	FRedisOp::SavePlayerData(GetPlayerID(), Data);
+	FRedisOp::SavePlayerData(GetPlayerID(), PlayerData);
 }
 
 void UMPlayer::SetCurWorldId(uint64 InWorldId)
@@ -122,6 +193,19 @@ UMWorld* UMPlayer::GetCurrentWorld() const
 
 void UMPlayer::UpdateLastWorldInfo()
 {
+}
+
+void UMPlayer::MarkNeedSave()
+{
+	if (NeedSaveFlag > 5)
+	{
+		Save();
+		NeedSaveFlag = 0;
+	}
+	else
+	{
+		NeedSaveFlag += 1;
+	}
 }
 
 void UMPlayer::OnOnline()

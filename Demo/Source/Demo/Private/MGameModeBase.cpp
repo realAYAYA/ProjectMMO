@@ -10,8 +10,8 @@
 AMGameMode::AMGameMode()
 {
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/Blueprints/Characters/BP_MCharacter"));
-	DefaultPawnClass = PlayerPawnClassFinder.Class;
+	//static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/Blueprints/Characters/BP_MCharacter"));
+	//DefaultPawnClass = PlayerPawnClassFinder.Class;
 }
 
 const AMPlayerState* AMGameMode::FindOnlinePlayerByID(const uint64 InID) const

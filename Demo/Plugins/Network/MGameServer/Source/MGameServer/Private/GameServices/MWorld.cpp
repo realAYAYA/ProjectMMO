@@ -6,8 +6,10 @@ UMWorld::~UMWorld()
 {
 }
 
-bool UMWorld::Init()
+bool UMWorld::Init(const FString& InIp, const FString& InPort)
 {
+	Ip = InIp;
+	Port = InPort;
 	return true;
 }
 

@@ -69,10 +69,6 @@ struct FPullRoleDataReq : public FGameMessage
 	
 	UPROPERTY()
 	uint64 PlayerID = 0;
-
-	// 需要请求的角色名称
-	UPROPERTY()
-	FString RoleName;
 };
 
 USTRUCT()
@@ -88,10 +84,7 @@ struct FPullRoleDataAck : public FGameMessage
 	// 角色数据
 	UPROPERTY()
 	FRoleData RoleData;
-
-	// 出生位置
-	UPROPERTY()
-	FVector3f SpawnPosition = FVector3f();
+	
 };
 
 // DS提交玩家数据
@@ -220,10 +213,7 @@ struct FEnterWorldReq : public FGameMessage
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FString RoleName;
-
-	// 选择出生位置
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FVector3f SpawnPosition = FVector3f();
+	
 };
 
 USTRUCT(BlueprintType)

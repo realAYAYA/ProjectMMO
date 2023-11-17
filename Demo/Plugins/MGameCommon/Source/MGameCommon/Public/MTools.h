@@ -7,6 +7,8 @@ FString MGAMECOMMON_API ToChineseNumbers(int32 In);
 
 bool MGAMECOMMON_API IsChinese(const FString& In);  // 是否为纯中文字符串
 
+uint64 MGAMECOMMON_API GenerateUID(const FString& In);
+
 /**
  * 百分之X的概率
  */

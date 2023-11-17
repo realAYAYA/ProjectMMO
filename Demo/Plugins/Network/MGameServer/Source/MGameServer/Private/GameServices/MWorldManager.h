@@ -41,6 +41,4 @@ public:
 
 	// 数据填充方法
 	//void Fill(const UZRole* Role);
-
-	
 };

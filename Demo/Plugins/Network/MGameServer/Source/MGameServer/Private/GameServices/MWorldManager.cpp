@@ -52,7 +52,7 @@ UMWorld* UMWorldManager::CreateWorld()
 	}*/
 
 	UMWorld* World = NewObject<UMWorld>(this);
-	if (!World->Init())
+	if (!World->Init(TEXT(""), TEXT("")))
 	{
 		World->ConditionalBeginDestroy();
 		return nullptr;

@@ -108,7 +108,7 @@ struct FRoleData
 
 	// 升级 角色属性值 = 职业等级成长 + 天赋 + 装备
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	int32 Level = 1;
+	int32 Rank = 1;
 
 	// 背包数据, 装备数据
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
@@ -137,7 +137,7 @@ struct FMPlayerData
 	
 	// 用户ID
 	UPROPERTY()
-	uint64 ID;
+	uint64 ID = 0;
 	
 	// 账户名Steam Epic PS4 Switch, etc
 	UPROPERTY()
@@ -186,6 +186,10 @@ struct FCreateRoleParams
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	ERoleClass Class = ERoleClass::None;
 
+	// 职业
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	ECamp Camp = ECamp::None;
+
 	// Todo 外观数据
 };
 
@@ -213,7 +217,7 @@ struct FPreviewRoleData
 	
 	// 等级
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	int32 Level = 0;
+	int32 Rank = 0;
 
 	// 出身
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
@@ -224,6 +228,8 @@ struct FPreviewRoleData
 	// Todo 其它特效
 };
 
+void MGAMESHARED_API RoleDataToPreview(const FRoleData& From, FPreviewRoleData& To);
+
 /* 关卡/副本进度数据*/
 USTRUCT(BlueprintType)
 struct FLevelData
@@ -232,7 +238,7 @@ struct FLevelData
 
 	// 唯一ID
 	UPROPERTY()
-	uint64 ID;
+	uint64 ID = 0;
 
 	// 配置
 	UPROPERTY()

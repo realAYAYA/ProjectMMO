@@ -27,9 +27,19 @@ public:
 	UMGameSession* GetSession() const;
 	FGuid GetConnId() const;
 
-	uint64 GetPlayerID() const { return PlayerId; }
+	uint64 GetPlayerID() const { return PlayerID; }
 
 	void SendToMe(const FGameMessage& InMessage) const;
+
+	bool CreateRole(const FCreateRoleParams& Params);
+	FRoleData* GetRoleDataRef(const uint64 ID);
+	FRoleData* GetRoleDataRef(const FString& Name);
+	
+	FRoleData* CurrentRole = nullptr;
+	void SetCurrentRole(const uint64 ID);
+	void SetCurrentRole(const FString& Name);
+
+	void Fill(TArray<FPreviewRoleData>& Out);
 
 	// ========================================================
 	
@@ -49,6 +59,8 @@ public:
 	uint32 GetCurrentWorldCfgID() const;  // 获得当前所在场景ID
 	UMWorld* GetCurrentWorld() const;  // 获得当前所在场景对象
 	void UpdateLastWorldInfo();
+
+	void MarkNeedSave();
 	
 private:
 
@@ -58,9 +70,11 @@ private:
 	void OnOnline();
 	void OnOffline();
 
-	uint64 PlayerId = 0;
+	uint64 PlayerID = 0;
 
 	FString Account;
 	
-	FMPlayerData Data;
+	FMPlayerData PlayerData;
+
+	int32 NeedSaveFlag = 0;
 };

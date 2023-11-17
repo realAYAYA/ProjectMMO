@@ -15,7 +15,7 @@ public:
 	
 	virtual ~UMWorld() override;
 
-	bool Init();
+	bool Init(const FString& InIp, const FString& InPort);
 	void Cleanup();
 
 	void Online(UMGameSession* InSession);
@@ -41,6 +41,10 @@ private:
 	void OnOffline();
 
 	const uint64 WorldId = 0;
+	
+	FString Ip;
+	
+	FString Port;
 	// DSProcessHandle;
 
 	UPROPERTY()

@@ -2,6 +2,8 @@
 
 #include <regex>
 
+#include "Misc/Fnv.h"
+
 void FStringToString(const FString& In, std::string* Out)
 {
 	*Out = TCHAR_TO_UTF8(*In);
@@ -84,6 +86,10 @@ bool IsChinese(const FString& In)
 	return std::regex_match(Text, Pattern);
 }
 
+uint64 GenerateUID(const FString& In)
+{
+	return FFnv::MemFnv64(*In, In.Len());
+}
 
 // ============================================================================
 

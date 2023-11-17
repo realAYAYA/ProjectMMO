@@ -90,7 +90,7 @@ bool UMSaveGame::CreateRole(const FString& InID, const FCreateRoleParams& InPara
 	NewRole.RoleName = InParams.RoleName;
 	NewRole.Class = InParams.Class;
 	NewRole.Camp = ECamp::None;
-	NewRole.Level = 1;
+	NewRole.Rank = 1;
 	NewRole.CreateDate = FDateTime::Now().GetTicks();
 
 	UserData[Index].RoleData.Add(NewRole);

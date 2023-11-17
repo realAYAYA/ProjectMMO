@@ -4,6 +4,7 @@
 #include "MPlayer.h"
 #include "MPlayerManager.h"
 #include "MTools.h"
+#include "MWorldManager.h"
 #include "RedisOp.h"
 #include "Misc/Fnv.h"
 
@@ -45,7 +46,7 @@ M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 	// 无此玩家，进入建新号流程
 	if (PlayerID == 0)
 	{
-		PlayerID = FFnv::MemFnv64(*Req.Account, Req.Account.Len());
+		PlayerID = GenerateUID(Req.Account);
 		if (!FRedisOp::SetAccountInfo(Req.Account, PlayerID))
 		{
 			UE_LOG(LogMGameServer, Display, TEXT("OnCreateCharacter 错误,报错ID失败 Account=%s UserId=%llu"), *Req.Account, PlayerID);
@@ -53,7 +54,7 @@ M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 		}
 	}
 
-	Player = UMPlayerManager::Get()->GetByPlayerId(PlayerID);
+	Player = UMPlayerManager::Get()->GetByPlayerID(PlayerID);
 	if (Player)
 	{
 		if (Player->GetSession())
@@ -83,9 +84,9 @@ M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 	{
 		Player->Online(InSession);
 		
-		// Todo 准备预览数据
 		Ack.Ret = ELoginGameRetCode::Ok;
 		Ack.PlayerID = Player->GetPlayerID();
+		Player->Fill(Ack.RolePreviewData);// 准备预览数据
 	}
 }
 
@@ -95,7 +96,9 @@ M_GAME_RPC_HANDLE(GameRpc, LogoutGame, InSession, Req, Ack)
 	UMPlayer* Player = InSession->Player;
 	if (!Player)
 		return;
-	
+
+	Player->Offline(InSession);
+	Ack.Ok = true;
 }
 
 // 创建角色
@@ -104,7 +107,15 @@ M_GAME_RPC_HANDLE(GameRpc, CreateRole, InSession, Req, Ack)
 	UMPlayer* Player = InSession->Player;
 	if (!Player)
 		return;
-	
+
+	Ack.Ok = Player->CreateRole(Req.Params);
+	if (Ack.Ok)
+	{
+		if (const FRoleData* RoleData = Player->GetRoleDataRef(Req.Params.RoleName))
+		{
+			RoleDataToPreview(*RoleData, Ack.PreviewRoleData);
+		}
+	}
 }
 
 // 请求进入世界
@@ -113,5 +124,20 @@ M_GAME_RPC_HANDLE(GameRpc, EnterWorld, InSession, Req, Ack)
 	UMPlayer* Player = InSession->Player;
 	if (!Player)
 		return;
+
+	Ack.IP = TEXT("");
+	Ack.Port = TEXT("0");
 	
+	// 角色不存在
+	Player->SetCurrentRole(Req.RoleName);
+	if (!Player->CurrentRole)
+	{
+		return;
+	}
+
+	if (UMWorldManager::Get()->MainWorld)
+	{
+		Ack.IP = TEXT("");
+		Ack.Port = TEXT("0");
+	}
 }

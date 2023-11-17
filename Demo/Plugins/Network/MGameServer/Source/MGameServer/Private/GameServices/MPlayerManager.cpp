@@ -41,7 +41,7 @@ void UMPlayerManager::Tick(float DeltaTime)
 	}
 }
 
-UMPlayer* UMPlayerManager::GetByPlayerId(const uint64 Id)
+UMPlayer* UMPlayerManager::GetByPlayerID(const uint64 Id)
 {
 	if (const auto Ret = IndexEntities.Find(Id))
 		return *Ret;
@@ -51,7 +51,7 @@ UMPlayer* UMPlayerManager::GetByPlayerId(const uint64 Id)
 
 UMPlayer* UMPlayerManager::CreatePlayer(const uint64 InPlayerId, const FString& InAccount)
 {
-	if (GetByPlayerId(InPlayerId))
+	if (GetByPlayerID(InPlayerId))
 	{
 		return nullptr;
 	}
@@ -100,7 +100,7 @@ void UMPlayerManager::DeletePlayer(UMPlayer* InPlayer)
 
 void UMPlayerManager::DeletePlayerById(const uint64 InPlayerId)
 {
-	auto* Player = GetByPlayerId(InPlayerId);
+	auto* Player = GetByPlayerID(InPlayerId);
 	if (!Player)
 		return;
 	

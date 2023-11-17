@@ -25,7 +25,7 @@ public:
 
 	void Tick(float DeltaTime);
 
-	UMPlayer* GetByPlayerId(const uint64 Id);
+	UMPlayer* GetByPlayerID(const uint64 Id);
 
 	UMPlayer* CreatePlayer(const uint64 InPlayerId, const FString& InAccount);
 	void DeletePlayer(UMPlayer* InPlayer);

@@ -1,10 +1,12 @@
 #include "MGameSession.h"
 #include "GameSessionHelper.h"
+#include "MPlayerManager.h"
 #include "MWorld.h"
 #include "MWorldManager.h"
 
 // 仅用于DS与WebSocket之间的通信，客户端禁止调用这些方法
 
+// 
 M_GAME_RPC_HANDLE(GameRpc, LoginAsDS, InSession, Req, Ack)
 {
 	// Todo 服务器拉起DS进程
@@ -27,4 +29,39 @@ M_GAME_RPC_HANDLE(GameRpc, LoginAsDS, InSession, Req, Ack)
 	Ack.bOk = true;
 }
 
-// Todo DS服务器拉取玩家角色数据
+// DS服务器拉取玩家角色数据
+M_GAME_RPC_HANDLE(GameRpc, PullRoleData, InSession, Req, Ack)
+{
+	const UMWorld* World = InSession->World;
+	if (!World)
+	{
+		return;
+	}
+	
+	const UMPlayer* Player = UMPlayerManager::Get()->GetByPlayerID(Req.PlayerID);
+	if (Player && Player->CurrentRole)
+	{
+		Ack.RoleData = *Player->CurrentRole;
+		Ack.bOk = true;
+	}
+}
+
+M_GAME_RPC_HANDLE(GameRpc, CommitRoleData, InSession, Req, Ack)
+{
+	const UMWorld* World = InSession->World;
+	if (!World)
+	{
+		return;
+	}
+	
+	const UMPlayer* Player = UMPlayerManager::Get()->GetByPlayerID(Req.PlayerID);
+	if (Player && Player->CurrentRole)
+	{
+		// 上传的角色数据与当前玩家数据不匹配
+		if (Player->CurrentRole->ID != Req.RoleData.ID)
+			return;
+
+		*Player->CurrentRole = Req.RoleData;
+		Ack.bOk = true;
+	}
+}

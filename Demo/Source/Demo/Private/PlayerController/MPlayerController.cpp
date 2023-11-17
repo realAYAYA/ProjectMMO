@@ -84,7 +84,6 @@ void AMPlayerController::GetMyRoleDataReq_Implementation(const FString& RoleName
 	
 	FPullRoleDataReq Req;
 	Req.PlayerID = GetMPlayerState()->GetPlayerID();
-	Req.RoleName = RoleName;
 	RPC->PullRoleData(Req, [this, PS](const ERpcErrorCode ErrorCode, const FPullRoleDataAck& Ack)
 	{
 		if (ErrorCode != ERpcErrorCode::Ok || !Ack.bOk)
