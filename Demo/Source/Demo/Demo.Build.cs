@@ -20,7 +20,7 @@ public class Demo : ModuleRules
 			"GameplayAbilities",
 			
 			"GameTables", 
-			"MGameShared", 
+			"MGameShared",
 			"MRpc"
 		});
 		
@@ -38,7 +38,7 @@ public class Demo : ModuleRules
 			"SlateCore", 
 			
 			"MGameShared", 
-			"MGameClient"
+			"MGameClient",
 		});
 	}
 }
