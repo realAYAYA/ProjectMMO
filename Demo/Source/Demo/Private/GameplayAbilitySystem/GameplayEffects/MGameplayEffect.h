@@ -22,7 +22,7 @@ enum class EBuffType : uint8
 };
 
 UENUM(BlueprintType)
-enum class EDamageType : uint8
+enum class EMDamageType : uint8
 {
 	None		UMETA(Displayname = "None"),	// 用于无法被驱散的效果
 	Physical	UMETA(Displayname = "Physical"),

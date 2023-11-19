@@ -21,7 +21,7 @@ public class Demo : ModuleRules
 			
 			"GameTables", 
 			"MGameShared",
-			"MRpc"
+			"MRpc",
 		});
 		
 		

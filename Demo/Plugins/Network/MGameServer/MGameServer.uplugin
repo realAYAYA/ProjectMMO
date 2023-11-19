@@ -17,7 +17,7 @@
 	"Modules": [
 		{
 			"Name": "MGameServer",
-			"Type": "RuntimeAndProgram",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	],
