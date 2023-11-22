@@ -6,7 +6,7 @@
 #include "GameServices/MPlayerManager.h"
 #include "GameServices/MWorldManager.h"
 
-#define LOCTEXT_NAMESPACE "FMWebSocketServerModule"
+#define LOCTEXT_NAMESPACE "FMGameServerModule"
 
 DEFINE_LOG_CATEGORY(LogMGameServer);
 

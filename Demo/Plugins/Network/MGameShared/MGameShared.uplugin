@@ -17,7 +17,7 @@
 	"Modules": [
 		{
 			"Name": "MGameShared",
-			"Type": "Runtime",
+			"Type": "RuntimeAndProgram",
 			"LoadingPhase": "Default"
 		}
 	]

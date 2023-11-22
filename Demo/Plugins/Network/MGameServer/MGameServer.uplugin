@@ -17,8 +17,10 @@
 	"Modules": [
 		{
 			"Name": "MGameServer",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"Type": "RuntimeAndProgram",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms": [ "Win64", "Linux", "Mac" ],
+			"BlacklistTargets": ["Server"]
 		}
 	],
 	"Plugins": [

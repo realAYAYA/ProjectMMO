@@ -2,7 +2,7 @@
 
 #include "MGameShared.h"
 
-#define LOCTEXT_NAMESPACE "FGameSharedModule"
+#define LOCTEXT_NAMESPACE "FMGameSharedModule"
 
 void FMGameSharedModule::StartupModule()
 {
@@ -17,4 +17,4 @@ void FMGameSharedModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FMGameSharedModule, GameShared)
+IMPLEMENT_MODULE(FMGameSharedModule, MGameShared)

@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{3A6A47CE-4B6E-98A7-5020-7DAE2618E397}",
+	"EngineAssociation": "{33B0C90A-489A-DB56-994C-A68EE6945CC0}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -30,12 +30,11 @@
 			"Enabled": true
 		},
 		{
-			"Name": "WebSocketNetworking",
-			"Enabled": true
-		},
-		{
 			"Name": "RenderDocPlugin",
-			"Enabled": true
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
 		}
 	]
 }
