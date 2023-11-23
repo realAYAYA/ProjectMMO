@@ -88,7 +88,7 @@ bool UMPlayer::CreateRole(const FCreateRoleParams& Params)
 
 	PlayerData.RoleData.Add(Data);
 
-	MarkNeedSave();
+	Save();//MarkNeedSave();
 
 	return true;
 }

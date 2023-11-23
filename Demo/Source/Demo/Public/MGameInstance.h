@@ -41,15 +41,20 @@ public:
 
 	static UMGameInstance* GetMGameInstance(const UWorld* World);
 
-	// DS server
+	void LoadLocalSave();
 
-	// Todo 后期不需要蓝图调用该方法，DS专用
-	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+private:
+
+	
+	// DS Only
+	
+public:
+	
 	void LoginServer();
 	
 	// DS服务器准备就绪
 	UFUNCTION()
-	void GetReady();
+	void GetReady(bool Success);
 	
 	// DS服务器准备就绪
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")

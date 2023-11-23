@@ -15,17 +15,10 @@ void UMGameInstance::Init()
 	Super::Init();
 
 	UAbilitySystemGlobals::Get().InitGlobalData();
-	
-	if (!UGameplayStatics::DoesSaveGameExist(TEXT("MSaveGame"), 0))
-	{
-		SaveGame = NewObject<UMSaveGame>(this);
-	}
-	else
-	{
-		SaveGame = Cast<UMSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MSaveGame"), 0));
-		if (!SaveGame)
-			SaveGame = NewObject<UMSaveGame>(this);
-	}
+
+	LoadLocalSave();
+
+	LoginServer();
 }
 
 void UMGameInstance::BeginDestroy()
@@ -46,11 +39,28 @@ UMGameInstance* UMGameInstance::GetMGameInstance(const UWorld* World)
 	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
 }
 
+void UMGameInstance::LoadLocalSave()
+{
+	if (IsRunningDedicatedServer())
+		return;
+	
+	if (!UGameplayStatics::DoesSaveGameExist(TEXT("MSaveGame"), 0))
+	{
+		SaveGame = NewObject<UMSaveGame>(this);
+	}
+	else
+	{
+		SaveGame = Cast<UMSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MSaveGame"), 0));
+		if (!SaveGame)
+			SaveGame = NewObject<UMSaveGame>(this);
+	}
+}
+
 void UMGameInstance::LoginServer()
 {
 	if (!IsRunningDedicatedServer())
 	{
-		//return;
+		return;
 	}
 	
 	if (UMGameClientSubsystem* Client = GetSubsystem<UMGameClientSubsystem>())
@@ -61,8 +71,15 @@ void UMGameInstance::LoginServer()
 	}
 }
 
-void UMGameInstance::GetReady()
+void UMGameInstance::GetReady(bool Success)
 {
+	if (!Success)
+	{
+		// 连接到根服务器不成功，重连多次还失败，则关闭DS
+		UE_LOG(LogProjectM, Error, TEXT("DS Link root server failed!"));
+		return;
+	}
+	
 	// Todo 如果是DS服务器，发起请求连接至WebSocket服务器
 	if (const UGameRpcClient* Stub = GetClientRpcStub())
 	{
@@ -76,8 +93,18 @@ void UMGameInstance::GetReady()
 			{
 				// 拿到游戏存档初始化世界
 				bReady = true;
+				UE_LOG(LogProjectM, Warning, TEXT("Level GetReady!"));
+			}
+			else if (Code == ERpcErrorCode::TimeOut)
+			{
+				GetReady(true);
+				UE_LOG(LogProjectM, Warning, TEXT("Login Timeout, Try again!"));
 			}
 		});
+	}
+	else
+	{
+		UE_LOG(LogProjectM, Error, TEXT("Get Client Stub Failed!"));
 	}
 }
 

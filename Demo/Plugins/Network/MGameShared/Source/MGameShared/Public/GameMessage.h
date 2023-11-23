@@ -21,13 +21,9 @@ struct FLoginAsDSReq : public FGameMessage
 	UPROPERTY()
 	uint64 Token = 0;
 
-	// Ip
+	// Ip Port
 	UPROPERTY()
-	FString Ip;
-	
-	// 端口号
-	UPROPERTY()
-	FString Port;
+	FString NetAddress;
 
 	// DS进程是否启动成功，并初始化完成
 	UPROPERTY()
@@ -232,10 +228,10 @@ struct FEnterWorldAck : public FGameMessage
 	GENERATED_CUSTOM_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FString IP;
-
+	bool Success = false;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FString Port;
+	FString NetAddress;
 };
 
 //////////////////////////////////////////////////客户端专用通知消息类型////////////////////////////////////////////////////

@@ -6,7 +6,6 @@
 #include "MTools.h"
 #include "MWorldManager.h"
 #include "RedisOp.h"
-#include "Misc/Fnv.h"
 
 M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 {
@@ -124,9 +123,6 @@ M_GAME_RPC_HANDLE(GameRpc, EnterWorld, InSession, Req, Ack)
 	UMPlayer* Player = InSession->Player;
 	if (!Player)
 		return;
-
-	Ack.IP = TEXT("");
-	Ack.Port = TEXT("0");
 	
 	// 角色不存在
 	Player->SetCurrentRole(Req.RoleName);
@@ -137,7 +133,7 @@ M_GAME_RPC_HANDLE(GameRpc, EnterWorld, InSession, Req, Ack)
 
 	if (UMWorldManager::Get()->MainWorld)
 	{
-		Ack.IP = TEXT("");
-		Ack.Port = TEXT("0");
+		Ack.Success = true;
+		Ack.NetAddress = TEXT("127.0.0.1:7777");
 	}
 }

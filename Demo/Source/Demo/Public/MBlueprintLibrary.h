@@ -34,4 +34,8 @@ public:
 	/** 客户端连接器 */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static UGameRpcClient* GetClientRpcStub(const UObject* WorldContextObject);
+
+	/** 如果是DS，获取进程的IP Port */
+	UFUNCTION(BlueprintPure, Category = "ProjectM")
+	static FString GetNetAddress();
 };

@@ -12,19 +12,19 @@ if (!GGameServerModule->RedisClient) \
 
 void UCharToChar(const TArray<uint8>& From, TArray<char>& To)
 {
-	To.SetNum(From.Num());
-	for (const uint8& E : From)
+	To.Init(0, From.Num());
+	for (int32 i = 0; i < From.Num(); i++)
 	{
-		To.Add(static_cast<char>(E));
+		To[i] = static_cast<char>(From[i]);
 	}
 }
 
 void CharToUChar(const TArray<char>& From, TArray<uint8>& To)
 {
-	To.SetNum(From.Num());
-	for (const char& E : From)
+	To.Init(0, From.Num());
+	for (int32 i = 0; i < From.Num(); i++)
 	{
-		To.Add(static_cast<uint8>(E));
+		To[i] = static_cast<uint8>(From[i]);
 	}
 }
 

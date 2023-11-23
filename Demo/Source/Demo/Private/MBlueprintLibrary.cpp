@@ -44,3 +44,18 @@ UGameRpcClient* UMBlueprintLibrary::GetClientRpcStub(const UObject* WorldContext
 	
 	return nullptr;
 }
+
+FString UMBlueprintLibrary::GetNetAddress()
+{
+	if (IsRunningDedicatedServer())
+	{
+		
+	}
+	else
+	{
+		
+		
+	}
+
+	return TEXT("Not Running as DedicatedServer!");
+}
