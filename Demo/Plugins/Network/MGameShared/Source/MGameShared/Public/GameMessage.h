@@ -21,6 +21,14 @@ struct FLoginAsDSReq : public FGameMessage
 	UPROPERTY()
 	uint64 Token = 0;
 
+	// Ip
+	UPROPERTY()
+	FString Ip;
+	
+	// 端口号
+	UPROPERTY()
+	FString Port;
+
 	// DS进程是否启动成功，并初始化完成
 	UPROPERTY()
 	bool bSucceed = false;
