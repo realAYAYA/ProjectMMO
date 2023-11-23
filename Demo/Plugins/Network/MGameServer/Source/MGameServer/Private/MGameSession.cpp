@@ -65,3 +65,4 @@ void UMGameSession::OnReceive(void* InData, const int32 Size)
 
 	LastReceivedTime.Store(FDateTime::UtcNow().GetTicks());
 }
+

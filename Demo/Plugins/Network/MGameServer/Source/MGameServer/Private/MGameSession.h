@@ -29,8 +29,6 @@ public:
 	void OnConnected();
 	
 	void OnReceive(void* InData, const int32 Size);
-	
-	virtual void Offline() {}
 
 	UPROPERTY()
 	UMPlayer* Player = nullptr;

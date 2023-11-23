@@ -177,12 +177,13 @@ void UMGameServer::OnError(const FGuid InID)
 
 void UMGameServer::OnClosed(const FGuid InID)
 {
-	const UMGameSession* Connection = *Connections.Find(InID);
+	UMGameSession* Connection = *Connections.Find(InID);
 	if (Connection && Connection->WebSocket)
 	{
 		if (IsValid(WebSocketClientClosedCallBack.GetUObject()))
 			WebSocketClientClosedCallBack.Execute(InID);
-		
+
+		Connection->Shutdown();
 		Connections.Remove(InID);
 	}
 	
