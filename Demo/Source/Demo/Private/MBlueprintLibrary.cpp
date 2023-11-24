@@ -8,7 +8,6 @@
 #include "GameTablesModule.h"
 #include "GameTables.h"
 #include "GameMessage.h"
-#include "MGameClientSubsystem.h"
 
 FString UMBlueprintLibrary::TestFunc()
 {
@@ -43,6 +42,26 @@ UGameRpcClient* UMBlueprintLibrary::GetClientRpcStub(const UObject* WorldContext
 	}
 	
 	return nullptr;
+}
+
+int64 UMBlueprintLibrary::GetPlayerID(const UObject* WorldContextObject)
+{
+	if (const UMGameInstance* GameInstance = GetMGameInstance(WorldContextObject))
+	{
+		return GameInstance->GetPlayerID();
+	}
+	
+	return 0;
+}
+
+bool UMBlueprintLibrary::IsOnline(const UObject* WorldContextObject)
+{
+	if (const UMGameInstance* GameInstance = GetMGameInstance(WorldContextObject))
+	{
+		return GameInstance->GetClientRpcStub() != nullptr && GameInstance->GetPlayerID() != 0;
+	}
+	
+	return false;
 }
 
 FString UMBlueprintLibrary::GetNetAddress()

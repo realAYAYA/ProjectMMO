@@ -12,7 +12,6 @@
 class AMPlayerState;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPCNotice, const FString&, NewMessage);
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginResult, const ELoginGameRetCode, RetCode, const TArray<FPreviewRoleData>&, PreviewData);// Todo 角色预览数据
 
 /**
  * 项目基类PC
@@ -30,26 +29,22 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	AMPlayerState* GetMPlayerState() const;
-
-	// 请求角色数据
-	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "Login")
-	void K2_Login(const FString& Account, const FOnLoginResult& Callback);
 	
 	// 请求角色数据
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "ReqMyRoleData")
-	void K2_ReqMyRoleData(const FString& RoleName, const FOnRpcResult& Callback);
+	void K2_ReqMyRoleData(const FOnRpcResult& Callback);
 
 private:
 
 	// Rpc implementation
 	
-	UFUNCTION(Client, Reliable)
-	void GetMyRoleDataReq(const FString& RoleName);
-
 	UFUNCTION(Server, Reliable)
+	void GetMyRoleDataReq(const uint64 InPlayerID);
+
+	UFUNCTION(Client, Reliable)
 	void GetMyRoleDataAck(const FRoleData& InData, EOpErrorCode Error);
 	
-	UFUNCTION(Server, Unreliable)
+	UFUNCTION(Client, Unreliable)
 	void ShowNotice(const FString& InMessage);
 
 	UPROPERTY()

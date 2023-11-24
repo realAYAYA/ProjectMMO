@@ -68,6 +68,9 @@ void UMGameInstance::LoginServer()
 		Client->GetOnConnectedCallback().BindUFunction(this, TEXT("GetReady"));
 
 		Client->CreateSocket(TEXT("ws://127.0.0.1:10086"), TEXT(""));
+
+		//Client->OnErrorCallback.AddDynamic(); //Todo 连接断开
+		//Client->CloseSocket()
 	}
 }
 
@@ -126,3 +129,26 @@ void UMGameInstance::SetLoginInfo(const FString& InUserID, const FString& InUser
 	UserName = InUserName;
 }
 
+void UMGameInstance::K2_Login(const FString& Account, const FOnLoginResult& Callback)
+{
+	if (!IsValid(Callback.GetUObject()))
+		return;
+
+	const UGameRpcClient* RPC = GetClientRpcStub();
+	
+	FLoginGameReq Req;
+	Req.Account = Account;
+	Req.ClientVersion = TEXT("");
+	RPC->LoginGame(Req, [this, Callback](const ERpcErrorCode ErrorCode, const FLoginGameAck& Ack)
+	{
+		if (ErrorCode != ERpcErrorCode::Ok)
+		{
+			Callback.Execute(ELoginGameRetCode::UnKnow, TArray<FPreviewRoleData>());
+			return;
+		}
+
+		PlayerID = Ack.PlayerID;
+
+		Callback.Execute(Ack.Ret, Ack.RolePreviewData);
+	});
+}

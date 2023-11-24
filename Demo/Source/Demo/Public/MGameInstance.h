@@ -11,6 +11,8 @@ class AMPlayerState;
 class UGameTables;
 class UMSaveGame;
 
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnLoginResult, const ELoginGameRetCode, RetCode, const TArray<FPreviewRoleData>&, PreviewData);// Todo 角色预览数据
+
 /**
  * 
  */
@@ -21,8 +23,18 @@ class DEMO_API UMGameInstance : public UGameInstance
 
 public:
 
+	virtual void Init() override;
+
+	virtual void BeginDestroy() override;
+
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void SetLoginInfo(const FString& InUserID, const FString& InUserName);
+
+	// 请求角色数据
+	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "Login")
+	void K2_Login(const FString& Account, const FOnLoginResult& Callback);
+
+	uint64 GetPlayerID() const { return PlayerID; }
 
 	// Steam, Epic, PS4 : ID
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProjectM")
@@ -34,10 +46,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "ProjectM")
 	UMSaveGame* SaveGame;
-	
-	virtual void Init() override;
-
-	virtual void BeginDestroy() override;
 
 	static UMGameInstance* GetMGameInstance(const UWorld* World);
 
@@ -45,6 +53,7 @@ public:
 
 private:
 
+	uint64 PlayerID = 0;
 	
 	// DS Only
 	

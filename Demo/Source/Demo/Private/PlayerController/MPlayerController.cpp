@@ -3,6 +3,7 @@
 
 #include "MPlayerController.h"
 
+#include "Demo.h"
 #include "MBlueprintLibrary.h"
 #include "MPlayerState.h"
 
@@ -11,43 +12,12 @@ AMPlayerState* AMPlayerController::GetMPlayerState() const
 	return Cast<AMPlayerState>(PlayerState);
 }
 
-void AMPlayerController::K2_Login(const FString& Account, const FOnLoginResult& Callback)
+void AMPlayerController::K2_ReqMyRoleData(const FOnRpcResult& Callback)
 {
 	if (!IsValid(Callback.GetUObject()))
 		return;
 
-	const UGameRpcClient* RPC = UMBlueprintLibrary::GetClientRpcStub(GetWorld());
-	AMPlayerState* PS = GetMPlayerState();
-	if (!RPC || !PS)
-	{
-		Callback.Execute(ELoginGameRetCode::UnKnow, TArray<FPreviewRoleData>());
-		return;
-	}
-	
-	FLoginGameReq Req;
-	Req.Account = Account;
-	Req.ClientVersion = TEXT("");
-	RPC->LoginGame(Req, [this, PS, Callback](const ERpcErrorCode ErrorCode, const FLoginGameAck& Ack)
-	{
-		if (ErrorCode != ERpcErrorCode::Ok)
-		{
-			Callback.Execute(ELoginGameRetCode::UnKnow, TArray<FPreviewRoleData>());
-			return;
-		}
-
-		if (Ack.Ret == ELoginGameRetCode::Ok)
-		{
-			PS->SetPlayerID(Ack.PlayerID);
-		}
-
-		Callback.Execute(Ack.Ret, Ack.RolePreviewData);
-	});
-}
-
-void AMPlayerController::K2_ReqMyRoleData(const FString& RoleName, const FOnRpcResult& Callback)
-{
-	if (!IsValid(Callback.GetUObject()))
-		return;
+	const uint64 PlayerID = UMBlueprintLibrary::GetPlayerID(GetWorld());
 	
 	const AMPlayerState* PS = GetMPlayerState();
 	if (!PS)
@@ -56,7 +26,7 @@ void AMPlayerController::K2_ReqMyRoleData(const FString& RoleName, const FOnRpcR
 		return;
 	}
 
-	if (PS->GetPlayerID() == 0)
+	if (PlayerID == 0)
 	{
 		Callback.Execute(EOpErrorCode::BadParams);
 		return;
@@ -69,11 +39,19 @@ void AMPlayerController::K2_ReqMyRoleData(const FString& RoleName, const FOnRpcR
 	}
 
 	RequestPendingData.Add(TEXT("GetMyRoleData"), Callback);
-	GetMyRoleDataReq(RoleName);
+	GetMyRoleDataReq(PlayerID);
 }
 
-void AMPlayerController::GetMyRoleDataReq_Implementation(const FString& RoleName)
+void AMPlayerController::GetMyRoleDataReq_Implementation(const uint64 InPlayerID)
 {
+	UE_LOG(LogProjectM, Warning, TEXT("Player(ID: %llu) Requesting RoleData..."), InPlayerID);
+	
+	if (InPlayerID == 0)
+	{
+		GetMyRoleDataAck(FRoleData(), EOpErrorCode::BadParams);
+		return;
+	}
+	
 	const UGameRpcClient* RPC = UMBlueprintLibrary::GetClientRpcStub(GetWorld());
 	AMPlayerState* PS = GetMPlayerState();
 	if (!RPC || !PS)
@@ -81,9 +59,11 @@ void AMPlayerController::GetMyRoleDataReq_Implementation(const FString& RoleName
 		GetMyRoleDataAck(FRoleData(), EOpErrorCode::BadServer);
 		return;
 	}
+
+	PS->SetPlayerID(InPlayerID);
 	
 	FPullRoleDataReq Req;
-	Req.PlayerID = GetMPlayerState()->GetPlayerID();
+	Req.PlayerID = InPlayerID;
 	RPC->PullRoleData(Req, [this, PS](const ERpcErrorCode ErrorCode, const FPullRoleDataAck& Ack)
 	{
 		if (ErrorCode != ERpcErrorCode::Ok || !Ack.bOk)
@@ -91,7 +71,7 @@ void AMPlayerController::GetMyRoleDataReq_Implementation(const FString& RoleName
 			GetMyRoleDataAck(FRoleData(), EOpErrorCode::BadServer);
 			return;
 		}
-			
+		
 		PS->LoadData(Ack.RoleData);
 		GetMyRoleDataAck(Ack.RoleData, EOpErrorCode::Ok);
 	});

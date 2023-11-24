@@ -35,6 +35,14 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
 	static UGameRpcClient* GetClientRpcStub(const UObject* WorldContextObject);
 
+	/** 获取玩家ID */
+	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
+	static int64 GetPlayerID(const UObject* WorldContextObject);
+
+	/** 玩家是否登录在线 */
+	UFUNCTION(BlueprintPure, Category = "ProjectM", meta = (WorldContext = "WorldContextObject"))
+	static bool IsOnline(const UObject* WorldContextObject);
+
 	/** 如果是DS，获取进程的IP Port */
 	UFUNCTION(BlueprintPure, Category = "ProjectM")
 	static FString GetNetAddress();
