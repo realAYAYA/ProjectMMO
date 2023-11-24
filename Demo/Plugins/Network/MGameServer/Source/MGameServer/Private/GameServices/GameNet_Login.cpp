@@ -7,6 +7,11 @@
 #include "MWorldManager.h"
 #include "RedisOp.h"
 
+#ifdef M_MODULAR_NAME
+#undef M_MODULAR_NAME 
+#endif
+#define M_MODULAR_NAME Login
+
 M_GAME_RPC_HANDLE(GameRpc, LoginGame, InSession, Req, Ack)
 {
 	// Todo 检查版本

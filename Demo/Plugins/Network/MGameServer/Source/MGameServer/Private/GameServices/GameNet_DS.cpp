@@ -4,6 +4,11 @@
 #include "MWorld.h"
 #include "MWorldManager.h"
 
+#ifdef M_MODULAR_NAME
+#undef M_MODULAR_NAME 
+#endif
+#define M_MODULAR_NAME DS
+
 // 仅用于DS与WebSocket之间的通信，客户端禁止调用这些方法
 
 // 
