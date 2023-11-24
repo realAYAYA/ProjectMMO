@@ -168,9 +168,10 @@ void UMGameServer::OnReceive(void* InData, const int32 DataSize, const FGuid InI
 
 void UMGameServer::OnError(const FGuid InID)
 {
-	const UMGameSession* Connection = *Connections.Find(InID);
+	UMGameSession* Connection = *Connections.Find(InID);
 	if (Connection && Connection->WebSocket)
 	{
+		Connection->Shutdown();
 		UE_LOG(LogMGameServer, Warning, TEXT("User: %s - %s"), *InID.ToString(), *FString(__FUNCTION__));
 	}
 }

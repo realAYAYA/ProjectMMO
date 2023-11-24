@@ -1,7 +1,7 @@
 #include "RedisProxy.h"
 
 #include "RedisClient.h"
-/* 学习用代码，使用范例
+/*
 #include "ZRedisOp.h"
 
 #include <random>
@@ -892,8 +892,7 @@ bool FZRedisOp::SaveSeptGlobalData(const idlezt::SeptGlobalSaveData& InData)
 	}
 	return true;	
 }
-
- */
+*/
 
 
 URedisProxy::URedisProxy()

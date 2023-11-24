@@ -13,6 +13,6 @@ struct FRedisOp
 	//static bool GeneratePlayerId(uint64* OutId);
 	//static bool GenerateWorldSerialNum(uint64* OutId);
 
-	static bool OccupyName(const FString& Name, const uint64 InId);
-	static bool GetOccupyNameId(const FString& Name, uint64& OutId);
+	static bool OccupyName(const FString& Name, const int64 InId);
+	static bool GetOccupyNameID(const FString& Name, int64& OutId);
 };

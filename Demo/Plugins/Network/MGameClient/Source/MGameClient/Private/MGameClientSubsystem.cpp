@@ -20,6 +20,11 @@ void UMGameClientSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 void UMGameClientSubsystem::Deinitialize()
 {
 	Super::Deinitialize();
+
+	if (Connection)
+	{
+		Connection->Close();
+	}
 }
 
 void UMGameClientSubsystem::K2_CreateSocket(const FString& ServerURL, const FString& ServerProtocol, const FOnConnectServer& Callback)

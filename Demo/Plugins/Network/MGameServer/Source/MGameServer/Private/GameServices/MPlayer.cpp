@@ -24,6 +24,8 @@ void UMPlayer::Online(UMGameSession* InSession)
 {
 	Session = InSession;
 	Session->Player = this;
+
+	CurrentRole = nullptr;
 }
 
 void UMPlayer::Offline(const UMGameSession* InSession)
@@ -31,6 +33,8 @@ void UMPlayer::Offline(const UMGameSession* InSession)
 	check(Session == InSession);
 
 	//UE_LOG()
+	
+	Session->Player = nullptr;
 
 	Session = nullptr;
 

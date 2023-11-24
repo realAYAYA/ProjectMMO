@@ -1,5 +1,6 @@
 #include "RedisOp.h"
 #include "MGameServerPrivate.h"
+#include "MTools.h"
 
 #include "Misc/Fnv.h"
 
@@ -138,12 +139,36 @@ bool FRedisOp::SetAccountInfo(const FString& InAccount, const uint64 InPlayerId)
 	return true;
 }
 
-bool FRedisOp::OccupyName(const FString& Name, const uint64 InId)
+bool FRedisOp::OccupyName(const FString& Name, const int64 InId)
 {
-	return true;
+	CHECK_REDIS_CLIENT;
+
+	std::string AsciiName;
+	FStringToString(Name, &AsciiName);
+	const uint64 NameHash = FFnv::MemFnv64(AsciiName.c_str(), AsciiName.size());
+	
+	const FString Key = MakeKey(FString::Printf(TEXT("UQNAME_%llu"), NameHash));
+	if (!GGameServerModule->RedisClient->SetNxInt(Key, InId))
+	{
+		return false;
+	}
+	
+	return true;	
 }
 
-bool FRedisOp::GetOccupyNameId(const FString& Name, uint64& OutId)
+bool FRedisOp::GetOccupyNameID(const FString& Name, int64& OutId)
 {
+	CHECK_REDIS_CLIENT;
+
+	std::string AsciiName;
+	FStringToString(Name, &AsciiName);
+	const uint64 NameHash = FFnv::MemFnv64(AsciiName.c_str(), AsciiName.size());
+
+	const FString Key = MakeKey(FString::Printf(TEXT("UQNAME_%llu"), NameHash));
+	if (!GGameServerModule->RedisClient->GetInt(Key, OutId))
+	{
+		return false;
+	}
+
 	return true;
 }

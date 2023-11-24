@@ -133,6 +133,7 @@ M_GAME_RPC_HANDLE(GameRpc, EnterWorld, InSession, Req, Ack)
 	Player->SetCurrentRole(Req.RoleName);
 	if (!Player->CurrentRole)
 	{
+		Ack.NetAddress = TEXT("Role");
 		return;
 	}
 
@@ -140,5 +141,9 @@ M_GAME_RPC_HANDLE(GameRpc, EnterWorld, InSession, Req, Ack)
 	{
 		Ack.Success = true;
 		Ack.NetAddress = TEXT("127.0.0.1:7777");
+	}
+	else
+	{
+		Ack.NetAddress = TEXT("World");
 	}
 }
