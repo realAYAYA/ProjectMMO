@@ -90,6 +90,7 @@ void UMGameClientSubsystem::OnConnectionError(const FString& Error)
 	}
 	
 	OnErrorCallback.Broadcast(Error);
+	OnErrorCallback.Clear();
 	
 	Connection->Close();
 	Connection.Reset();

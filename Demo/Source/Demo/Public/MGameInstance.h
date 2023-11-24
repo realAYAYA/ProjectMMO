@@ -60,10 +60,18 @@ private:
 public:
 	
 	void LoginServer();
+	void CloseConnection();
+
+	UFUNCTION()
+	void OnDisConnected();
+
+	int32 ReconnectTime = 0;// 重试连接次数（超过5次失败就执行一些其它行为）
 	
 	// DS服务器准备就绪
 	UFUNCTION()
 	void GetReady(bool Success);
+
+	
 	
 	// DS服务器准备就绪
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")

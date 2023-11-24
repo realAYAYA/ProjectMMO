@@ -14,9 +14,6 @@ AMPlayerState* AMPlayerController::GetMPlayerState() const
 
 void AMPlayerController::K2_ReqMyRoleData(const FOnRpcResult& Callback)
 {
-	if (!IsValid(Callback.GetUObject()))
-		return;
-
 	const uint64 PlayerID = UMBlueprintLibrary::GetPlayerID(GetWorld());
 	
 	const AMPlayerState* PS = GetMPlayerState();
@@ -38,7 +35,7 @@ void AMPlayerController::K2_ReqMyRoleData(const FOnRpcResult& Callback)
 		return;
 	}
 
-	RequestPendingData.Add(TEXT("GetMyRoleData"), Callback);
+	AddRpcCallback(TEXT("GetMyRoleData"), Callback);
 	GetMyRoleDataReq(PlayerID);
 }
 
@@ -91,11 +88,9 @@ void AMPlayerController::GetMyRoleDataAck_Implementation(const FRoleData& InData
 		}
 	}
 	
-	if (const FOnRpcResult* Callback = RequestPendingData.Find(TEXT("GetMyRoleData")))
+	if (const FOnRpcResult* Callback = FindRpcCallback(TEXT("GetMyRoleData")))
 	{
-		if (IsValid(Callback->GetUObject()))
-			Callback->Execute(Error);
-		
+		Callback->Execute(Error);
 		RequestPendingData.Remove(TEXT("GetMyRoleData"));
 	}
 }
@@ -105,3 +100,34 @@ void AMPlayerController::ShowNotice_Implementation(const FString& InMessage)
 	OnNotice.Broadcast(InMessage);
 }
 
+void AMPlayerController::AddRpcCallback(const FString& In, const FOnRpcResult& InCallback)
+{
+	if (RequestPendingData.Find(In) != nullptr)
+	{
+		InCallback.Execute(EOpErrorCode::Waiting);
+		return;
+	}
+	
+	RequestPendingData.Add(In, FRpcPendingData(InCallback));
+}
+
+const FOnRpcResult* AMPlayerController::FindRpcCallback(const FString& In)
+{
+	const FRpcPendingData* PendingData = RequestPendingData.Find(In);
+	if (PendingData)
+	{
+		if (IsValid(PendingData->Callback.GetUObject()))
+		{
+			if (!PendingData->IsTimeOut())
+				return &PendingData->Callback;
+			else
+			{
+				PendingData->Callback.Execute(EOpErrorCode::Timeout);
+			}
+		}
+
+		RequestPendingData.Remove(In);
+	}
+
+	return nullptr;
+}

@@ -47,7 +47,14 @@ private:
 	UFUNCTION(Client, Unreliable)
 	void ShowNotice(const FString& InMessage);
 
+
+	// Rpc封装
+	
 	UPROPERTY()
-	TMap<FString, FOnRpcResult> RequestPendingData;
+	TMap<FString, FRpcPendingData> RequestPendingData;
+
+	void AddRpcCallback(const FString& In, const FOnRpcResult& InCallback);
+
+	const FOnRpcResult* FindRpcCallback(const FString& In);
 	
 };

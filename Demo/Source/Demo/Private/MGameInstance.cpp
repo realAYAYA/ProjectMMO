@@ -74,6 +74,14 @@ void UMGameInstance::LoginServer()
 	}
 }
 
+void UMGameInstance::CloseConnection()
+{
+}
+
+void UMGameInstance::OnDisConnected()
+{
+}
+
 void UMGameInstance::GetReady(bool Success)
 {
 	if (!Success)

@@ -15,10 +15,40 @@ enum class EOpErrorCode : uint8
 	BadConfig		UMETA(DisplayName = "BadConfig"),
 	BadServer		UMETA(DisplayName = "BadServer"),
 	BadMemory		UMETA(DisplayName = "BadMemory"),
+	Timeout			UMETA(DisplayName = "Timeout"),
 	UnKnow			UMETA(DisplayName = "UnKnow"),
 };
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnRpcResult, const EOpErrorCode, ErrorCode);
+
+USTRUCT()
+struct FRpcPendingData
+{
+	GENERATED_BODY()
+		
+	FOnRpcResult Callback;
+
+	FDateTime BeginDate;
+
+	int32 TimeoutSetting;
+
+	FRpcPendingData()
+	{
+		TimeoutSetting = 3;
+	}
+	
+	explicit FRpcPendingData(const FOnRpcResult& InCallback, const int32 InTimeoutSetting = 3)
+	{
+		Callback = InCallback;
+		BeginDate = FDateTime::UtcNow();
+		TimeoutSetting = InTimeoutSetting;
+	}
+
+	bool IsTimeOut() const
+	{
+		return (FDateTime::UtcNow() - BeginDate).GetTotalSeconds() >TimeoutSetting;
+	}
+};
 
 // Todo Delete
 USTRUCT(BlueprintType)
