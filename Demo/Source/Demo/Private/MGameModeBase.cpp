@@ -6,6 +6,7 @@
 #include "GameFramework/GameStateBase.h"
 
 #include "MPlayerState.h"
+#include "Kismet/GameplayStatics.h"
 
 AMGameMode::AMGameMode()
 {
@@ -62,4 +63,16 @@ void AMGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AMGameMode::PreLogin(
+	const FString& Options,
+	const FString& Address,
+	const FUniqueNetIdRepl& UniqueId,
+	FString& ErrorMessage)
+{
+	const FString& SteamId = UGameplayStatics::ParseOption(Options, "SteamId");
+	FUniqueNetIdRepl UniqueIdFromSteam;
+	UniqueIdFromSteam.FromJson(SteamId);
+	Super::PreLogin(Options, Address, UniqueIdFromSteam, ErrorMessage);
 }

@@ -26,7 +26,7 @@ M_GAME_RPC_HANDLE(GameRpc, LoginAsDS, InSession, Req, Ack)
 	World = UMWorldManager::Get()->CreateWorld();
 	if (!World)
 	{
-		return;
+		//return;
 	}
 
 	World->Online(InSession);
