@@ -8,6 +8,10 @@
 #include "MAbilitySystemComponent.generated.h"
 
 class AMCharacter;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGEAppliedDelegate, const FGameplayTag&, Tag, const float, TimeRemaining);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGERemovedDelegate, const FGameplayTag&, Tag);
+
 /**
  * 
  */
@@ -18,18 +22,15 @@ class DEMO_API UMAbilitySystemComponent : public UAbilitySystemComponent
 
 public:
 
-	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
-	FGameplayTagContainer MoveEventTag;
-	
-	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
-	FGameplayTagContainer LookEventTag;
-	
-	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
-	FGameplayTagContainer JumpEventTag;
+	virtual void InitializeComponent() override;
 
-	UPROPERTY(EditDefaultsOnly, Category = ProjectM)
-	FGameplayTagContainer SprintEventTag;
+	/** Whenever a duration based GE is added */
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnGEAppliedDelegate OnGEAppliedCallback;
 
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnGERemovedDelegate OnGERemovedCallback;
+	
 	// 受到近战攻击时触发的效果
 	
 	// 受到近战攻击时给对方施加效果
@@ -43,12 +44,6 @@ public:
 	// 施放法术时触发的效果
 
 	const AMCharacter* GetOwnerCharacter() const { return Cast<AMCharacter>(GetOwnerActor()); }
-
-	/**
-	 * 主动键入触发的技能，这些技能往往有着如下特点，暂时只能手动实现
-	 * 1.键入触发，但不知道何时停止，比如移动，需要侦听键位回调后手动取消
-	 * 2.结束时机由其它模块来决定，比如跳跃，需要依赖移动组件的回调
-	 */
 	
 	void Move();
 	void MoveEnd();
@@ -56,11 +51,17 @@ public:
 	void Jump();
 	void JumpEnd();
 
-	float MovementInputX;
-	
-	float MovementInputY;
-	
-	float LookInputYaw;
+protected:
 
-	float LookInputPitch;
+	//void OnTakingMeleeAttack();
+
+	//void OnTakingSpellAttack();
+
+	//void OnTakingDamage();
+
+	//void OnTakingHostileBehavior();
+
+	void OnGEApplied(UAbilitySystemComponent* Asc, const FGameplayEffectSpec& Spec, FActiveGameplayEffectHandle Handle) const;
+
+	void OnGERemoved(const FActiveGameplayEffect& Effect) const;
 };

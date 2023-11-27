@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
+#include "Abilities/GameplayAbility.h"
 #include "GA_Jump.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DEMO_API UGA_Jump : public UMGameplayAbility
+class DEMO_API UGA_Jump : public UGameplayAbility
 {
 	GENERATED_BODY()
 

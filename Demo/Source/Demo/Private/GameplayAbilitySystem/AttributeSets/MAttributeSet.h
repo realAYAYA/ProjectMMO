@@ -7,6 +7,14 @@
 #include "AttributeSet.h"
 #include "MAttributeSet.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRageChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxRageChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnergyChanged, float, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxEnergyChanged, float, V);
 
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
@@ -201,6 +209,30 @@ public:
 	FGameplayAttributeData DivineResist;
 	ATTRIBUTE_ACCESSORS(UMAttributeSet, DivineResist)
 
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnHealthChanged OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnMaxHealthChanged OnMaxHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnManaChanged OnManaChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnMaxManaChanged OnMaxManaChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnRageChanged OnRageChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnMaxRageChanged OnMaxRageChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnEnergyChanged OnEnergyChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnMaxEnergyChanged OnMaxEnergyChanged;
+	
 protected:
 
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;

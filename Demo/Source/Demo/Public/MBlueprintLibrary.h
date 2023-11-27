@@ -8,6 +8,7 @@
 #include "MBlueprintLibrary.generated.h"
 
 class AMPlayerState;
+class AMCharacter;
 
 /**
  * 
@@ -46,4 +47,9 @@ public:
 	/** 如果是DS，获取进程的IP Port */
 	UFUNCTION(BlueprintPure, Category = "ProjectM")
 	static FString GetNetAddress();
+
+	/** 鉴定二者是否为友军 */
+	UFUNCTION(BlueprintPure, Category = "ProjectM")
+	static bool IsFriendly(const AMCharacter* A, const AMCharacter* B);
+	
 };

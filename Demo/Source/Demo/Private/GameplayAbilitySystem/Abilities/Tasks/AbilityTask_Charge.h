@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Characters/MCharacter.h"
-#include "GameplayAbilitySystem/Abilities/Tasks/MAbilityTask.h"
+#include "GameplayAbilitySystem/Abilities/Base/MAbilityTask.h"
 #include "AbilityTask_Charge.generated.h"
 
 class UCharacterMovementComponent;

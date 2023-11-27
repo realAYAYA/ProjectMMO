@@ -19,12 +19,13 @@ enum class EBuffType : uint8
 {
 	None		UMETA(Displayname = "None"),	// 用于无法被驱散的效果
 	Spell		UMETA(Displayname = "Spell"),
+	Combat		UMETA(Displayname = "Combat"),
 };
 
 UENUM(BlueprintType)
-enum class EMDamageType : uint8
+enum class EDamageType : uint8
 {
-	None		UMETA(Displayname = "None"),	// 用于无法被驱散的效果
+	Chaos		UMETA(Displayname = "Chaos"),
 	Physical	UMETA(Displayname = "Physical"),
 	Frost		UMETA(Displayname = "Frost"),
 	Flame		UMETA(Displayname = "Flame"),
@@ -40,6 +41,11 @@ UCLASS()
 class UMGameplayEffect : public UGameplayEffect
 {
 	GENERATED_BODY()
+
+public:
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "PorjectM")
+	EDamageType DamageType;
 	
 	// Todo 目标和施术者
 	// Todo 持续，且影响双方的buff，例如：吸血

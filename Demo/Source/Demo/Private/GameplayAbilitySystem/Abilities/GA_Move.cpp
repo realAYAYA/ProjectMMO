@@ -33,8 +33,6 @@ void UGA_Move::ActivateAbility(
 
 	ACharacter* Character = Cast<ACharacter>(OwnerInfo->AvatarActor);
 	const UMAbilitySystemComponent* ASC = Cast<UMAbilitySystemComponent>(OwnerInfo->AbilitySystemComponent);
-	Character->AddMovementInput(Character->GetActorForwardVector(), ASC->MovementInputY);
-	Character->AddMovementInput(Character->GetActorRightVector(), ASC->MovementInputX);
 }
 
 void UGA_Move::CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

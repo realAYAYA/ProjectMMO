@@ -18,6 +18,10 @@ void UMAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackD
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
 	}
+	else if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
+	}
 	else if (Data.EvaluatedData.Attribute == GetMaxMoveSpeedAttribute())
 	{
 		const AMCharacter* OwningCharacter = Cast<AMCharacter>(GetOwningActor());
@@ -31,31 +35,37 @@ void UMAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackD
 void UMAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Mana, OldMana);
+	OnManaChanged.Broadcast(GetMana());
 }
 
 void UMAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxMana, OldMaxMana);
+	OnMaxManaChanged.Broadcast(GetMaxMana());
 }
 
 void UMAttributeSet::OnRep_Energy(const FGameplayAttributeData& OldEnergy)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Energy, OldEnergy);
+	OnEnergyChanged.Broadcast(GetEnergy());
 }
 
 void UMAttributeSet::OnRep_MaxEnergy(const FGameplayAttributeData& OldMaxEnergy)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxEnergy, OldMaxEnergy);
+	OnMaxEnergyChanged.Broadcast(GetMaxEnergy());
 }
 
 void UMAttributeSet::OnRep_Rage(const FGameplayAttributeData& OldRage)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Rage, OldRage);
+	OnRageChanged.Broadcast(GetRage());
 }
 
 void UMAttributeSet::OnRep_MaxRage(const FGameplayAttributeData& OldMaxRage)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxRage, OldMaxRage);
+	OnMaxRageChanged.Broadcast(GetMaxRage());
 }
 
 void UMAttributeSet::OnRep_CastSpeed(const FGameplayAttributeData& OldCastSpeed)
@@ -66,11 +76,13 @@ void UMAttributeSet::OnRep_CastSpeed(const FGameplayAttributeData& OldCastSpeed)
 void UMAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHeath)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, Health, OldHeath);
+	OnHealthChanged.Broadcast(GetHealth());
 }
 
 void UMAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHeath)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMAttributeSet, MaxHealth, OldMaxHeath);
+	OnMaxHealthChanged.Broadcast(GetMaxHealth());
 }
 
 void UMAttributeSet::OnRep_MaxMoveSpeed(const FGameplayAttributeData& OldMaxMoveSpeed)

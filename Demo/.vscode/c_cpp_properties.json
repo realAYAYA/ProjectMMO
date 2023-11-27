@@ -1,0 +1,20 @@
+{
+	"configurations": [
+		{
+			"name": "DemoEditor Editor Win64 Development (Demo)",
+			"compilerPath": "D:\\apps\\Microsoft\\VisualStudio\\IDE\\VC\\Tools\\MSVC\\14.29.30133\\bin\\Hostx64\\x64\\cl.exe",
+			"cStandard": "c17",
+			"cppStandard": "c++17",
+			"intelliSenseMode": "msvc-x64",
+			"compileCommands": "D:\\ProjectMMO\\Demo\\.vscode\\compileCommands_Demo.json"
+		},
+		{
+			"name": "Win32",
+			"compilerPath": "D:\\apps\\Microsoft\\VisualStudio\\IDE\\VC\\Tools\\MSVC\\14.29.30133\\bin\\Hostx64\\x64\\cl.exe",
+			"cStandard": "c17",
+			"cppStandard": "c++20",
+			"intelliSenseMode": "msvc-x64",
+			"compileCommands": "D:\\ProjectMMO\\Demo\\.vscode\\compileCommands_Default.json"
+		}
+	]
+}

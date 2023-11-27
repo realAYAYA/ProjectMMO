@@ -2,25 +2,18 @@
 
 
 #include "MCharacter.h"
+#include "MCharacterDataAsset.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilitySystem/Components/MAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AttributeSets/MAttributeSet.h"
 #include "Components/MCharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
-
-#include "Demo.h"
-#include "MGameInstance.h"
-#include "MCharacterDataAsset.h"
-#include "PlayerController/MPlayerController.h"
-#include "MPlayerState.h"
-
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
@@ -53,7 +46,6 @@ AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
 	AttributeSet = CreateDefaultSubobject<UMAttributeSet>(TEXT("AttributeSet"));
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetMaxMoveSpeedAttribute()).AddUObject(this, &AMCharacter::OnMaxMovementSpeedChanged);
-
 	
 }
 
@@ -65,9 +57,26 @@ void AMCharacter::PostInitializeComponents()
 		CharacterData = CharacterDataAsset->CharacterData;
 }
 
-const UMAttributeSet* AMCharacter::GetAttributeSet() const
+void AMCharacter::SetRoleName(const FString& InName)
 {
-	return AttributeSet;
+	RoleName = FName(*InName);
+
+	// 如果本机是服务器，OnRep不会调用，需要手动触发
+	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
+	{
+		OnRoleNameChanged.Broadcast(RoleName);
+	}
+}
+
+void AMCharacter::SetRoleCamp(const ECamp& InCamp)
+{
+	Camp = InCamp;
+
+	// 如果本机是服务器，OnRep不会调用，需要手动触发
+	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
+	{
+		OnRoleCampChanged.Broadcast(InCamp);
+	}
 }
 
 void AMCharacter::OnRep_RoleName() const
@@ -75,9 +84,19 @@ void AMCharacter::OnRep_RoleName() const
 	OnRoleNameChanged.Broadcast(RoleName);
 }
 
+void AMCharacter::OnRep_RoleCamp() const
+{
+	OnRoleCampChanged.Broadcast(Camp);
+}
+
+void AMCharacter::OnRep_RoleRace() const
+{
+	OnRoleRaceChanged.Broadcast(Race);
+}
+
 void AMCharacter::OnRep_CurrentTarget() const
 {
-	OnCurrentChanged.Broadcast(CurrentTarget);
+	OnCurrentTargetChanged.Broadcast(CurrentTarget);
 }
 
 UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
@@ -106,22 +125,33 @@ void AMCharacter::GiveAbilities()
 {
 	if (!HasAuthority() || !AbilitySystemComponent)
 		return;
-
-	int32 i = 0;
-	for (const auto& DefaultAbility : CharacterData.Abilities)
+	
+	for (const auto& AbilityClass : CharacterData.DefaultAbilities)
 	{
-		if (!DefaultAbility)
+		if (!AbilityClass)
 			continue;
 			
-		FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(DefaultAbility);
+		FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(AbilityClass);
 		AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
+	}
 
-		const UGameplayAbility* Ability = NewObject<UGameplayAbility>(this, DefaultAbility);
-		if (Ability && Ability->AbilityTags.Num() > 0 && Ability->AbilityTags.IsValidIndex(0))
-		{
-			const FGameplayTag& Tag = Ability->AbilityTags.First();
-			InputSkillMap.Add(++i, Tag);
-		}
+	TArray<TSubclassOf<UGameplayAbility>>* Abilities;
+	
+	switch (RoleClass)
+	{
+		default: return;
+	case ERoleClass::Warrior: Abilities = &CharacterData.WarriorAbilities;break;
+	case ERoleClass::Mage: Abilities = &CharacterData.MageAbilities;break;
+	case ERoleClass::Priest: Abilities = &CharacterData.PriestAbilities;break;
+	}
+	
+	for (const auto& AbilityClass : *Abilities)
+	{
+		if (!AbilityClass)
+			continue;
+			
+		FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(AbilityClass);
+		AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
 	}
 }
 
@@ -137,7 +167,7 @@ void AMCharacter::ApplyStartupEffects()
 	{
 		if (ApplyGameplayEffectToSelf(Effect, EffectContextHandle))
 		{
-			UE_LOG(LogProjectM, Error, TEXT("%s : %s Failed"), *FString(__FUNCTION__), *FString(Effect->GetName()));
+			//UE_LOG(LogProjectM, Error, TEXT("%s : %s Failed"), *FString(__FUNCTION__), *FString(Effect->GetName()));
 		}
 	}
 }
@@ -155,111 +185,100 @@ void AMCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 	
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 // Called when the game starts or when spawned
 void AMCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//Add Input Mapping Context
-	if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(DefaultMappingContext, 0);
-		}
-	}
-}
-
-// Called every frame
-void AMCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-// Called to bind functionality to input
-void AMCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
-	{
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AMCharacter::TryJump);
-
-		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMCharacter::Move);
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AMCharacter::MoveEnd);
-
-		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMCharacter::Look);
-
-		// 技能栏映射
-		//EnhancedInputComponent->BindAction(InputAction1, ETriggerEvent::Triggered, this, &AMCharacter::TryActiveAbility1);
-	}
-}
-
-void AMCharacter::Move(const FInputActionValue& Value)
-{
-	// 检测是否可以移动
-	for (const FGameplayTag& Tag : MoveLimitTags)
-	{
-		if (GetAbilitySystemComponent()->HasMatchingGameplayTag(Tag))
-			return;
-	}
-	// input is a Vector2D
-	const FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		// add movement
-		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
-		AddMovementInput(GetActorRightVector(), MovementVector.X);
-
-		//AbilitySystemComponent->MovementInputX = MovementVector.X;
-		//AbilitySystemComponent->MovementInputY = MovementVector.Y;
-		AbilitySystemComponent->Move();
-
-		OnMoveInput.Broadcast(MovementVector.X, MovementVector.Y);
-	}
-}
-
-void AMCharacter::MoveEnd(const FInputActionValue& Value)
-{
-	if (Controller != nullptr)
-	{
-		// add movement
-		AbilitySystemComponent->MoveEnd();
-		
-		OnMoveInput.Broadcast(0, 0);
-	}
-}
-
-void AMCharacter::Look(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	const FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
-
-		//AbilitySystemComponent->LookInputYaw = LookAxisVector.X;
-		//AbilitySystemComponent->LookInputPitch = LookAxisVector.Y;
-
-		OnLookInput.Broadcast(LookAxisVector.X, LookAxisVector.Y);
-	}
+	
 }
 
 void AMCharacter::TryJump(const FInputActionValue& Value)
 {
-	AbilitySystemComponent->Jump();
+	// 检测是否可以移动
+	FGameplayTagContainer Container;
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Stun")));
 
-	OnJumpInput.Broadcast(Value.Get<float>());
+	for (const FGameplayTag& Tag :Container)
+	{
+		if (GetAbilitySystemComponent()->HasMatchingGameplayTag(Tag))
+			return;
+	}
+	
+	AbilitySystemComponent->Jump();
+}
+
+void AMCharacter::MoveBeginInternal(const FVector2D& Value)
+{
+	// 检测是否可以移动
+	FGameplayTagContainer Container;
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Stun")));
+	//Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limited.Fear")));
+	//Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limited.Sleep")));
+
+	for (const FGameplayTag& Tag :Container)
+	{
+		if (GetAbilitySystemComponent()->HasMatchingGameplayTag(Tag))
+			return;
+	}
+
+	if (Controller != nullptr)
+	{
+		// add movement
+		AddMovementInput(GetActorForwardVector(), Value.Y);
+		AddMovementInput(GetActorRightVector(), Value.X);
+		
+		AbilitySystemComponent->Move();
+	}
+}
+
+void AMCharacter::MoveEndInternal(const FVector2D& Value)
+{
+	if (Controller != nullptr)
+	{
+		AbilitySystemComponent->MoveEnd();
+	}
+}
+
+void AMCharacter::LookInternal(const FVector2D& Value)
+{
+	// 检测是否可以四周观察
+	FGameplayTagContainer Container;
+	//Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limited.Fear")));
+	//Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limited.Sleep")));
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Stun")));
+
+	for (const FGameplayTag& Tag :Container)
+	{
+		if (GetAbilitySystemComponent()->HasMatchingGameplayTag(Tag))
+			return;
+	}
+
+	if (Controller != nullptr)
+	{
+		// add yaw and pitch input to controller
+		AddControllerYawInput(Value.X);
+		AddControllerPitchInput(Value.Y);
+	}
+}
+
+void AMCharacter::JumpBeginInternal(const bool IsHeightJump)
+{
+	// 检测是否可以移动
+	FGameplayTagContainer Container;
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Stun")));
+
+	for (const FGameplayTag& Tag :Container)
+	{
+		if (GetAbilitySystemComponent()->HasMatchingGameplayTag(Tag))
+			return;
+	}
+	
+	AbilitySystemComponent->Jump();
 }
 
 void AMCharacter::Landed(const FHitResult& Hit)
@@ -267,13 +286,6 @@ void AMCharacter::Landed(const FHitResult& Hit)
 	Super::Landed(Hit);
 	
 	AbilitySystemComponent->JumpEnd();
-	
-	OnJumpInput.Broadcast(0.0f);
-}
-
-void AMCharacter::TryActiveAbility(const FInputActionValue& Value)
-{
-	// Todo 按键映射机制
 }
 
 void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
@@ -281,19 +293,15 @@ void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
 	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
 }
 
-AMPlayerState* AMCharacter::GetMPlayerState() const
-{
-	return Cast<AMPlayerState>(GetPlayerState());
-}
-
-AMPlayerController* AMCharacter::GetMPlayerController() const
-{
-	return Cast<AMPlayerController>(Controller);
-}
-
 void AMCharacter::SetCurrentTarget_Implementation(AMCharacter* NewTarget)
 {
 	CurrentTarget = NewTarget;
+
+	// 如果本机是服务器，OnRep不会调用，需要手动触发
+	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
+	{
+		OnCurrentTargetChanged.Broadcast(CurrentTarget);
+	}
 }
 
 void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
@@ -304,8 +312,10 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 
 	FDoRepLifetimeParams SharedParams;
 	SharedParams.bIsPushBased = true;
-	SharedParams.RepNotifyCondition = REPNOTIFY_Always;
+	
+	SharedParams.RepNotifyCondition = REPNOTIFY_OnChanged;
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, CurrentTarget, SharedParams);
 	
 	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, RoleName, SharedParams);
-	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, CurrentTarget, SharedParams);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, Camp, SharedParams);
 }

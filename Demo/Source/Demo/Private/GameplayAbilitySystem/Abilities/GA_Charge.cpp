@@ -31,44 +31,8 @@ EActivateFailCode UGA_Charge::CanActivateCondition(const FGameplayAbilityActorIn
 		Caster->OnAbilityFailed.Broadcast(FailCode);
 		return FailCode;
 	}
-	
-	const AMCharacter* Target = Caster->CurrentTarget;
-	if (!Target || !Target->GetAbilitySystemComponent())
-	{
-		Caster->OnAbilityFailed.Broadcast(EActivateFailCode::NoTarget);
-		return EActivateFailCode::NoTarget;
-	}
 
-	FailCode = EActivateFailCode::Success;
-	
-	// Todo 不是敌对目标
-	
-	// Out of range
-	const float Distance = (Caster->GetActorLocation() - Target->GetActorLocation()).Length();
-	if (Distance > Range)
-	{
-		FailCode = EActivateFailCode::OutOfRange;
-		Caster->OnAbilityFailed.Broadcast(FailCode);
-		return FailCode;
-	}
-		
-	if (Distance < MinRange)
-	{
-		FailCode = EActivateFailCode::ToClose;
-		Caster->OnAbilityFailed.Broadcast(FailCode);
-		return FailCode;
-	}
-	
-	// 没有朝向敌人
-	const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
-	if (UKismetMathLibrary::Dot_VectorVector(Dir, Caster->GetActorForwardVector()) < 0.5f)
-	{
-		FailCode = EActivateFailCode::NoToward;
-		Caster->OnAbilityFailed.Broadcast(FailCode);
-		return FailCode;
-	}
-	
-	// Todo 不在视野中
+	// Todo 路径检查
 
 	Caster->OnAbilityFailed.Broadcast(FailCode);
 
@@ -78,39 +42,23 @@ EActivateFailCode UGA_Charge::CanActivateCondition(const FGameplayAbilityActorIn
 void UGA_Charge::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* OwnerInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	// 根据目标位置，计算冲锋的目的地
-	AMCharacter* Caster = Cast<AMCharacter>(OwnerInfo->AvatarActor);
-	const AMCharacter* Target = Cast<AMCharacter>(OwnerInfo->AvatarActor)->CurrentTarget;
-	UAbilitySystemComponent* TargetComponent = Target->GetAbilitySystemComponent();
 	
-	// 对目标施加效果
-	for (const TSubclassOf<UMGameplayEffect>& Effect : EffectsToTarget)
-	{
-		if (!Effect.Get())
-			continue;
-
-		const FGameplayEffectContextHandle EffectContext = TargetComponent->MakeEffectContext();
-		const FGameplayEffectSpecHandle SpecHandle = TargetComponent->MakeOutgoingSpec(Effect, 1, EffectContext);
-		if (SpecHandle.IsValid())
-		{
-			const FActiveGameplayEffectHandle ActiveGEHandle = TargetComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
-			if (!ActiveGEHandle.WasSuccessfullyApplied())
-				ABILITY_LOG(Log, TEXT("Ability %s faild to apply Effect to Target %s"), *GetName(), *GetNameSafe(Effect));
-		}
-	}
-
-	// Task
+	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
+	
+	AMCharacter* Caster = Cast<AMCharacter>(OwnerInfo->AvatarActor);
+	// Target已经在父类虚函数中指定
+	
+	// 根据目标位置，计算冲锋的目的地
 	FVector Destination = Target->GetActorLocation();
 	const float Radius = Target->GetCapsuleComponent()->GetScaledCapsuleRadius() + 5.0f;
 	const FVector Dir = UKismetMathLibrary::Normal(Target->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
 	Destination = Destination - Dir * Radius;
 
+	// Task
 	ChargeTask = UAbilityTask_Charge::CreateChargeTask(this, Caster, Destination);
 	ChargeTask->OnAbilityTaskEnd.AddDynamic(this, &UGA_Charge::K2_EndAbility);
 	ChargeTask->OnAbilityCancel.AddDynamic(this, &UGA_Charge::K2_CancelAbility);
 	ChargeTask->ReadyForActivation();// 启动任务
-	
-	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
 }
 
 void UGA_Charge::CancelAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

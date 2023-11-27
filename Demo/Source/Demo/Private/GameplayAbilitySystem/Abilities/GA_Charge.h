@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
+#include "GameplayAbilitySystem/Abilities/Base/GA_DirectSkill.h"
 #include "GA_Charge.generated.h"
 
 class UMAbilityTask;
@@ -12,20 +12,13 @@ class UMAbilityTask;
  * 
  */
 UCLASS()
-class UGA_Charge : public UMGameplayAbility
+class UGA_Charge : public UGA_DirectSkill
 {
 	GENERATED_BODY()
 	
 public:
+	
 	UGA_Charge();
-
-	/** 最小距离*/
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectM")
-	int32 MinRange = 400;
-
-	/** 对目标施加效果*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastMelee")
-	TArray<TSubclassOf<UMGameplayEffect>> EffectsToTarget;
 
 	virtual EActivateFailCode CanActivateCondition(const FGameplayAbilityActorInfo& ActorInfo) const override;
 	
@@ -38,5 +31,5 @@ public:
 protected:
 
 	UPROPERTY()
-	UMAbilityTask* ChargeTask;
+	UMAbilityTask* ChargeTask = nullptr;
 };

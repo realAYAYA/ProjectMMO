@@ -6,6 +6,9 @@
 
 #include "MGameCommon.generated.h"
 
+class UGameplayAbility;
+class UGameplayEffect;
+
 UENUM(BlueprintType)
 enum class EOpErrorCode : uint8
 {
@@ -57,8 +60,17 @@ struct FCharacterData
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<class UGameplayEffect>> Effects;
+	TArray<TSubclassOf<UGameplayEffect>> Effects;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<class UGameplayAbility>> Abilities;
+	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
+	TArray<TSubclassOf<UGameplayAbility>> WarriorAbilities;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
+	TArray<TSubclassOf<UGameplayAbility>> MageAbilities;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
+	TArray<TSubclassOf<UGameplayAbility>> PriestAbilities;
 };

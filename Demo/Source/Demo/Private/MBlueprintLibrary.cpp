@@ -8,6 +8,7 @@
 #include "GameTablesModule.h"
 #include "GameTables.h"
 #include "GameMessage.h"
+#include "Characters/MCharacter.h"
 
 FString UMBlueprintLibrary::TestFunc()
 {
@@ -77,4 +78,12 @@ FString UMBlueprintLibrary::GetNetAddress()
 	}
 
 	return TEXT("Not Running as DedicatedServer!");
+}
+
+bool UMBlueprintLibrary::IsFriendly(const AMCharacter* A, const AMCharacter* B)
+{
+	if (A->Camp == B->Camp)
+		return true;
+	
+	return false;
 }

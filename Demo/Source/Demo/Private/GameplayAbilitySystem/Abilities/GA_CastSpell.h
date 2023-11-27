@@ -3,35 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
+#include "GameplayAbilitySystem/Abilities/Base/GA_DirectSkill.h"
 #include "GA_CastSpell.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UGA_CastSpell : public UMGameplayAbility
+class UGA_CastSpell : public UGA_DirectSkill
 {
 	GENERATED_BODY()
 
 
 public:
 
-	/** 技能等级*/
-	UPROPERTY(EditDefaultsOnly, Category = "ProjectM")
-	int32 Level = 1;
-
 	/** 施法时间*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
+	UPROPERTY(EditDefaultsOnly, Category = "ProjectM")
 	float CastTime = 2.5f;
-
-	/** 对目标施加效果*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
-	TArray<TSubclassOf<UMGameplayEffect>> EffectsToTarget;
-
-	/** 技能目标类型*/
-	UPROPERTY(EditDefaultsOnly, Category = "CastSpell")
-	ETargetType TargetType;
 
 	UGA_CastSpell();
 

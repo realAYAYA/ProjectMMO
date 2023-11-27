@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayAbilitySystem/Abilities/MGameplayAbility.h"
+#include "Abilities/GameplayAbility.h"
 #include "GA_Look.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UGA_Look : public UMGameplayAbility
+class UGA_Look : public UGameplayAbility
 {
 	GENERATED_BODY()
 	

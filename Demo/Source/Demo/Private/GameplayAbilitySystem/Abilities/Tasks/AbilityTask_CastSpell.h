@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayAbilitySystem/Abilities/Tasks/MAbilityTask.h"
+#include "GameplayAbilitySystem/Abilities/Base/MAbilityTask.h"
 #include "AbilityTask_CastSpell.generated.h"
 
 /**
