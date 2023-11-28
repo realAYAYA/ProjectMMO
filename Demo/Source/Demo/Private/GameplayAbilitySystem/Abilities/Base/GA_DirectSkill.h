@@ -7,7 +7,8 @@
 #include "GA_DirectSkill.generated.h"
 
 /**
- * 
+ * 瞬发技能，包括读条后单次施法技能（火球术，治疗术），
+ * 它不适合用于带有“持续释放时间”的这种引导性技能（比如暗影鞭笞，吸取生命，暴风雪）
  */
 UCLASS()
 class UGA_DirectSkill : public UGA_Base

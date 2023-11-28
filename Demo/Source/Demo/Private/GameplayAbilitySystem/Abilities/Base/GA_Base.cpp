@@ -14,7 +14,7 @@ AMCharacter* UGA_Base::GetMCharacterFromActorInfo() const
 	return Cast<AMCharacter>(GetAvatarActorFromActorInfo());
 }
 
-UMAbilitySystemComponent* UGA_Base::GetMASC() const
+UMAbilitySystemComponent* UGA_Base::GetAsc() const
 {
 	return Cast<UMAbilitySystemComponent>(GetAvatarActorFromActorInfo());
 }
@@ -33,7 +33,7 @@ void UGA_Base::ActivateAbility(
 {
 	Super::ActivateAbility(Handle, OwnerInfo, ActivationInfo, TriggerEventData);
 
-	UAbilitySystemComponent* ASC = OwnerInfo->AbilitySystemComponent.Get();
+	UAbilitySystemComponent* Asc = OwnerInfo->AbilitySystemComponent.Get();
 
 	const FGameplayEffectContextHandle EffectContext = OwnerInfo->AbilitySystemComponent->MakeEffectContext();
 
@@ -43,11 +43,11 @@ void UGA_Base::ActivateAbility(
 		if (!GameplayEffect.Get())
 			continue;
 		
-		const FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
+		const FGameplayEffectSpecHandle SpecHandle = Asc->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
 		if (!SpecHandle.IsValid())
 			continue;
 
-		FActiveGameplayEffectHandle ActiveGEHandle = ASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		FActiveGameplayEffectHandle ActiveGEHandle = Asc->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 		if (!ActiveGEHandle.WasSuccessfullyApplied())
 			ABILITY_LOG(Log, TEXT("Ability %s faild to apply Startup Effect %s"), *GetName(), *GetNameSafe(GameplayEffect));
 	}
@@ -61,11 +61,11 @@ void UGA_Base::ActivateAbility(
 		if (!GameplayEffect.Get())
 			continue;
 
-		FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
+		FGameplayEffectSpecHandle SpecHandle = Asc->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
 		if (!SpecHandle.IsValid())
 			continue;
 		
-		FActiveGameplayEffectHandle ActiveGEHandle = ASC->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		FActiveGameplayEffectHandle ActiveGEHandle = Asc->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 		if (ActiveGEHandle.WasSuccessfullyApplied())
 			RemoveOnEndEffectHandles.Add(ActiveGEHandle);
 		else

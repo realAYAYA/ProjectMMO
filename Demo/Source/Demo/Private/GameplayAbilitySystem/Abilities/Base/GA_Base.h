@@ -89,7 +89,7 @@ public:
 	AMCharacter* GetMCharacterFromActorInfo() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	UMAbilitySystemComponent* GetMASC() const;
+	UMAbilitySystemComponent* GetAsc() const;
 
 protected:
 
