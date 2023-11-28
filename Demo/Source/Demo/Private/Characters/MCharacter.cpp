@@ -49,6 +49,21 @@ AMCharacter::AMCharacter(const FObjectInitializer& ObjectInitializer)
 	
 }
 
+void AMCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	GiveAbilities();
+	ApplyStartupEffects();
+}
+
+void AMCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	
+}
+
 void AMCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -57,26 +72,64 @@ void AMCharacter::PostInitializeComponents()
 		CharacterData = CharacterDataAsset->CharacterData;
 }
 
+// Called when the game starts or when spawned
+void AMCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+void AMCharacter::SetCurrentTarget_Implementation(AMCharacter* NewTarget)
+{
+	CurrentTarget = NewTarget;
+
+#if !UE_SERVER
+	// 如果不是以DS编译，而是以Listening Server启动方式时，OnRep不会在主机上调用，需要手动触发
+	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
+	{
+		OnCurrentTargetChanged.Broadcast(CurrentTarget);
+	}
+#endif
+	
+}
+
 void AMCharacter::SetRoleName(const FString& InName)
 {
 	RoleName = FName(*InName);
 
-	// 如果本机是服务器，OnRep不会调用，需要手动触发
+#if !UE_SERVER
+	// 如果不是以DS编译，而是以Listening Server启动方式时，OnRep不会在主机上调用，需要手动触发
 	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
 	{
 		OnRoleNameChanged.Broadcast(RoleName);
 	}
+#endif
 }
 
 void AMCharacter::SetRoleCamp(const ECamp& InCamp)
 {
 	Camp = InCamp;
 
-	// 如果本机是服务器，OnRep不会调用，需要手动触发
+#if !UE_SERVER
+	// 如果不是以DS编译，而是以Listening Server启动方式时，OnRep不会在主机上调用，需要手动触发
 	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
 	{
 		OnRoleCampChanged.Broadcast(InCamp);
 	}
+#endif
+}
+
+void AMCharacter::SetRoleRace(const ERace& InRace)
+{
+	Race = InRace;
+
+#if !UE_SERVER
+	// 如果不是以DS编译，而是以Listening Server启动方式时，OnRep不会在主机上调用，需要手动触发
+	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
+	{
+		OnRoleRaceChanged.Broadcast(InRace);
+	}
+#endif
 }
 
 void AMCharacter::OnRep_RoleName() const
@@ -172,28 +225,6 @@ void AMCharacter::ApplyStartupEffects()
 	}
 }
 
-void AMCharacter::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-	
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	GiveAbilities();
-	ApplyStartupEffects();
-}
-
-void AMCharacter::OnRep_PlayerState()
-{
-	Super::OnRep_PlayerState();
-	
-}
-
-// Called when the game starts or when spawned
-void AMCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 void AMCharacter::TryJump(const FInputActionValue& Value)
 {
 	// 检测是否可以移动
@@ -231,7 +262,7 @@ void AMCharacter::MoveBeginInternal(const FVector2D& Value)
 		AddMovementInput(GetActorForwardVector(), Value.Y);
 		AddMovementInput(GetActorRightVector(), Value.X);
 		
-		AbilitySystemComponent->Move();
+		AbilitySystemComponent->MoveBegin();
 	}
 }
 
@@ -291,17 +322,6 @@ void AMCharacter::Landed(const FHitResult& Hit)
 void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
-}
-
-void AMCharacter::SetCurrentTarget_Implementation(AMCharacter* NewTarget)
-{
-	CurrentTarget = NewTarget;
-
-	// 如果本机是服务器，OnRep不会调用，需要手动触发
-	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
-	{
-		OnCurrentTargetChanged.Broadcast(CurrentTarget);
-	}
 }
 
 void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const

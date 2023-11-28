@@ -68,42 +68,41 @@ protected:
 	
 public:
 	
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_RoleName, Category = "ProjectM")
-	FName RoleName;
-
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_RoleCamp, Category = "ProjectM")
-	ECamp Camp;
-
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_RoleRace, Category = "ProjectM")
-	ERace Race;
-
-	UPROPERTY(BlueprintReadOnly, Replicated, Category = "ProjectM")
-	ERoleClass RoleClass;
-
-	/** 当前锁定目标*/
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CurrentTarget, Category = "ProjectM")
-	AMCharacter* CurrentTarget;
-
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	AMCharacter* GetCurrentTarget() const { return CurrentTarget; }
+	
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "ProjectM")
 	void SetCurrentTarget(AMCharacter* NewTarget);
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnCurrentTargetChanged OnCurrentTargetChanged;
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	FName GetRoleName() const { return RoleName; }
 	
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnRoleNameChanged OnRoleNameChanged;
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	ECamp GetRoleCamp() const { return Camp; }
 	
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnRoleCampChanged OnRoleCampChanged;
 
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	ERace GetRoleRace() const { return Race; }
+	
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnRoleRaceChanged OnRoleRaceChanged;
-
-	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
-	FOnCurrentTargetChanged OnCurrentTargetChanged;
 
 	UFUNCTION()
 	void SetRoleName(const FString& InName);
 
 	UFUNCTION()
 	void SetRoleCamp(const ECamp& InCamp);
+
+	UFUNCTION()
+	void SetRoleRace(const ERace& InRace);
 	
 protected:
 	
@@ -120,7 +119,22 @@ protected:
 	void OnRep_CurrentTarget() const;
 
 private:
-	
+
+	/** 当前锁定目标*/
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentTarget)
+	AMCharacter* CurrentTarget;
+
+	UPROPERTY(ReplicatedUsing = OnRep_RoleName)
+	FName RoleName;
+
+	UPROPERTY(ReplicatedUsing = OnRep_RoleCamp)
+	ECamp Camp;
+
+	UPROPERTY(ReplicatedUsing = OnRep_RoleRace)
+	ERace Race;
+
+	UPROPERTY(Replicated)
+	ERoleClass RoleClass;
 
 	// GAS
 	
@@ -151,7 +165,7 @@ public:
 protected:
 
 	UPROPERTY(Replicated)
-	FCharacterData CharacterData;
+	FCharacterData CharacterData;// Todo 测试技能配置
 
 	UPROPERTY(EditDefaultsOnly)
 	class UMCharacterDataAsset* CharacterDataAsset;
@@ -160,6 +174,8 @@ protected:
 
 	//FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
 	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
+
+private:
 	
 	UPROPERTY(Transient)
 	UMAttributeSet* AttributeSet;

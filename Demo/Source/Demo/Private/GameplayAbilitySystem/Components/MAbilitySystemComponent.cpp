@@ -11,12 +11,12 @@ void UMAbilitySystemComponent::InitializeComponent()
 	ActiveGameplayEffects.OnActiveGameplayEffectRemovedDelegate.AddUObject(this, &UMAbilitySystemComponent::OnGERemoved);
 }
 
-void UMAbilitySystemComponent::Move()
+bool UMAbilitySystemComponent::MoveBegin()
 {
 	FGameplayTagContainer Container;
 	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.Ability.Movement.Move")));
 	
-	TryActivateAbilitiesByTag(Container, true);
+	return TryActivateAbilitiesByTag(Container, true);
 }
 
 void UMAbilitySystemComponent::MoveEnd()

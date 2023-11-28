@@ -82,7 +82,7 @@ FString UMBlueprintLibrary::GetNetAddress()
 
 bool UMBlueprintLibrary::IsFriendly(const AMCharacter* A, const AMCharacter* B)
 {
-	if (A->Camp == B->Camp)
+	if (A->GetRoleCamp() == B->GetRoleCamp())
 		return true;
 	
 	return false;

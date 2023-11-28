@@ -52,13 +52,13 @@ void UGA_DirectSkill::ActivateAbility(
 	{
 		Target = Caster;
 	}
-	else if (TargetType == ETargetType::SelfOrFriendly && !Caster->CurrentTarget)
+	else if (TargetType == ETargetType::SelfOrFriendly && !Caster->GetCurrentTarget())
 	{
 		Target = Caster;
 	}
 	else
 	{
-		Target = Cast<AMCharacter>(OwnerInfo->AvatarActor)->CurrentTarget;
+		Target = Cast<AMCharacter>(OwnerInfo->AvatarActor)->GetCurrentTarget();
 	}
 	
 	UAbilitySystemComponent* ASC = OwnerInfo->AbilitySystemComponent.Get();
@@ -118,7 +118,7 @@ void UGA_DirectSkill::EndAbility(
 EActivateFailCode UGA_DirectSkill::CanActivateCondition(const FGameplayAbilityActorInfo& ActorInfo) const
 {
 	const AMCharacter* Caster = Cast<AMCharacter>(ActorInfo.AvatarActor.Get());
-	const AMCharacter* CurrentTarget = Caster->CurrentTarget;
+	const AMCharacter* CurrentTarget = Caster->GetCurrentTarget();
 
 	// 根据目标类型检查是否可以释放技能
 	switch (TargetType)
@@ -141,7 +141,7 @@ EActivateFailCode UGA_DirectSkill::CanActivateCondition(const FGameplayAbilityAc
 			if (UMBlueprintLibrary::IsFriendly(Caster, CurrentTarget))
 				return EActivateFailCode::InValidTarget;
 			
-			CurrentTarget = Caster->CurrentTarget;
+			CurrentTarget = Caster->GetCurrentTarget();
 		}
 	}
 	

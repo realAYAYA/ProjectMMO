@@ -45,7 +45,7 @@ public:
 
 	const AMCharacter* GetOwnerCharacter() const { return Cast<AMCharacter>(GetOwnerActor()); }
 	
-	void Move();
+	bool MoveBegin();
 	void MoveEnd();
 
 	void Jump();
