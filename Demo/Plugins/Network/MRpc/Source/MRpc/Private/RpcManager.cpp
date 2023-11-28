@@ -24,8 +24,10 @@ bool CheckBodyLength(const TArray<uint8>& Data)
 
 void FClientRpcManager::Tick(float DeltaTime)
 {
+#if !WITH_EDITOR
+	// 编辑器模式下不进行超时计算
 	const FDateTime Now = FDateTime::UtcNow();
-	if ((Now - LastCheckAliveTime).GetTotalSeconds() > 10)
+	if ((Now - LastCheckAliveTime).GetTotalSeconds() > 8)
 	{
 		TArray<uint64> Keys;
 		for (const auto& Tuple : AllRequestPending)
@@ -47,6 +49,7 @@ void FClientRpcManager::Tick(float DeltaTime)
 		
 		LastCheckAliveTime = Now;
 	}
+#endif
 }
 
 bool FClientRpcManager::IsTickable() const
