@@ -22,6 +22,7 @@ bool CheckBodyLength(const TArray<uint8>& Data)
 	return true;
 }
 
+/*
 void FClientRpcManager::Tick(float DeltaTime)
 {
 #if !WITH_EDITOR
@@ -61,6 +62,7 @@ TStatId FClientRpcManager::GetStatId() const
 {
 	RETURN_QUICK_DECLARE_CYCLE_STAT(FClientRpcManager, STATGROUP_Tickables);
 }
+*/
 
 void FClientRpcManager::SendRequest(
 	const FConnectionPtr& InConn,

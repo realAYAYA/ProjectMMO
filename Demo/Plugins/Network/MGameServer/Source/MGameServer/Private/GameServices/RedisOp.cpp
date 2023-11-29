@@ -7,7 +7,7 @@
 #define CHECK_REDIS_CLIENT \
 if (!GGameServerModule->RedisClient) \
 { \
-	UE_LOG(LogMGameServer, Error, TEXT("[RedisOp] %s 错误,还未初始化RedisClient"), ANSI_TO_TCHAR(__FUNCTION__)); \
+	UE_LOG(LogMGameServer, Error, TEXT("%s 错误,还未初始化RedisClient"), ANSI_TO_TCHAR(__FUNCTION__)); \
 	return false; \
 }
 
@@ -66,7 +66,7 @@ bool FRedisOp::LoadPlayerData(const uint64 PlayerId, const FMPlayerData* OutData
 	const FString Key = GeneratePlayerKey(PlayerId);
 	if (!GGameServerModule->RedisClient->HGetBin(Key, GKeyPlayerDataField, OutValue))
 	{
-		UE_LOG(LogMGameServer, Error, TEXT("[RedisOp] %s 错误, Redis操作失败 Key = %s"), *FString(__FUNCTION__), *Key);
+		UE_LOG(LogMGameServer, Error, TEXT("%s 错误, Redis操作失败 Key = %s"), *FString(__FUNCTION__), *Key);
 		return false;
 	}
 
@@ -89,7 +89,7 @@ bool FRedisOp::SavePlayerData(const uint64 PlayerId, const FMPlayerData& InData)
 	const FString Key = GeneratePlayerKey(PlayerId);
 	if (!GGameServerModule->RedisClient->HSetBin(Key, GKeyPlayerDataField, Buffer))
 	{
-		UE_LOG(LogMGameServer, Error, TEXT("[RedisOp] %s 错误, Redis操作失败 Key = %s Size = %d"),  *FString(__FUNCTION__), *Key, Buffer.Num());
+		UE_LOG(LogMGameServer, Error, TEXT("%s 错误, Redis操作失败 Key = %s Size = %d"),  *FString(__FUNCTION__), *Key, Buffer.Num());
 		return false;
 	}
 	
@@ -108,7 +108,7 @@ bool FRedisOp::GetAccountInfo(const FString& InAccount, uint64* OutPlayerId)
 	const FString Key = GenerateAccountKey(InAccount);
 	if (!GGameServerModule->RedisClient->HMGet(Key, Fields, ResultMap))
 	{
-		UE_LOG(LogMGameServer, Error, TEXT("[RedisOp] %s 错误,Redis操作失败 Key=%s"), *FString(__FUNCTION__), *Key);
+		UE_LOG(LogMGameServer, Error, TEXT("%s 错误,Redis操作失败 Key=%s"), *FString(__FUNCTION__), *Key);
 		return false;
 	}
 
@@ -116,7 +116,7 @@ bool FRedisOp::GetAccountInfo(const FString& InAccount, uint64* OutPlayerId)
 	if (PlayerIdStr && !PlayerIdStr->IsEmpty())
 		LexFromString(*OutPlayerId, GetData(*PlayerIdStr));
 	
-	UE_LOG(LogMGameServer, Display, TEXT("[RedisOp] %s Account = %s PlayerId = %s"), *FString(__FUNCTION__), *InAccount, *(*PlayerIdStr));
+	UE_LOG(LogMGameServer, Display, TEXT("%s Account = %s PlayerId = %s"), *FString(__FUNCTION__), *InAccount, *(*PlayerIdStr));
 	
 	return true;
 }
@@ -131,11 +131,11 @@ bool FRedisOp::SetAccountInfo(const FString& InAccount, const uint64 InPlayerId)
 	const FString Key = GenerateAccountKey(InAccount);
 	if (!GGameServerModule->RedisClient->HMSet(Key, MemberMap))
 	{
-		UE_LOG(LogMGameServer, Error, TEXT("[RedisOp] %s 错误,Redis操作失败 Key = %s"), *FString(__FUNCTION__), *Key);
+		UE_LOG(LogMGameServer, Error, TEXT("%s 错误,Redis操作失败 Key = %s"), *FString(__FUNCTION__), *Key);
 		return false;
 	}
 
-	UE_LOG(LogMGameServer, Display, TEXT("[RedisOp] %s Account = %s PlayerId = %llu"), *FString(__FUNCTION__), *InAccount, InPlayerId);
+	UE_LOG(LogMGameServer, Display, TEXT("%s Account = %s PlayerId = %llu"), *FString(__FUNCTION__), *InAccount, InPlayerId);
 	return true;
 }
 

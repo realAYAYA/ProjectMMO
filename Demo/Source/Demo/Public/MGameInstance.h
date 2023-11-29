@@ -70,12 +70,10 @@ public:
 	// DS服务器准备就绪
 	UFUNCTION()
 	void GetReady(bool Success);
-
-	
 	
 	// DS服务器准备就绪
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	bool IsReady() const { return bReady; }
+	bool IsReady() const;
 
 	UGameRpcClient* GetClientRpcStub() const;
 

@@ -10,7 +10,6 @@
 class UGameRpcClient;
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnConnectServer, bool, Ok);
-DECLARE_DYNAMIC_DELEGATE(FOnDisConnectServer);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnErrorCallback, const FString&, Error);
 
 UCLASS()
@@ -29,16 +28,17 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "ProjcetM")
 	UGameRpcClient* GameRpcClient;
 
-	// Todo 测试用的显示调用
+	// Todo Test for Blueprint
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "CreateSocket")
 	void K2_CreateSocket(const FString& ServerURL, const FString& ServerProtocol, const FOnConnectServer& Callback);
-
-	FOnConnectServer& GetOnConnectedCallback() { return OnConnectedServer; }
+	
 	void CreateSocket(const FString& ServerURL, const FString& ServerProtocol);
+	FOnConnectServer OnConnectedCallback;
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void CloseSocket(const FOnDisConnectServer& Callback);
+	void CloseSocket();
 
+	// Suggest: Establishing connection first before binding this callback
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnErrorCallback OnErrorCallback;
 
@@ -57,10 +57,6 @@ protected:
 private:
 
 	FConnectionPtr Connection;
-	
-	FOnConnectServer OnConnectedServer;
-
-	FOnDisConnectServer OnDisConnectedServer;
 
 	FClientRpcManager RpcManager;
 };

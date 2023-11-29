@@ -65,12 +65,9 @@ void UMGameInstance::LoginServer()
 	
 	if (UMGameClientSubsystem* Client = GetSubsystem<UMGameClientSubsystem>())
 	{
-		Client->GetOnConnectedCallback().BindUFunction(this, TEXT("GetReady"));
+		Client->OnConnectedCallback.BindUFunction(this, TEXT("GetReady"));
 
 		Client->CreateSocket(TEXT("ws://127.0.0.1:10086"), TEXT(""));
-
-		//Client->OnErrorCallback.AddDynamic(); //Todo 连接断开
-		//Client->CloseSocket()
 	}
 }
 
@@ -90,6 +87,8 @@ void UMGameInstance::GetReady(bool Success)
 		UE_LOG(LogProjectM, Error, TEXT("DS Link root server failed!"));
 		return;
 	}
+
+	//Client->OnErrorCallback.AddDynamic(); //Todo 断线重连机制
 	
 	// Todo 如果是DS服务器，发起请求连接至WebSocket服务器
 	if (const UGameRpcClient* Stub = GetClientRpcStub())
@@ -117,6 +116,11 @@ void UMGameInstance::GetReady(bool Success)
 	{
 		UE_LOG(LogProjectM, Error, TEXT("Get Client Stub Failed!"));
 	}
+}
+
+bool UMGameInstance::IsReady() const
+{
+	return bReady;
 }
 
 UGameRpcClient* UMGameInstance::GetClientRpcStub() const
