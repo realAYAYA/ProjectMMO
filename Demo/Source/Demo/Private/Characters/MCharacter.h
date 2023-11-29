@@ -57,6 +57,16 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	UCameraComponent* GetThirdPersonCameraComponent() const { return ThirdPersonCameraComponent; }
+
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	AMPlayerState* GetMPlayerState() const;
+
+	// 加载数据
+	void LoadData();
+
+	// 加载外观
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	void LoadModel();
 	
 protected:
 	
@@ -64,7 +74,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	
-	// Network
+	// Network-Replicate
 	
 public:
 	
@@ -117,7 +127,10 @@ protected:
 
 	UFUNCTION()
 	void OnRep_CurrentTarget() const;
-
+	
+	/*UFUNCTION()
+	void OnRep_Appearance() const;*/
+	
 private:
 
 	/** 当前锁定目标*/
@@ -135,6 +148,8 @@ private:
 
 	UPROPERTY(Replicated)
 	ERoleClass RoleClass;
+
+	// Todo 外观数据，及其同步
 
 	// GAS
 	

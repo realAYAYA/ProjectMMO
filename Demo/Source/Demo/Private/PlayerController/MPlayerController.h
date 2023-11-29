@@ -34,6 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "ReqMyRoleData")
 	void K2_ReqMyRoleData(const FOnRpcResult& Callback);
 
+	// 请求生成角色
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "ProjectM")
+	void RequestPawn(const FTransform& SpawnTransform);
+
 private:
 
 	// Rpc implementation

@@ -3,6 +3,7 @@
 
 #include "MCharacter.h"
 #include "MCharacterDataAsset.h"
+#include "MPlayerState.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -53,13 +54,19 @@ void AMCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	GiveAbilities();
-	ApplyStartupEffects();
+
+	// PossessedBy()只在服务器执行
+	LoadData();
 }
 
 void AMCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
+
+#if !UE_SERVER
+	// 如果不是以DS编译，而是以Listening Server启动方式时，OnRep不会在主机上调用，需要手动触发
+	LoadData();
+#endif
 	
 }
 
@@ -69,6 +76,31 @@ void AMCharacter::PostInitializeComponents()
 
 	if (IsValid(CharacterDataAsset))
 		CharacterData = CharacterDataAsset->CharacterData;
+}
+
+AMPlayerState* AMCharacter::GetMPlayerState() const
+{
+	return Cast<AMPlayerState>(GetPlayerState());
+}
+
+void AMCharacter::LoadData()
+{
+	const AMPlayerState* PS = GetMPlayerState();
+	if (PS && PS->IsOnline())
+	{
+		const FRoleData& Data = PS->GetRoleData();
+		RoleName = FName(Data.RoleName);
+		RoleClass = Data.Class;
+		Race = Data.Race;
+
+		GiveAbilities();
+		ApplyStartupEffects();
+		//LoadModel();
+	}
+}
+
+void AMCharacter::LoadModel()
+{
 }
 
 // Called when the game starts or when spawned
@@ -177,6 +209,8 @@ void AMCharacter::GiveAbilities()
 {
 	if (!HasAuthority() || !AbilitySystemComponent)
 		return;
+
+	//AbilitySystemComponent->ClearAbility()
 	
 	for (const auto& AbilityClass : CharacterData.DefaultAbilities)
 	{

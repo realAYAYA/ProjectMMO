@@ -5,7 +5,9 @@
 
 #include "Demo.h"
 #include "MBlueprintLibrary.h"
+#include "MGameModeBase.h"
 #include "MPlayerState.h"
+#include "Characters/MCharacter.h"
 
 AMPlayerState* AMPlayerController::GetMPlayerState() const
 {
@@ -39,6 +41,25 @@ void AMPlayerController::K2_ReqMyRoleData(const FOnRpcResult& Callback)
 	GetMyRoleDataReq(PlayerID);
 }
 
+void AMPlayerController::RequestPawn_Implementation(const FTransform& SpawnTransform)
+{
+	const AMGameMode* GameMode = Cast<AMGameMode>(GetWorld()->GetAuthGameMode());
+	UClass* PawnClass = GameMode->MPlayerPawnClass;
+	if (GameMode && PawnClass)
+	{
+		// Todo Spawn PlayerCharacter and init it
+		FActorSpawnParameters SpawnInfo;
+		SpawnInfo.Instigator = GetInstigator();
+		SpawnInfo.ObjectFlags |= RF_Transient;
+		
+		APawn* ResultPawn = GetWorld()->SpawnActor<APawn>(PawnClass, SpawnTransform, SpawnInfo);
+		if (AMCharacter* MCharacter = Cast<AMCharacter>(ResultPawn))
+		{
+			this->Possess(MCharacter);
+		}
+	}
+}
+
 void AMPlayerController::GetMyRoleDataReq_Implementation(const uint64 InPlayerID)
 {
 	UE_LOG(LogProjectM, Warning, TEXT("Player(ID: %llu) Requesting RoleData..."), InPlayerID);
@@ -70,6 +91,7 @@ void AMPlayerController::GetMyRoleDataReq_Implementation(const uint64 InPlayerID
 		}
 		
 		PS->LoadData(Ack.RoleData);
+		
 		GetMyRoleDataAck(Ack.RoleData, EOpErrorCode::Ok);
 	});
 }

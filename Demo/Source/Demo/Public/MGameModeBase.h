@@ -16,6 +16,10 @@ class AMGameMode : public AGameModeBase
 public:
 	
 	AMGameMode();
+
+	/** The default pawn class used by players. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	TSubclassOf<APawn> MPlayerPawnClass;
 	
 	const AMPlayerState* FindOnlinePlayerByID(const uint64 InID) const;
 
