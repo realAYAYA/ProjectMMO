@@ -9,6 +9,7 @@
 #include "MGameCommon.h"
 #include "MPlayerController.generated.h"
 
+class AMPlayerCharacter;
 class AMPlayerState;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPCNotice, const FString&, NewMessage);
@@ -35,8 +36,12 @@ public:
 	void K2_ReqMyRoleData(const FOnRpcResult& Callback);
 
 	// 请求生成角色
-	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "ProjectM")
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "ProjectM")
 	void RequestPawn(const FTransform& SpawnTransform);
+
+	// 请求生成角色
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	AMPlayerCharacter* GetMCharacter() const;
 
 private:
 

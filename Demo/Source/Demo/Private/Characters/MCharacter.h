@@ -105,6 +105,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnRoleRaceChanged OnRoleRaceChanged;
 
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	ERoleClass GetRoleClass() const { return RoleClass; }
+
 	UFUNCTION()
 	void SetRoleName(const FString& InName);
 

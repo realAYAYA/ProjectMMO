@@ -8,6 +8,7 @@
 #include "MGameModeBase.h"
 #include "MPlayerState.h"
 #include "Characters/MCharacter.h"
+#include "Characters/MPlayerCharacter.h"
 
 AMPlayerState* AMPlayerController::GetMPlayerState() const
 {
@@ -41,6 +42,21 @@ void AMPlayerController::K2_ReqMyRoleData(const FOnRpcResult& Callback)
 	GetMyRoleDataReq(PlayerID);
 }
 
+
+
+AMPlayerCharacter* AMPlayerController::GetMCharacter() const
+{
+	return Cast<AMPlayerCharacter>(GetPawn());
+}
+
+bool AMPlayerController::RequestPawn_Validate(const FTransform& SpawnTransform)
+{
+	if (GetMCharacter())
+		return false;
+
+	return true;
+}
+
 void AMPlayerController::RequestPawn_Implementation(const FTransform& SpawnTransform)
 {
 	const AMGameMode* GameMode = Cast<AMGameMode>(GetWorld()->GetAuthGameMode());
@@ -53,7 +69,7 @@ void AMPlayerController::RequestPawn_Implementation(const FTransform& SpawnTrans
 		SpawnInfo.ObjectFlags |= RF_Transient;
 		
 		APawn* ResultPawn = GetWorld()->SpawnActor<APawn>(PawnClass, SpawnTransform, SpawnInfo);
-		if (AMCharacter* MCharacter = Cast<AMCharacter>(ResultPawn))
+		if (AMPlayerCharacter* MCharacter = Cast<AMPlayerCharacter>(ResultPawn))
 		{
 			this->Possess(MCharacter);
 		}

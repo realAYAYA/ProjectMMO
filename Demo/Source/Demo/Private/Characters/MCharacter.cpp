@@ -263,7 +263,7 @@ void AMCharacter::TryJump(const FInputActionValue& Value)
 	// 检测是否可以移动
 	FGameplayTagContainer Container;
 	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Stun")));
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Paralysis")));// 瘫痪类buff
 
 	for (const FGameplayTag& Tag :Container)
 	{
@@ -279,9 +279,7 @@ void AMCharacter::MoveBeginInternal(const FVector2D& Value)
 	// 检测是否可以移动
 	FGameplayTagContainer Container;
 	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Stun")));
-	//Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limited.Fear")));
-	//Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limited.Sleep")));
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Paralysis")));// 瘫痪类buff
 
 	for (const FGameplayTag& Tag :Container)
 	{
@@ -311,9 +309,7 @@ void AMCharacter::LookInternal(const FVector2D& Value)
 {
 	// 检测是否可以四周观察
 	FGameplayTagContainer Container;
-	//Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limited.Fear")));
-	//Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limited.Sleep")));
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Stun")));
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Paralysis")));// 瘫痪类buff
 
 	for (const FGameplayTag& Tag :Container)
 	{
@@ -334,7 +330,7 @@ void AMCharacter::JumpBeginInternal(const bool IsHeightJump)
 	// 检测是否可以移动
 	FGameplayTagContainer Container;
 	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Stun")));
+	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Paralysis")));// 瘫痪类buff
 
 	for (const FGameplayTag& Tag :Container)
 	{
