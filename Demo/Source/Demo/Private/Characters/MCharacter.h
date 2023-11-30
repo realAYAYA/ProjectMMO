@@ -61,9 +61,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	AMPlayerState* GetMPlayerState() const;
 
-	// 加载数据
-	void LoadData();
-
 	// 加载外观
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	void LoadModel();
@@ -72,6 +69,11 @@ protected:
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+private:
+
+	// Only called by Server
+	virtual void InitReplicatedData();
 
 	
 	// Network-Replicate

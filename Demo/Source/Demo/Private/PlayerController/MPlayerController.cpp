@@ -42,19 +42,18 @@ void AMPlayerController::K2_ReqMyRoleData(const FOnRpcResult& Callback)
 	GetMyRoleDataReq(PlayerID);
 }
 
-
-
-AMPlayerCharacter* AMPlayerController::GetMCharacter() const
+void AMPlayerController::K2_RequestPawn(const FTransform& SpawnTransform)
 {
-	return Cast<AMPlayerCharacter>(GetPawn());
+	if (GetMCharacterPawn())
+		return;
+
+	RequestPawn(SpawnTransform);
 }
 
-bool AMPlayerController::RequestPawn_Validate(const FTransform& SpawnTransform)
-{
-	if (GetMCharacter())
-		return false;
 
-	return true;
+AMPlayerCharacter* AMPlayerController::GetMCharacterPawn() const
+{
+	return Cast<AMPlayerCharacter>(GetPawn());
 }
 
 void AMPlayerController::RequestPawn_Implementation(const FTransform& SpawnTransform)
@@ -72,6 +71,12 @@ void AMPlayerController::RequestPawn_Implementation(const FTransform& SpawnTrans
 		if (AMPlayerCharacter* MCharacter = Cast<AMPlayerCharacter>(ResultPawn))
 		{
 			this->Possess(MCharacter);
+			//MCharacter->LoadData();
+		}
+		else
+		{
+			if (ResultPawn)
+				ResultPawn->Destroyed();
 		}
 	}
 }

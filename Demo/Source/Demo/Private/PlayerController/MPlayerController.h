@@ -35,13 +35,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "ReqMyRoleData")
 	void K2_ReqMyRoleData(const FOnRpcResult& Callback);
 
-	// 请求生成角色
-	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "ProjectM")
-	void RequestPawn(const FTransform& SpawnTransform);
+	// 请求角色数据
+	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "RequestPawn")
+	void K2_RequestPawn(const FTransform& SpawnTransform);
 
-	// 请求生成角色
+	// 请求角色实例
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	AMPlayerCharacter* GetMCharacter() const;
+	AMPlayerCharacter* GetMCharacterPawn() const;
 
 private:
 
@@ -52,6 +52,10 @@ private:
 
 	UFUNCTION(Client, Reliable)
 	void GetMyRoleDataAck(const FRoleData& InData, EOpErrorCode Error);
+
+	// 请求生成角色
+	UFUNCTION(Server, Reliable)
+	void RequestPawn(const FTransform& SpawnTransform);
 	
 	UFUNCTION(Client, Unreliable)
 	void ShowNotice(const FString& InMessage);

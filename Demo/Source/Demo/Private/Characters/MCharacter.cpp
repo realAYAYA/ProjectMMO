@@ -56,7 +56,7 @@ void AMCharacter::PossessedBy(AController* NewController)
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
 	// PossessedBy()只在服务器执行
-	LoadData();
+	InitReplicatedData();
 }
 
 void AMCharacter::OnRep_PlayerState()
@@ -65,7 +65,6 @@ void AMCharacter::OnRep_PlayerState()
 
 #if !UE_SERVER
 	// 如果不是以DS编译，而是以Listening Server启动方式时，OnRep不会在主机上调用，需要手动触发
-	LoadData();
 #endif
 	
 }
@@ -83,7 +82,7 @@ AMPlayerState* AMCharacter::GetMPlayerState() const
 	return Cast<AMPlayerState>(GetPlayerState());
 }
 
-void AMCharacter::LoadData()
+void AMCharacter::InitReplicatedData()
 {
 	const AMPlayerState* PS = GetMPlayerState();
 	if (PS && PS->IsOnline())
@@ -365,6 +364,9 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 	SharedParams.RepNotifyCondition = REPNOTIFY_OnChanged;
 	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, CurrentTarget, SharedParams);
 	
-	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, RoleName, SharedParams);
 	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, Camp, SharedParams);
+
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, RoleName, SharedParams);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, RoleClass, SharedParams);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, Race, SharedParams);
 }
