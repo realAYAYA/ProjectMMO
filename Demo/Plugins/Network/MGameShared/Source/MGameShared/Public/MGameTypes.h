@@ -68,6 +68,34 @@ struct FMInventoryData
 	TArray<FMItemData> Equipments;
 };
 
+/** 外观数据*/
+USTRUCT(BlueprintType) 
+struct FModelData
+{
+	GENERATED_USTRUCT_BODY()
+
+	// 种族、性别
+	// 体型
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 Body = 0;
+
+	// 更具体的身体参数
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 BodyParam = 0;
+	
+	// 头发
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 Hair = 0;
+
+	// 穿戴装备
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 Weapon1 = 0;
+
+	// 穿戴装备
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 Head = 0;
+};
+
 /** 玩家属性数据*/
 USTRUCT(BlueprintType) 
 struct FRoleData

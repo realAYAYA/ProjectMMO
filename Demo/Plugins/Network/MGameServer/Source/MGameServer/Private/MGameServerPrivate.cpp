@@ -11,7 +11,7 @@
 DEFINE_LOG_CATEGORY(LogMGameServer);
 
 
-const FString RedisIp = TEXT("106.54.222.137");
+const FString RedisIp = TEXT("42.192.111.227");
 const int32 RedisPort = 6379;
 const FString RedisPassword = TEXT("123456");
 
