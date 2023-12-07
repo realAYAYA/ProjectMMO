@@ -11,9 +11,10 @@
 
 ### 防火墙设置
 1. 启动和关闭  
-systemctl start firewalld  
-systemctl stop firewalld  
-2. 选择端口打开 firewall-cmd --zone=public --add-port=1935/tcp --permanent  
+sudo systemctl start firewalld  
+sudo systemctl stop firewalld  
+sudo systemctl restart firewalld  
+2. 选择端口打开 sudo firewall-cmd --zone=public --add-port=1935/tcp --permanent  
 3. 端口相关  
 查看对应端口占用 netstat –ntlp  
 查看所有已打卡的端口 netstat -ntulp | grep 7777  
@@ -52,4 +53,62 @@ sudo bash -c "echo 1 > /proc/sys/vm/overcommit_memory"
 
 
 ### 部署httpd
+
+
+
 ### 部署frp
+1. 去Github上下载Release版  
+根据系统选择linux-amd64或darwin-amd64  
+2. 使用ftp传输到服务器  
+在你希望安装的位置进行解压操作 tar -zvxf frp_版本号_linux_amd64.tar.gz  
+3. 在解压目录创建配置文件 sudo nano frps.ini  
+配置内容参考https://gitee.com/spoto/natserver?_from=gitee_search  
+
+```bash
+[common]
+# 监听端口
+bind_port = 7000
+# 面板端口
+dashboard_port = 7500
+# 登录面板账号设置
+dashboard_user = admin
+dashboard_pwd = spoto1234
+# 设置http及https协议下代理端口（非重要）
+vhost_http_port = 7080
+vhost_https_port = 7081
+
+
+# 身份验证
+token = 12345678
+```
+
+
+4. 设置开机启动  
+创建配置文件 sudo nano /lib/systemd/system/frps.service  
+输入以下内容:  
+
+```bash
+[Unit]
+Description=Frp Server Service
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/apps/frp_0.52.3_linux_amd64/frps -c /usr/local/apps/frp_0.52.3_linux_amd64/frps.ini
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=multi-user.target
+```
+
+接着执行三条命令  
+sudo systemctl daemon-reload  
+sudo systemctl enable frps  
+sudo systemctl start frps  
+检查运行是否成功 sudo systemctl status frps  
+去网页端登录验证 服务器ip:7500，如果能进入网页说明成功  
+
+Ps: 如果出问题，检查路径配置和防火墙设置！  
