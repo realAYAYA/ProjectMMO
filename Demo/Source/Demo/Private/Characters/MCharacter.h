@@ -24,6 +24,7 @@ class UMAttributeSet;
 class AMPlayerController;
 class AMPlayerState;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoleDataChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleNameChanged, FName, NewName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleCampChanged, ECamp, NewCamp);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleRaceChanged, ERace, NewRace);
@@ -60,10 +61,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	AMPlayerState* GetMPlayerState() const;
-
-	// 加载外观
-	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	void LoadModel();
+	
+	void UpdateModel();// 从角色各个功能模块中计算外观，仅服务器方面调用
 	
 protected:
 	
@@ -110,6 +109,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	ERoleClass GetRoleClass() const { return RoleClass; }
 
+	UFUNCTION(BlueprintCallable, Category = "ProjectM")
+	FModelData GetModelData() const { return ModelData; }
+
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnRoleDataChanged OnModelDataChanged;
+
 	UFUNCTION()
 	void SetRoleName(const FString& InName);
 
@@ -118,6 +123,9 @@ public:
 
 	UFUNCTION()
 	void SetRoleRace(const ERace& InRace);
+
+	UFUNCTION()
+	void SetModelData(const FModelData& InData);
 	
 protected:
 	
@@ -133,8 +141,8 @@ protected:
 	UFUNCTION()
 	void OnRep_CurrentTarget() const;
 	
-	/*UFUNCTION()
-	void OnRep_Appearance() const;*/
+	UFUNCTION()
+	void OnRep_ModelData() const;
 	
 private:
 
@@ -154,8 +162,13 @@ private:
 	UPROPERTY(Replicated)
 	ERoleClass RoleClass;
 
-	// Todo 外观数据，及其同步
+	// 外观数据
+	UPROPERTY(ReplicatedUsing = OnRep_ModelData)
+	FModelData ModelData;
 
+	FModelData OldModelData;
+
+	
 	// GAS
 	
 public:
@@ -177,8 +190,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnAbilityFailed OnAbilityFailed;
-
-	// 初始化技能系统，职业|天赋|种族|出身|
+	
 	UFUNCTION()
 	void GiveAbilities();
 	
@@ -193,7 +205,7 @@ protected:
 	void ApplyStartupEffects();
 
 	//FDelegateHandle MaxMovementSpeedChangedDelegatedHandle;
-	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data);
+	void OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data) const;
 
 private:
 	
@@ -209,11 +221,9 @@ protected:
 	void TryJump(const FInputActionValue& Value);
 
 	void MoveBeginInternal(const FVector2D& Value);
-	void MoveEndInternal(const FVector2D& Value);
+	void MoveEndInternal(const FVector2D& Value) const;
 
 	void LookInternal(const FVector2D& Value);
-
-	void JumpBeginInternal(const bool IsHeightJump);
 	
 	virtual void Landed(const FHitResult& Hit) override;
 

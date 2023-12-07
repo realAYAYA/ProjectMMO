@@ -85,7 +85,7 @@ struct FModelData
 	
 	// 头发
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	int32 Hair = 0;
+	int32 HairParam = 0;
 
 	// 穿戴装备
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")

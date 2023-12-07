@@ -94,12 +94,14 @@ void AMCharacter::InitReplicatedData()
 
 		GiveAbilities();
 		ApplyStartupEffects();
-		//LoadModel();
+		UpdateModel();
 	}
 }
 
-void AMCharacter::LoadModel()
+void AMCharacter::UpdateModel()
 {
+	// Todo 从角色各个功能模块中计算外观
+	//const AMPlayerState* PS = GetMPlayerState();
 }
 
 // Called when the game starts or when spawned
@@ -162,6 +164,19 @@ void AMCharacter::SetRoleRace(const ERace& InRace)
 #endif
 }
 
+void AMCharacter::SetModelData(const FModelData& InData)
+{
+	ModelData = InData;
+
+#if !UE_SERVER
+	// 如果不是以DS编译，而是以Listening Server启动方式时，OnRep不会在主机上调用，需要手动触发
+	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
+	{
+		OnModelDataChanged.Broadcast();
+	}
+#endif
+}
+
 void AMCharacter::OnRep_RoleName() const
 {
 	OnRoleNameChanged.Broadcast(RoleName);
@@ -180,6 +195,11 @@ void AMCharacter::OnRep_RoleRace() const
 void AMCharacter::OnRep_CurrentTarget() const
 {
 	OnCurrentTargetChanged.Broadcast(CurrentTarget);
+}
+
+void AMCharacter::OnRep_ModelData() const
+{
+	OnModelDataChanged.Broadcast();
 }
 
 UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
@@ -206,6 +226,8 @@ bool AMCharacter::ApplyGameplayEffectToSelf(
 
 void AMCharacter::GiveAbilities()
 {
+	// Todo 根据种族、出身、职业、副职业、天赋获取技能
+	
 	if (!HasAuthority() || !AbilitySystemComponent)
 		return;
 
@@ -242,6 +264,8 @@ void AMCharacter::GiveAbilities()
 
 void AMCharacter::ApplyStartupEffects()
 {
+	// Todo 根据上次离线状态初始化身上的buff和属性值
+	
 	if (!HasAuthority())
 		return;
 
@@ -296,7 +320,7 @@ void AMCharacter::MoveBeginInternal(const FVector2D& Value)
 	}
 }
 
-void AMCharacter::MoveEndInternal(const FVector2D& Value)
+void AMCharacter::MoveEndInternal(const FVector2D& Value) const
 {
 	if (Controller != nullptr)
 	{
@@ -324,22 +348,6 @@ void AMCharacter::LookInternal(const FVector2D& Value)
 	}
 }
 
-void AMCharacter::JumpBeginInternal(const bool IsHeightJump)
-{
-	// 检测是否可以移动
-	FGameplayTagContainer Container;
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Paralysis")));// 瘫痪类buff
-
-	for (const FGameplayTag& Tag :Container)
-	{
-		if (GetAbilitySystemComponent()->HasMatchingGameplayTag(Tag))
-			return;
-	}
-	
-	AbilitySystemComponent->Jump();
-}
-
 void AMCharacter::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
@@ -347,7 +355,7 @@ void AMCharacter::Landed(const FHitResult& Hit)
 	AbilitySystemComponent->JumpEnd();
 }
 
-void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data)
+void AMCharacter::OnMaxMovementSpeedChanged(const FOnAttributeChangeData& Data) const
 {
 	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
 }
@@ -363,6 +371,7 @@ void AMCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLif
 	
 	SharedParams.RepNotifyCondition = REPNOTIFY_OnChanged;
 	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, CurrentTarget, SharedParams);
+	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, ModelData, SharedParams);
 	
 	DOREPLIFETIME_WITH_PARAMS_FAST(AMCharacter, Camp, SharedParams);
 

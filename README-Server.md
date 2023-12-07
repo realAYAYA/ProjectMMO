@@ -7,21 +7,21 @@
 ```bash
 sudo yum -y update
 ```
-3. 设置yum源  
-中央仓库
+3. 设置yum源 中央仓库 | 阿里仓库
 ```bash
 yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo
 ```
-阿里仓库
 ```bash
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 ```
 
 ### 防火墙设置
 1. 启动和关闭  
-sudo systemctl start firewalld  
-sudo systemctl stop firewalld  
-sudo systemctl restart firewalld  
+```bash
+sudo systemctl start firewalld
+sudo systemctl stop firewalld
+sudo systemctl restart firewalld
+```
 2. 选择端口打开
 ```bash
 sudo firewall-cmd --zone=public --add-port=1935/tcp --permanent
@@ -31,7 +31,10 @@ sudo firewall-cmd --zone=public --add-port=1935/tcp --permanent
 查看所有已打卡的端口 netstat -ntulp | grep 7777  
 
 ### 其它常用命令
-1. 开放文件权限 sudo chmod 777 /var/***
+1. 开放文件权限
+```bash
+sudo chmod 777 /var/***
+```
 2. 常用端口:  
 window远程 3389,frp 7050 7080,p41666,httpd 8090,redis 6379,mysql 3306,DS 7777,WebSocket 10086  
 
