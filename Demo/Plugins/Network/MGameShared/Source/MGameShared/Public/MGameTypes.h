@@ -74,6 +74,20 @@ struct FModelData
 {
 	GENERATED_USTRUCT_BODY()
 
+	// 穿戴装备
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 Weapon1 = 0;
+
+	// 装饰
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 Head = 0;
+};
+
+USTRUCT(BlueprintType) 
+struct FBodyModelData
+{
+	GENERATED_USTRUCT_BODY()
+
 	// 种族、性别
 	// 体型
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
@@ -86,14 +100,6 @@ struct FModelData
 	// 头发
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	int32 HairParam = 0;
-
-	// 穿戴装备
-	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	int32 Weapon1 = 0;
-
-	// 穿戴装备
-	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	int32 Head = 0;
 };
 
 /** 玩家属性数据*/
