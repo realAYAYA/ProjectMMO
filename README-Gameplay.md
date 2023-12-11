@@ -16,7 +16,9 @@
 10. 搞清楚Sequence Player和Sequence Evaluator的区别，后者适合根据Explicit Time值来决定动画播放程度  
 11. Sequence Evaluator节点，右侧面板，Explicit Time改为Dynamic，以及去掉勾选项Expose as Pin（如果没有在蓝图中显示改值的需求），目的是在程序中可以动态调整播放程度；  
 12. Sequence Evaluator节点，右侧面板，  
-13. 设置同步组，目的是使两个动画直接过度自然。先是在Sequence Player(Evaluation)右侧面板 Sync栏目中设置同步组名称和同步方式；在去到对应动画资产中添加SyncMakerAnimationModifier（自动计算左右脚落地）
+13. 设置同步组，目的是使两个动画直接过度自然。先是在Sequence Player(Evaluation)右侧面板 Sync栏目中设置同步组名称和同步方式；在去到对应动画资产中添加SyncMakerAnimationModifier（自动计算左右脚落地）  
+14. 
+15. 理解动画状态机中什么是别名  
 
 
 
