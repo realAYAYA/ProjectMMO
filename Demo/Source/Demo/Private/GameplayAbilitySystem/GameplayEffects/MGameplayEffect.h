@@ -7,15 +7,7 @@
 #include "MGameplayEffect.generated.h"
 
 UENUM(BlueprintType)
-enum class ERangeType : uint8
-{
-	None		UMETA(Displayname = "None"),	// 用于无法被驱散的效果
-	Melee		UMETA(Displayname = "Melee"),
-	Ranged		UMETA(Displayname = "Ranged"),
-};
-
-UENUM(BlueprintType)
-enum class EBuffType : uint8
+enum class EMBuffType : uint8
 {
 	None		UMETA(Displayname = "None"),	// 用于无法被驱散的效果
 	Spell		UMETA(Displayname = "Spell"),
