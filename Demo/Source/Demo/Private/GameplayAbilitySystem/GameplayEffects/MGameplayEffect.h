@@ -23,7 +23,7 @@ enum class EBuffType : uint8
 };
 
 UENUM(BlueprintType)
-enum class EDamageType : uint8
+enum class EMDamageType : uint8
 {
 	Chaos		UMETA(Displayname = "Chaos"),
 	Physical	UMETA(Displayname = "Physical"),
@@ -45,7 +45,7 @@ class UMGameplayEffect : public UGameplayEffect
 public:
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "PorjectM")
-	EDamageType DamageType;
+	EMDamageType DamageType;
 	
 	// Todo 目标和施术者
 	// Todo 持续，且影响双方的buff，例如：吸血

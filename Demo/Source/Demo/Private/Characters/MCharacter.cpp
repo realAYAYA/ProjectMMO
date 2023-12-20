@@ -313,7 +313,7 @@ void AMCharacter::MoveBeginInternal(const FVector2D& Value)
 	if (Controller != nullptr)
 	{
 		// add movement
-		AddMovementInput(GetActorForwardVector(), Value.Y);
+		AddMovementInput(GetActorForwardVector(), FMath::Clamp(Value.Y, -0.5f, 1));
 		AddMovementInput(GetActorRightVector(), Value.X);
 		
 		AbilitySystemComponent->MoveBegin();
