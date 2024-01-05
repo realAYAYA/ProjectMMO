@@ -42,6 +42,9 @@ public class MEditor : ModuleRules
 				"UnrealEd",
 				"Projects",
 				
+				"ToolMenus",
+				"LevelEditor",
+				
 				"MGameServer",
 				// ... add private dependencies that you statically link with here ...	
 			}

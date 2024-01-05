@@ -28,6 +28,8 @@ protected:
 	
 	virtual void BindCommands();
 
+	static TSharedRef< SWidget > GenerateProjectMMenuContent(TSharedRef<FUICommandList> InCommandList);
+
 	void BuildToolbar(FToolBarBuilder& ToolbarBuilder, UObject* InContextObject);
 
 	TSharedRef<FExtender> GetExtender(UObject* InContextObject);

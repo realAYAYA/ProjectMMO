@@ -261,6 +261,38 @@ void FMEditorToolbar::BindCommands()
 	//CommandList->MapAction(Commands.ReloadGdd, FExecuteAction::CreateRaw(this, &FMEditorToolbar::ReloadGdd_Executed));
 }
 
+TSharedRef<SWidget> FMEditorToolbar::GenerateProjectMMenuContent(TSharedRef<FUICommandList> InCommandList)
+{
+	const FMEditorCommands& Commands = FMEditorCommands::Get();
+	FMenuBuilder MenuBuilder(true, InCommandList);
+
+	bool bGameServiceRunning = false;
+	{
+		const FMGameServerModule* Mod = GetMGameServerModule();
+		if (Mod && Mod->IsRunning())
+		{
+			bGameServiceRunning = true;
+		}
+	}
+
+	if (!bGameServiceRunning)
+	{
+		MenuBuilder.AddMenuEntry(Commands.StartGameService);
+	}
+	else
+	{
+		MenuBuilder.AddMenuEntry(Commands.StopGameService);
+	}
+			
+	MenuBuilder.AddSeparator();
+	MenuBuilder.AddMenuEntry(Commands.ShowGddInFileManager);
+	MenuBuilder.AddMenuEntry(Commands.ShowExcelInFileManager);
+	//MenuBuilder.AddMenuEntry(Commands.UpdateGdd);
+	//MenuBuilder.AddMenuEntry(Commands.ReloadGdd);
+			
+	return MenuBuilder.MakeWidget();
+}
+
 void FMEditorToolbar::BuildToolbar(FToolBarBuilder& ToolbarBuilder, UObject* InContextObject)
 {
 	// InContextObject 在关卡模式为 nullptr， 在蓝图模式下则为当前蓝图对象
@@ -272,37 +304,11 @@ void FMEditorToolbar::BuildToolbar(FToolBarBuilder& ToolbarBuilder, UObject* InC
 		FOnGetContent::CreateLambda([&, InContextObject]()
 		{
 			ContextObject = InContextObject;
-			const FMEditorCommands& Commands = FMEditorCommands::Get();
-			FMenuBuilder MenuBuilder(true, CommandList);
-
-			bool bGameServiceRunning = false;
-			{
-				const FMGameServerModule* Mod = GetMGameServerModule();
-				if (Mod && Mod->IsRunning())
-				{
-					bGameServiceRunning = true;
-				}
-			}
-
-			if (!bGameServiceRunning)
-			{
-				MenuBuilder.AddMenuEntry(Commands.StartGameService);
-			}
-			else
-			{
-				MenuBuilder.AddMenuEntry(Commands.StopGameService);
-			}
 			
-			MenuBuilder.AddSeparator();
-			MenuBuilder.AddMenuEntry(Commands.ShowGddInFileManager);
-			MenuBuilder.AddMenuEntry(Commands.ShowExcelInFileManager);
-			//MenuBuilder.AddMenuEntry(Commands.UpdateGdd);
-			//MenuBuilder.AddMenuEntry(Commands.ReloadGdd);
-			
-			return MenuBuilder.MakeWidget();
+			return GenerateProjectMMenuContent(CommandList);
 		}),
 		LOCTEXT("MEditor_Label", "ProjectM Editor"),
-		LOCTEXT("MEditor_ToolTip", "Editor Extension"),
+		LOCTEXT("MEditor_ToolTip", "ProjectM Editor"),
 		FSlateIcon("MEditorStyle", TEXT("MEditor.Icon1"))
 	);
 
@@ -311,7 +317,6 @@ void FMEditorToolbar::BuildToolbar(FToolBarBuilder& ToolbarBuilder, UObject* InC
 
 TSharedRef<FExtender> FMEditorToolbar::GetExtender(UObject* InContextObject)
 {
-	
 	const auto ExtensionDelegate = FToolBarExtensionDelegate::CreateLambda(
 		[this, InContextObject](FToolBarBuilder& ToolbarBuilder)
 		{

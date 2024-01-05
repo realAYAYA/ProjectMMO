@@ -31,6 +31,7 @@ public:
 		OnPostEngineInitHandle = FCoreDelegates::OnPostEngineInit.AddRaw(this, &FMEditorModule::OnPostEngineInit);
 		PostPIEStartedHandle = FEditorDelegates::PostPIEStarted.AddRaw(this, &FMEditorModule::PostPIEStarted);
 		PrePIEEndedHandle = FEditorDelegates::PrePIEEnded.AddRaw(this, &FMEditorModule::PrePIEEnded);
+		OnEditorInitializedHandle = FEditorDelegates::ChangeEditorMode.AddRaw(this, &FMEditorModule::OnEditorInitialized);
 
 		BlueprintToolbar = MakeShareable(new FBlueprintToolbar);
 		LevelToolbar = MakeShareable(new FLevelToolbar);
@@ -44,13 +45,13 @@ public:
 		FCoreDelegates::OnPostEngineInit.Remove(OnPostEngineInitHandle);
 		FEditorDelegates::PostPIEStarted.Remove(PostPIEStartedHandle);
 		FEditorDelegates::PrePIEEnded.Remove(PrePIEEndedHandle);
+		FEditorDelegates::ChangeEditorMode.Remove(OnEditorInitializedHandle);
 	}
 
 private:
 	
 	void OnPostEngineInit()
 	{
-		LevelToolbar->Initialize();
 		BlueprintToolbar->Initialize();
 
 		IMainFrameModule& MainFrameModule = FModuleManager::LoadModuleChecked<IMainFrameModule>(TEXT("MainFrame"));
@@ -60,11 +61,17 @@ private:
 	void PostPIEStarted(bool bIsSimulating)
 	{
 		bIsPIE = true; // raise PIE flag
+		LevelToolbar->Initialize();
 	}
 
 	void PrePIEEnded(bool bIsSimulating)
 	{
 		bIsPIE = false; // clear PIE flag
+	}
+
+	void OnEditorInitialized(FEditorModeID)
+	{
+		LevelToolbar->Initialize();
 	}
 
 	void OnMainFrameCreationFinished(TSharedPtr<SWindow> InRootWindow, bool bIsNewProjectWindow)
@@ -84,6 +91,7 @@ private:
 	FDelegateHandle OnPostEngineInitHandle;
 	FDelegateHandle PostPIEStartedHandle;
 	FDelegateHandle PrePIEEndedHandle;
+	FDelegateHandle OnEditorInitializedHandle;
 
 	bool bIsPIE;
 };
