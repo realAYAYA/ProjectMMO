@@ -1,5 +1,5 @@
 #include "Editor.h"
-#include "Interfaces/IMainFrameModule.h"
+//#include "Interfaces/IMainFrameModule.h"
 
 #include "Toolbars/LevelToolbar.h"
 #include "Toolbars/BlueprintToolbar.h"
@@ -31,7 +31,6 @@ public:
 		OnPostEngineInitHandle = FCoreDelegates::OnPostEngineInit.AddRaw(this, &FMEditorModule::OnPostEngineInit);
 		PostPIEStartedHandle = FEditorDelegates::PostPIEStarted.AddRaw(this, &FMEditorModule::PostPIEStarted);
 		PrePIEEndedHandle = FEditorDelegates::PrePIEEnded.AddRaw(this, &FMEditorModule::PrePIEEnded);
-		OnEditorInitializedHandle = FEditorDelegates::ChangeEditorMode.AddRaw(this, &FMEditorModule::OnEditorInitialized);
 
 		BlueprintToolbar = MakeShareable(new FBlueprintToolbar);
 		LevelToolbar = MakeShareable(new FLevelToolbar);
@@ -45,7 +44,6 @@ public:
 		FCoreDelegates::OnPostEngineInit.Remove(OnPostEngineInitHandle);
 		FEditorDelegates::PostPIEStarted.Remove(PostPIEStartedHandle);
 		FEditorDelegates::PrePIEEnded.Remove(PrePIEEndedHandle);
-		FEditorDelegates::ChangeEditorMode.Remove(OnEditorInitializedHandle);
 	}
 
 private:
@@ -53,31 +51,31 @@ private:
 	void OnPostEngineInit()
 	{
 		BlueprintToolbar->Initialize();
+		LevelToolbar->Initialize();
 
-		IMainFrameModule& MainFrameModule = FModuleManager::LoadModuleChecked<IMainFrameModule>(TEXT("MainFrame"));
-		MainFrameModule.OnMainFrameCreationFinished().AddRaw(this, &FMEditorModule::OnMainFrameCreationFinished);
+		// UE5 在关卡编辑器栏目中添加自定义按钮的方法
+		// 参考UEditorUtilitySubsystem::HandleStartup()的调用过程
+		/*IMainFrameModule& MainFrameModule = IMainFrameModule::Get();
+		if (MainFrameModule.IsWindowInitialized())
+		{
+			MainFrameCreationFinished();
+		}
+		else
+		{
+			MainFrameModule.OnMainFrameCreationFinished().AddLambda([this](TSharedPtr<SWindow>, bool) { MainFrameCreationFinished(); });
+		}*/
 	}
 
 	void PostPIEStarted(bool bIsSimulating)
 	{
 		bIsPIE = true; // raise PIE flag
-		LevelToolbar->Initialize();
 	}
 
 	void PrePIEEnded(bool bIsSimulating)
 	{
 		bIsPIE = false; // clear PIE flag
 	}
-
-	void OnEditorInitialized(FEditorModeID)
-	{
-		LevelToolbar->Initialize();
-	}
-
-	void OnMainFrameCreationFinished(TSharedPtr<SWindow> InRootWindow, bool bIsNewProjectWindow)
-	{
-	}
-
+	
 	bool IsPIE() const
 	{
 		return bIsPIE;
