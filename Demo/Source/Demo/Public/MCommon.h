@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffect.h"
 
 #include "MCommon.generated.h"
 

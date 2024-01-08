@@ -17,7 +17,7 @@ DEFINE_LOG_CATEGORY(LogGameTables);
 
 bool UGameTables::Init()
 {
-	UE_LOG(LogGameTables, Display, TEXT("[GameTables] Init begin..."));
+	UE_LOG(LogGameTables, Display, TEXT("[GameTables] Init Beginning..."));
 	
 	//INIT_TABLE(UZQiCollectorConfigManager, QiCollector);
 	
@@ -38,7 +38,7 @@ bool UGameTables::Init()
 		check(bOk);
 	}*/
 
-	UE_LOG(LogGameTables, Display, TEXT("[GameTables] Init end."));
+	UE_LOG(LogGameTables, Display, TEXT("[GameTables] Init End."));
 	
 	return true;
 }

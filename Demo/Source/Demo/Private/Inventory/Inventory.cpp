@@ -12,11 +12,10 @@ UInventory::UInventory(const FObjectInitializer& ObjectInitializer)
 void UInventory::K2_UseItem(const int32 ID, const FOnRpcResult& InCallback)
 {
 	// Todo 检测背包数据
-	RequestPendingData.Add(TEXT("UseItem"), InCallback);
 	//InCallback.ExecuteIfBound(false);
 }
 
-void UInventory::K2_AddItem(const int32 ID, const FOnRpcResult& InCallback)
+void UInventory::AddItem(const int32 ID, const int32 InNum)
 {
 }
 

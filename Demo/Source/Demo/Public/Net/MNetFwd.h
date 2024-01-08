@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MNetFwd.generated.h"
 
 class UGameplayAbility;
 class UGameplayEffect;

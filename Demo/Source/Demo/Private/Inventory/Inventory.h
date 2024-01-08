@@ -34,9 +34,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "UseItem")
 	void K2_UseItem(const int32 ID, const FOnRpcResult& InCallback);
-
-	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "AddItem")
-	void K2_AddItem(const int32 ID, const FOnRpcResult& InCallback);
+	
+	void AddItem(const int32 ID, const int32 InNum = 1);
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "DeleteItem")
 	void K2_DeleteItem(const int32 ID, const FOnRpcResult& InCallback);
