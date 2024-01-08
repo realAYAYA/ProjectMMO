@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "MGameCommon.generated.h"
-
 class UGameplayAbility;
 class UGameplayEffect;
 
@@ -24,11 +22,8 @@ enum class EOpErrorCode : uint8
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnRpcResult, const EOpErrorCode, ErrorCode);
 
-USTRUCT()
 struct FRpcPendingData
 {
-	GENERATED_BODY()
-		
 	FOnRpcResult Callback;
 
 	FDateTime BeginDate;
@@ -37,7 +32,7 @@ struct FRpcPendingData
 
 	FRpcPendingData()
 	{
-		TimeoutSetting = 3;
+		TimeoutSetting = 10;
 	}
 	
 	explicit FRpcPendingData(const FOnRpcResult& InCallback, const int32 InTimeoutSetting = 3)
@@ -49,28 +44,36 @@ struct FRpcPendingData
 
 	bool IsTimeOut() const
 	{
+#if WITH_EDITOR
+		return false;// 编辑器模式下没有超时
+#else
 		return (FDateTime::UtcNow() - BeginDate).GetTotalSeconds() >TimeoutSetting;
+#endif
 	}
 };
 
-// Todo Delete
-USTRUCT(BlueprintType)
-struct FCharacterData
+
+/**
+ * Rpc封装
+ */
+class DEMO_API FRpcManager
 {
-	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<UGameplayEffect>> Effects;
+public:
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<UGameplayAbility>> DefaultAbilities;
+	uint64 AddRpcCallback(const FOnRpcResult& InCallback);
+	const FOnRpcResult* FindRpcCallback(const uint64 In);
+	void RemoveRpcCallback(const uint64 In);
+
+	void AddRpcCallback(const FString& In, const FOnRpcResult& InCallback);
+	const FOnRpcResult* FindRpcCallback(const FString& In);
+	void RemoveRpcCallback(const FString& In);
+
+private:
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<UGameplayAbility>> WarriorAbilities;
+	TMap<FString, FRpcPendingData> RequestPendingDataByString;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<UGameplayAbility>> MageAbilities;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
-	TArray<TSubclassOf<UGameplayAbility>> PriestAbilities;
+	TMap<uint64, FRpcPendingData> RequestPendingData;
+	uint64 SerialNum = 0;
 };
+

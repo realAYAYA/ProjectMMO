@@ -6,7 +6,7 @@
 #include "GameDefines.h"
 #include "MGameTypes.h"
 
-#include "Net/RpcObject.h"
+#include "..\..\Public\Net\MNetFwd.h"
 #include "Inventory.generated.h"
 
 class UItem;
@@ -15,7 +15,7 @@ class UItem;
  * 
  */
 UCLASS()
-class DEMO_API UInventory : public URpcObject
+class DEMO_API UInventory : public UObject
 {
 	GENERATED_BODY()
 	
@@ -59,6 +59,7 @@ private:
 	UPROPERTY()
 	TArray<UItem*> Equipments;
 
+	
 	/** Network & Rpc*/
 
 	UFUNCTION(Server, Reliable, Category = "ProjectM")
@@ -67,4 +68,5 @@ private:
 	UFUNCTION(Client, Reliable, Category = "ProjectM")
 	void UseItemAck(const ERpcErrorCode Code);
 
+	FRpcManager RpcManager;
 };

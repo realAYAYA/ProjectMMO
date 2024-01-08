@@ -32,13 +32,13 @@ void AMPlayerController::K2_ReqMyRoleData(const FOnRpcResult& Callback)
 		return;
 	}
 	
-	if (RequestPendingData.Find(TEXT("GetMyRoleData")))
+	if (RpcManager.FindRpcCallback(TEXT("GetMyRoleData")))
 	{
 		Callback.Execute(EOpErrorCode::Waiting);
 		return;
 	}
 
-	AddRpcCallback(TEXT("GetMyRoleData"), Callback);
+	RpcManager.AddRpcCallback(TEXT("GetMyRoleData"), Callback);
 	GetMyRoleDataReq(PlayerID);
 }
 
@@ -131,46 +131,14 @@ void AMPlayerController::GetMyRoleDataAck_Implementation(const FRoleData& InData
 		}
 	}
 	
-	if (const FOnRpcResult* Callback = FindRpcCallback(TEXT("GetMyRoleData")))
+	if (const FOnRpcResult* Callback = RpcManager.FindRpcCallback(TEXT("GetMyRoleData")))
 	{
 		Callback->Execute(Error);
-		RequestPendingData.Remove(TEXT("GetMyRoleData"));
+		RpcManager.RemoveRpcCallback(TEXT("GetMyRoleData"));
 	}
 }
 
 void AMPlayerController::ShowNotice_Implementation(const FString& InMessage)
 {
-	OnNotice.Broadcast(InMessage);
-}
-
-void AMPlayerController::AddRpcCallback(const FString& In, const FOnRpcResult& InCallback)
-{
-	if (RequestPendingData.Find(In) != nullptr)
-	{
-		InCallback.Execute(EOpErrorCode::Waiting);
-		return;
-	}
-	
-	RequestPendingData.Add(In, FRpcPendingData(InCallback));
-}
-
-const FOnRpcResult* AMPlayerController::FindRpcCallback(const FString& In)
-{
-	const FRpcPendingData* PendingData = RequestPendingData.Find(In);
-	if (PendingData)
-	{
-		if (IsValid(PendingData->Callback.GetUObject()))
-		{
-			if (!PendingData->IsTimeOut())
-				return &PendingData->Callback;
-			else
-			{
-				PendingData->Callback.Execute(EOpErrorCode::Timeout);
-			}
-		}
-
-		RequestPendingData.Remove(In);
-	}
-
-	return nullptr;
+	OnStringNoticeFromDs.Broadcast(InMessage);
 }

@@ -6,13 +6,13 @@
 #include "GameFramework/PlayerController.h"
 
 #include "MGameTypes.h"
-#include "MGameCommon.h"
+#include "Net/MNetFwd.h"
 #include "MPlayerController.generated.h"
 
 class AMPlayerCharacter;
 class AMPlayerState;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPCNotice, const FString&, NewMessage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStringNotice, const FString&, NewMessage);
 
 /**
  * 项目基类PC
@@ -26,7 +26,11 @@ public:
 
 	// 收到來自DS的消息通知
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
-	FOnPCNotice OnNotice;
+	FOnStringNotice OnStringNoticeFromDs;
+	
+	// 收到來自WebSocket的消息通知
+	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
+	FOnStringNotice OnStringNoticeFromWebSocket;
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
 	AMPlayerState* GetMPlayerState() const;
@@ -59,15 +63,8 @@ private:
 	
 	UFUNCTION(Client, Unreliable)
 	void ShowNotice(const FString& InMessage);
-
-
-	// Rpc封装
 	
-	UPROPERTY()
-	TMap<FString, FRpcPendingData> RequestPendingData;
-
-	void AddRpcCallback(const FString& In, const FOnRpcResult& InCallback);
-
-	const FOnRpcResult* FindRpcCallback(const FString& In);
+	// Rpc封装
+	FRpcManager RpcManager;
 	
 };

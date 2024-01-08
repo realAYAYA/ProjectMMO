@@ -8,7 +8,7 @@
 #include "GameplayEffectTypes.h"
 #include "InputActionValue.h"
 
-#include "MGameCommon.h"
+#include "MCommon.h"
 #include "MGameTypes.h"
 #include "MCharacter.generated.h"
 
