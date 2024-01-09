@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MGameTypes.h"
 #include "Item.generated.h"
 
 /**
@@ -29,5 +30,7 @@ protected:
 
 	int32 UID = 0;
 
-	//FDateTime 
+	//FDateTime
+
+	FMItemData ItemData;
 };

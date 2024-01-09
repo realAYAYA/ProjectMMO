@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GameplayAbilitySystem/Abilities/GA_CastSpell.h"
+#include "GA_CastSpell.h"
 #include "Characters/MCharacter.h"
-#include "Tasks/AbilityTask_CastSpell.h"
 
 #include "AbilitySystemComponent.h"
+#include "GameplayAbilitySystem/Abilities/Tasks/AbilityTask_CastSpell.h"
 
 UGA_CastSpell::UGA_CastSpell()
 {

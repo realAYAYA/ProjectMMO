@@ -6,10 +6,38 @@
 #include "GameDefines.h"
 #include "MGameTypes.h"
 
-#include "..\..\Public\Net\MNetFwd.h"
+#include "Net/MNetFwd.h"
 #include "Inventory.generated.h"
 
 class UItem;
+
+
+/** 道具数据缓存*/
+USTRUCT() 
+struct FRefreshItems
+{
+	GENERATED_USTRUCT_BODY()
+
+	// 添加或更改
+	UPROPERTY()
+	TArray<FMItemData> AddOrModify;
+
+	// 待删除道具
+	UPROPERTY()
+	TArray<FMItemData> Junks;
+
+	bool IsEmpty() const
+	{
+		return !(!AddOrModify.IsEmpty() || !Junks.IsEmpty());
+	}
+	
+	void Clear()
+	{
+		AddOrModify.Empty();
+		Junks.Empty();
+	}
+};
+
 
 /**
  * 
@@ -50,7 +78,15 @@ public:
 	
 	void Fill(FMInventoryData& OutData);
 
+	void SendRefreshItemsCacheToMe();
+
+protected:
+
+	virtual void Tick(float DeltaTime);
+	
 private:
+
+	int32 GenerateItemUID();
 
 	UPROPERTY()
 	TMap<int32, UItem*> AllItems;
@@ -58,8 +94,14 @@ private:
 	UPROPERTY()
 	TArray<UItem*> Equipments;
 
+	int32 SerialNum = 0;
 	
 	/** Network & Rpc*/
+	
+	UFUNCTION(Client, Reliable)
+	void SendRefreshItemsCacheToMe(const FRefreshItems& Cache);
+
+	FRefreshItems RefreshItemsCache;
 
 	UFUNCTION(Server, Reliable, Category = "ProjectM")
 	void UseItemReq(const int32 ID);

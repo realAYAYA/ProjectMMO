@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GameplayAbilitySystem/Abilities/GA_Melee.h"
+#include "GA_Melee.h"
 #include "Characters/MCharacter.h"
 
 UGA_Melee::UGA_Melee()

@@ -7,9 +7,9 @@
 #include "AbilitySystemLog.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Tasks/AbilityTask_Charge.h"
 
 #include "Characters/MCharacter.h"
+#include "GameplayAbilitySystem/Abilities/Tasks/AbilityTask_Charge.h"
 #include "GameplayAbilitySystem/GameplayEffects/MGameplayEffect.h"
 
 UGA_Charge::UGA_Charge()

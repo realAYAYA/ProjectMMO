@@ -17,6 +17,8 @@ void UInventory::K2_UseItem(const int32 ID, const FOnRpcResult& InCallback)
 
 void UInventory::AddItem(const int32 ID, const int32 InNum)
 {
+	// Todo 检查不进包道具
+	// 
 }
 
 void UInventory::K2_DeleteItem(const int32 ID, const FOnRpcResult& InCallback)
@@ -38,6 +40,36 @@ void UInventory::LoadData(const FMInventoryData& InData)
 void UInventory::Fill(FMInventoryData& OutData)
 {
 	
+}
+
+void UInventory::SendRefreshItemsCacheToMe_Implementation(const FRefreshItems& Cache)
+{
+	// Cache
+}
+
+void UInventory::Tick(float DeltaTime)
+{
+	if (!RefreshItemsCache.IsEmpty())
+	{
+		SendRefreshItemsCacheToMe();
+	}
+}
+
+int32 UInventory::GenerateItemUID()
+{
+	++SerialNum;
+	while (SerialNum == 0 || GetItemByUID(SerialNum))
+	{
+		++SerialNum;
+	}
+
+	return SerialNum;
+}
+
+void UInventory::SendRefreshItemsCacheToMe()
+{
+	SendRefreshItemsCacheToMe(RefreshItemsCache);
+	RefreshItemsCache.Clear();
 }
 
 void UInventory::UseItemReq_Implementation(const int32 ID)
