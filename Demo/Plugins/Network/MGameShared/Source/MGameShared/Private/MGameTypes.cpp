@@ -2,6 +2,7 @@
 
 void RoleDataToPreview(const FRoleData& From, FPreviewRoleData& To)
 {
+	To.RoleID	= From.ID;
 	To.RoleName = From.RoleName;
 	To.Race		= From.Race;
 	To.Class	= From.Class;

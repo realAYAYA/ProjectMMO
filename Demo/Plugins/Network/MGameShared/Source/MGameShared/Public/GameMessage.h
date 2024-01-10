@@ -157,6 +157,10 @@ struct FLoginGameAck : public FGameMessage
 	// 角色预览数据
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	TArray<FPreviewRoleData> RolePreviewData;
+
+	// 玩家设置
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FMUserSettings UserSettings;
 };
 
 USTRUCT(BlueprintType)
@@ -216,7 +220,7 @@ struct FEnterWorldReq : public FGameMessage
 	int32 WorldID = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FString RoleName;
+	int32 RoleID = 0;
 	
 };
 

@@ -161,6 +161,7 @@ void UMGameInstance::K2_Login(const FString& Account, const FOnLoginResult& Call
 		}
 
 		PlayerID = Ack.PlayerID;
+		//Ack.UserSettings.RoleSettings;// Todo 处理玩家设置
 
 		Callback.Execute(Ack.Ret, Ack.RolePreviewData);
 	});

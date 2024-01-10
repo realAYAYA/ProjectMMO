@@ -71,10 +71,8 @@ void UMPlayer::SendToMe(const FGameMessage& InMessage) const
 bool UMPlayer::CreateRole(const FCreateRoleParams& Params)
 {
 	// Todo 建议姓名合法性，参数合法性
-
-	// 角色名已经存在
-	const uint64 ID = GenerateUID(Params.RoleName);
-	if (GetRoleDataRef(ID))
+	
+	if (GetRoleDataRef(Params.RoleName))
 		return false;
 	
 	FRoleData Data;
@@ -86,7 +84,7 @@ bool UMPlayer::CreateRole(const FCreateRoleParams& Params)
 	Data.Race = Params.Race;
 	Data.Birth = Params.Birth;
 
-	Data.ID = ID;
+	Data.ID = GenerateRoleID();
 	Data.CreateDate = FDateTime::UtcNow().GetTicks();
 	Data.Rank = 1;
 
@@ -116,7 +114,7 @@ void UMPlayer::Fill(TArray<FPreviewRoleData>& Out)
 	}
 }
 
-FRoleData* UMPlayer::GetRoleDataRef(const uint64 ID)
+FRoleData* UMPlayer::GetRoleDataRef(const int32 ID)
 {
 	for (FRoleData& Data : PlayerData.RoleData)
 	{
@@ -210,6 +208,11 @@ void UMPlayer::MarkNeedSave()
 	{
 		NeedSaveFlag += 1;
 	}
+}
+
+int32 UMPlayer::GenerateRoleID() const
+{
+	return PlayerData.SerialRoleNum;
 }
 
 void UMPlayer::OnOnline()

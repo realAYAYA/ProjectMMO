@@ -32,7 +32,7 @@ public:
 	void SendToMe(const FGameMessage& InMessage) const;
 
 	bool CreateRole(const FCreateRoleParams& Params);
-	FRoleData* GetRoleDataRef(const uint64 ID);
+	FRoleData* GetRoleDataRef(const int32 ID);
 	FRoleData* GetRoleDataRef(const FString& Name);
 	
 	FRoleData* CurrentRole = nullptr;
@@ -63,6 +63,8 @@ public:
 	void MarkNeedSave();
 	
 private:
+
+	int32 GenerateRoleID() const;
 
 	UPROPERTY()
 	UMGameSession* Session = nullptr;

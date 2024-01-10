@@ -130,7 +130,7 @@ M_GAME_RPC_HANDLE(GameRpc, EnterWorld, InSession, Req, Ack)
 		return;
 	
 	// 角色不存在
-	Player->SetCurrentRole(Req.RoleName);
+	Player->SetCurrentRole(Req.RoleID);
 	if (!Player->CurrentRole)
 	{
 		Ack.NetAddress = TEXT("Role");

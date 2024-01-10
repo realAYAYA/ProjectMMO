@@ -22,6 +22,31 @@ void ParseFromArray(const TArray<uint8>& Data) const \
 	DataType->SerializeTaggedProperties(Reader, (uint8*)this, DataType, nullptr); \
 } \
 
+/** 角色游戏设置*/
+USTRUCT(BlueprintType)
+struct FMRoleSettings
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	int32 RoleID = 0;
+	
+	// Todo 技能按键，宏
+};
+
+/** 用户游戏设置*/
+USTRUCT(BlueprintType)
+struct FMUserSettings
+{
+	GENERATED_USTRUCT_BODY()
+
+	// Todo 音量，显示设置
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	TArray<FMRoleSettings> RoleSettings;
+};
+
+
 /** 道具数据*/
 USTRUCT(BlueprintType) 
 struct FMItemData
@@ -109,8 +134,8 @@ struct FRoleData
 	GENERATED_USTRUCT_BODY()
 
 	//角色ID
-	UPROPERTY()
-	uint64 ID = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	int32 ID = 0;
 	
 	// 角色名
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
@@ -188,6 +213,10 @@ struct FMPlayerData
 	// 账户创建时间
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	int64 CreateDate = 0;
+
+	// 角色唯一ID序列器
+	UPROPERTY()
+	int32 SerialRoleNum = 0;
 };
 
 /** 创建角色参数*/
@@ -233,6 +262,10 @@ struct FPreviewRoleData
 {
 	GENERATED_USTRUCT_BODY()
 
+	// 角色名
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	int32 RoleID = 0;
+	
 	// 角色名
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FString RoleName;
