@@ -3,18 +3,19 @@
 
 #include "MGameInstance.h"
 
-#include "AbilitySystemGlobals.h"
 #include "Demo.h"
-#include "MGameClientSubsystem.h"
 #include "GameRpcClient.h"
+#include "MGameClientSubsystem.h"
+#include "GameplayAbilitySystem/MAbilitySystemGlobals.h"
 #include "Developer/MSaveGame.h"
+
 #include "Kismet/GameplayStatics.h"
 
 void UMGameInstance::Init()
 {
 	Super::Init();
 
-	UAbilitySystemGlobals::Get().InitGlobalData();
+	UMAbilitySystemGlobals::Get().InitGlobalData();
 
 	LoadLocalSave();
 

@@ -30,7 +30,7 @@ enum class EMDamageType : uint8
  * 
  */
 UCLASS()
-class UMGameplayEffect : public UGameplayEffect
+class DEMO_API UMGameplayEffect : public UGameplayEffect
 {
 	GENERATED_BODY()
 
