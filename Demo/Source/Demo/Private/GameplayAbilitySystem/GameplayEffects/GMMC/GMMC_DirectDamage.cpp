@@ -53,6 +53,4 @@ float UGMMC_DirectDamage::CalculateBaseMagnitude_Implementation(const FGameplayE
 	}
 	
 	return Reduction;
-	
-	return Super::CalculateBaseMagnitude_Implementation(Spec);
 }

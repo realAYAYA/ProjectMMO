@@ -31,7 +31,7 @@ EActivateFailCode UGA_Charge::CanActivateCondition(const FGameplayAbilityActorIn
 		Caster->OnAbilityFailed.Broadcast(FailCode);
 		return FailCode;
 	}
-
+	
 	// Todo 路径检查
 
 	Caster->OnAbilityFailed.Broadcast(FailCode);

@@ -88,7 +88,9 @@ bool IsChinese(const FString& In)
 
 uint64 GenerateUID(const FString& In)
 {
-	return FFnv::MemFnv64(*In, In.Len());
+	std::string Text;
+	FStringToString(In, &Text);
+	return FFnv::MemFnv64(Text.c_str(), Text.size());
 }
 
 // ============================================================================

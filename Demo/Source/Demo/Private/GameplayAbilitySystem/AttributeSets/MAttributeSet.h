@@ -31,6 +31,10 @@ class UMAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 public:
+
+	// -------------------------------------------------------------------------------
+	//		Battle Properties
+	// -------------------------------------------------------------------------------
 	
 	UPROPERTY(BlueprintReadOnly, Category = "BaseAttributes")
 	FGameplayAttributeData Strength;
@@ -232,6 +236,15 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnMaxEnergyChanged OnMaxEnergyChanged;
+
+	// -------------------------------------------------------------------------------
+	//		Life Properties
+	// -------------------------------------------------------------------------------
+
+	// -------------------------------------------------------------------------------
+	//		Character Model
+	// -------------------------------------------------------------------------------
+	
 	
 protected:
 

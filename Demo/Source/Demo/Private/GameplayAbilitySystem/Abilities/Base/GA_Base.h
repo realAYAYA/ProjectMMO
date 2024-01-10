@@ -27,7 +27,7 @@ enum class EActivateFailCode : uint8
 	Cooldown		UMETA(Displayname = "冷却中"),
 	OutOfRange		UMETA(Displayname = "超出距离"),
 	TooClose		UMETA(Displayname = "太近了"),
-	NoToward		UMETA(Displayname = "面向对方"),
+	NeedFace		UMETA(Displayname = "面向对方"),
 	NotInView		UMETA(Displayname = "不在视野中"),
 	NoMana			UMETA(Displayname = "法力不足"),
 	NoEnergy		UMETA(Displayname = "能量不足"),

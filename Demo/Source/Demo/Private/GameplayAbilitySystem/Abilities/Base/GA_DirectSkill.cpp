@@ -171,7 +171,7 @@ EActivateFailCode UGA_DirectSkill::CanActivateCondition(const FGameplayAbilityAc
 		return EActivateFailCode::OutOfRange;
 	}
 
-	// 目标过近
+	// Too close
 	if (Distance < MinRange)
 	{
 		return EActivateFailCode::TooClose;
@@ -183,11 +183,37 @@ EActivateFailCode UGA_DirectSkill::CanActivateCondition(const FGameplayAbilityAc
 		const FVector Dir = UKismetMathLibrary::Normal(CurrentTarget->GetActorLocation() - Caster->GetActorLocation(), 0.0001);
 		if (UKismetMathLibrary::Dot_VectorVector(Dir, Caster->GetActorForwardVector()) < 0.5f)
 		{
-			return EActivateFailCode::NoToward;
+			return EActivateFailCode::NeedFace;
 		}
 	}
 	
-	// Todo 不在视野中
+	// 不在视野中
+	{
+		// 碰撞参数
+		FCollisionQueryParams CollisionQueryParams(TEXT("QueryParams"),true,nullptr);
+		CollisionQueryParams.bTraceComplex = true;
+		CollisionQueryParams.bReturnPhysicalMaterial = false;
+		CollisionQueryParams.AddIgnoredActor(Caster);
+ 
+		// 起始点和检测结果
+		FVector BeginLoc = Caster->GetActorLocation();
+		FVector EndLoc = BeginLoc + Target->GetActorLocation();
+		FHitResult HitResult;
+ 
+		// 射线检测
+		GetWorld()->LineTraceSingleByChannel(HitResult, BeginLoc, EndLoc, ECollisionChannel::ECC_Visibility, CollisionQueryParams);
+		if (HitResult.GetActor() != Target)
+		{
+			return EActivateFailCode::NotInView;
+		}
+
+#if WITH_EDITOR
+		if (HitResult.GetActor())
+		{
+			DrawDebugLine(GetWorld(), BeginLoc, HitResult.Location, FColor::Blue, false, 1.0f);
+		}
+#endif
+	}
 	
 	return EActivateFailCode::Success;
 }
