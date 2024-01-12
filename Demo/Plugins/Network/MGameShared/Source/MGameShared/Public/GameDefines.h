@@ -194,3 +194,31 @@ enum class EEquipSlot : uint8
 
 	MaxNum
 };
+
+UENUM(BlueprintType)
+enum class EDressType : uint8
+{
+	Unknown				UMETA(Displayname = "Unknown"),
+	Head				UMETA(Displayname = "Head"),
+	Shoulder			UMETA(Displayname = "Shoulder"),
+	Cloak				UMETA(Displayname = "Cloak"),
+	Armor				UMETA(Displayname = "Armor"),
+	Gloves				UMETA(Displayname = "Gloves"),
+	Belt				UMETA(Displayname = "Belt"),
+	Shoes				UMETA(Displayname = "Shoes"),
+	
+	Neck				UMETA(Displayname = "Neck"),
+	Ring1				UMETA(Displayname = "Ring1"),
+	Ring2				UMETA(Displayname = "Ring2"),
+
+	Weapon1				UMETA(Displayname = "Weapon1"),
+	Weapon2				UMETA(Displayname = "Weapon2"),
+	RangedWeapon		UMETA(Displayname = "RangedWeapon"),
+
+	Cloth1				UMETA(Displayname = "TopCloth"),
+	Cloth2				UMETA(Displayname = "UpperCloth"),
+	Pants				UMETA(Displayname = "Pants"),
+	InDoorShoes			UMETA(Displayname = "InDoorShoes"),
+
+	MaxNum
+};

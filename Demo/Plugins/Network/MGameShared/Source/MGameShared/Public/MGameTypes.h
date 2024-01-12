@@ -254,6 +254,8 @@ struct FCreateRoleParams
 	ECamp Camp = ECamp::None;
 
 	// Todo 外观数据
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FBodyModelData ModelData;
 };
 
 /** 登录节目角色数据预览*/
@@ -291,7 +293,11 @@ struct FPreviewRoleData
 	EBirth Birth = EBirth::None;
 
 	// Todo 外观数据
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FBodyModelData ModelData;
+	
 	// Todo 装扮（备）数据
+	
 	// Todo 其它特效
 };
 

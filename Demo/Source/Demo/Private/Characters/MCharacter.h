@@ -24,7 +24,7 @@ class UMAttributeSet;
 class AMPlayerController;
 class AMPlayerState;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoleDataChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRoleDataChanged, EDressType, Postion, int32, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleNameChanged, FName, NewName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleCampChanged, ECamp, NewCamp);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleRaceChanged, ERace, NewRace);
