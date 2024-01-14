@@ -1,6 +1,5 @@
 #include "MSaveGame.h"
 
-
 bool UMSaveGame::CreateUser(const FString& InID, const FString& InName)
 {
 	if (INDEX_NONE != FindUserIndex(InID))
@@ -11,7 +10,7 @@ bool UMSaveGame::CreateUser(const FString& InID, const FString& InName)
 	Data.CreateDate = FDateTime::Now().GetTicks();
 
 	UserData.Add(Data);
-
+	
 	return true;
 }
 

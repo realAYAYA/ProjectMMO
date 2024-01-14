@@ -37,6 +37,8 @@ public class Demo : ModuleRules
 			"Slate",
 			"SlateCore", 
 			
+			"DeveloperSettings",
+			
 			"MGameShared", 
 			"MGameClient",
 		});
