@@ -22,6 +22,36 @@ void ParseFromArray(const TArray<uint8>& Data) const \
 	DataType->SerializeTaggedProperties(Reader, (uint8*)this, DataType, nullptr); \
 } \
 
+// 键位设置
+USTRUCT(BlueprintType)
+struct FMInputSetting
+{
+	GENERATED_USTRUCT_BODY()
+
+	// 玩家设置键位
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ProjectM")
+	FName CurrentKey;
+
+	// 对应的默认键位
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ProjectM")
+	FName DefaultKey;
+};
+
+// 技能栏设置
+USTRUCT(BlueprintType)
+struct FMSkillBarSetting
+{
+	GENERATED_USTRUCT_BODY()
+
+	// 技能栏位位置或ID
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ProjectM")
+	int32 BarID = 0;
+
+	// 技能栏上放置的技能
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "ProjectM")
+	FName Skill;
+};
+
 /** 角色游戏设置*/
 USTRUCT(BlueprintType)
 struct FMRoleSettings
@@ -31,7 +61,13 @@ struct FMRoleSettings
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	int32 RoleID = 0;
 	
-	// Todo 技能按键，宏
+	// Todo 按键设置，宏
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	TArray<FMInputSetting> InputSettings;
+
+	// 技能栏
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	TArray<FMSkillBarSetting> SkillBarSettings;
 };
 
 /** 用户游戏设置*/
@@ -41,9 +77,6 @@ struct FMUserSettings
 	GENERATED_USTRUCT_BODY()
 
 	// Todo 音量，显示设置
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	TArray<FMRoleSettings> RoleSettings;
 };
 
 
@@ -214,6 +247,14 @@ struct FMPlayerData
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
 	int64 CreateDate = 0;
 
+	// 用户全局设置
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	FMUserSettings UserSettings;
+
+	// 角色设置
+	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
+	TArray<FMRoleSettings> RoleSettings;
+	
 	// 角色唯一ID序列器
 	UPROPERTY()
 	int32 SerialRoleNum = 0;

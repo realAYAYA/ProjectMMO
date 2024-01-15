@@ -5,8 +5,17 @@
 #include "CoreMinimal.h"
 #include "GameplayEffect.h"
 
-#include "MCommon.generated.h"
+#include "MFwd.generated.h"
 
+USTRUCT(BlueprintType)
+struct FUserInputSetting
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = GAS)
+	FKey DefaultKey;
+	
+};
 
 // Todo Delete
 USTRUCT(BlueprintType)

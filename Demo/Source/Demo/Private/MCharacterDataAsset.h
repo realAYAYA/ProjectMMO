@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "MCommon.h"
+#include "MFwd.h"
 #include "MCharacterDataAsset.generated.h"
 
 /**
