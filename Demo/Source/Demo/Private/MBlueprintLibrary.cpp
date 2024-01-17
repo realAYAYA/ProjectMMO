@@ -7,7 +7,7 @@
 
 #include "GameTablesModule.h"
 #include "GameTables.h"
-#include "GameMessage.h"
+#include "MGameMessage.h"
 #include "Characters/MCharacter.h"
 
 FString UMBlueprintLibrary::TestFunc()

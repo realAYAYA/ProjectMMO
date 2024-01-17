@@ -2,23 +2,6 @@
 
 #include "CoreMinimal.h"
 
-UENUM()
-enum class ERpcMessageOp : uint8
-{
-	Notify			UMETA(DisplayName = "Notify"),
-	Request			UMETA(DisplayName = "Request"),
-	Response		UMETA(DisplayName = "Response"),
-};
-
-UENUM(BlueprintType)
-enum class ERpcErrorCode : uint8
-{
-	Ok				UMETA(DisplayName = "Ok"),
-	UnKnow			UMETA(DisplayName = "UnKnow"),
-	Unimplemented	UMETA(DisplayName = "Unimplemented"),
-	TimeOut			UMETA(DisplayName = "TimeOut"),
-};
-
 UENUM(BlueprintType)
 enum class ELoginGameRetCode : uint8
 {
@@ -166,7 +149,7 @@ enum class EItemType : uint8
 };
 
 UENUM(BlueprintType)
-enum class EEquipSlot : uint8
+enum class EEquipmentSlot : uint8
 {
 	Unknown				UMETA(Displayname = "Unknown"),
 	Head				UMETA(Displayname = "Head"),

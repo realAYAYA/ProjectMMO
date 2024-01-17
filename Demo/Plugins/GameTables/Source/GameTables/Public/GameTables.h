@@ -25,5 +25,9 @@ public:
 	/** Json常量配置 */
 	//UPROPERTY(BlueprintReadOnly, Category="")
 	//FZCommonConstantsConfig CommonConstants;
+
+#if UE_SERVER
+
+#endif
 	
 };

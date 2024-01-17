@@ -1,5 +1,5 @@
 #pragma once
-#include "GameMessage.h"
+#include "MGameMessage.h"
 
 
 class FServerRpcManager;

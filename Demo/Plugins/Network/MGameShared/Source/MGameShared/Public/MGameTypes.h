@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "GameDefines.h"
+#include "MGameDefines.h"
 
 #include "MGameTypes.generated.h"
 
@@ -61,13 +61,11 @@ struct FMRoleSettings
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	int32 RoleID = 0;
 	
-	// Todo 按键设置，宏
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	TArray<FMInputSetting> InputSettings;
+	// Todo 按键设置，角色宏
 
-	// 技能栏
+	// 技能栏映射
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	TArray<FMSkillBarSetting> SkillBarSettings;
+	TArray<FMSkillBarSetting> SkillBarMappings;
 };
 
 /** 用户游戏设置*/
@@ -77,6 +75,10 @@ struct FMUserSettings
 	GENERATED_USTRUCT_BODY()
 
 	// Todo 音量，显示设置
+
+	// 按键设置，宏
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	TArray<FMInputSetting> InputSettings;
 };
 
 
@@ -104,7 +106,7 @@ struct FMItemData
 
 	// 装备位置，如果是装备的话
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	EEquipSlot Slot = EEquipSlot::Unknown;
+	EEquipmentSlot Slot = EEquipmentSlot::Unknown;
 	
 	// 武器属性字段，附魔，质变，配置Id
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
@@ -128,7 +130,7 @@ struct FMInventoryData
 
 /** 外观数据*/
 USTRUCT(BlueprintType) 
-struct FModelData
+struct FMAppearanceData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -141,8 +143,9 @@ struct FModelData
 	int32 Head = 0;
 };
 
+/** 角色模型身体数据*/
 USTRUCT(BlueprintType) 
-struct FBodyModelData
+struct FMBodyModelData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -296,7 +299,7 @@ struct FCreateRoleParams
 
 	// Todo 外观数据
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FBodyModelData ModelData;
+	FMBodyModelData ModelData;
 };
 
 /** 登录节目角色数据预览*/
@@ -335,7 +338,7 @@ struct FPreviewRoleData
 
 	// Todo 外观数据
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FBodyModelData ModelData;
+	FMBodyModelData ModelData;
 	
 	// Todo 装扮（备）数据
 	
@@ -344,9 +347,9 @@ struct FPreviewRoleData
 
 void MGAMESHARED_API RoleDataToPreview(const FRoleData& From, FPreviewRoleData& To);
 
-/* 关卡/副本进度数据*/
+/* 单个关卡/副本进度数据*/
 USTRUCT(BlueprintType)
-struct FLevelData
+struct FMLevelData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -367,13 +370,13 @@ struct FLevelData
 	int64 CreateTime = 0;
 };
 
-/* 关卡/副本服务器缓存数据*/
+/* 所有关卡/副本服务器缓存数据*/
 USTRUCT(BlueprintType)
-struct FLevelSaveData
+struct FMLevelSaveData
 {
 	GENERATED_USTRUCT_BODY()
 
 	// 存储->转为TMap
 	UPROPERTY()
-	TArray<FLevelData> LevelData;
+	TArray<FMLevelData> LevelData;
 };

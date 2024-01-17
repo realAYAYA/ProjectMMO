@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "GameFwd.h"
+#include "MGameMessageFwd.h"
 #include "MGameTypes.h"
-#include "GameMessage.generated.h"
+#include "MGameMessage.generated.h"
 
 ////////////////////////////////////////////////DS服务器专用消息类型///////////////////////////////////////////////////////
 // 仅用于DS与WebSocket服务器直接通信
@@ -236,6 +236,9 @@ struct FEnterWorldAck : public FGameMessage
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
 	FString NetAddress;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
+	FMRoleSettings RoleSettings;
 };
 
 //////////////////////////////////////////////////客户端专用通知消息类型////////////////////////////////////////////////////

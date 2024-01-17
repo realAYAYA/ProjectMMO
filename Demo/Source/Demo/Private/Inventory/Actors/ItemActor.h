@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
-#include "GameDefines.h"
 #include "Inventory/Item.h"
 
 #include "ItemActor.generated.h"

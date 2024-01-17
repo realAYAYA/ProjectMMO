@@ -16,7 +16,7 @@ STUB_HPP_TEMPL = """#pragma once
 #include "CoreMinimal.h"
 
 #include "NetFwd.h"
-#include "GameMessage.h"
+#include "MGameMessage.h"
 {% for inc in include_list %}
 #include "{{inc}}"
 {%- endfor %}

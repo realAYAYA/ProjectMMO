@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameMessage.h"
+#include "MGameMessage.h"
 #include "MGameTypes.h"
 
 #include "MPlayer.generated.h"

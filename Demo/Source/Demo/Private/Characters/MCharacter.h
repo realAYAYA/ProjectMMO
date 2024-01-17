@@ -110,7 +110,7 @@ public:
 	ERoleClass GetRoleClass() const { return RoleClass; }
 
 	UFUNCTION(BlueprintCallable, Category = "ProjectM")
-	FModelData GetModelData() const { return ModelData; }
+	FMAppearanceData GetModelData() const { return ModelData; }
 
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
 	FOnRoleDataChanged OnModelDataChanged;
@@ -125,7 +125,7 @@ public:
 	void SetRoleRace(const ERace& InRace);
 
 	UFUNCTION()
-	void SetModelData(const FModelData& InData);
+	void SetModelData(const FMAppearanceData& InData);
 	
 protected:
 	
@@ -164,9 +164,9 @@ private:
 
 	// 外观数据
 	UPROPERTY(ReplicatedUsing = OnRep_ModelData)
-	FModelData ModelData;
+	FMAppearanceData ModelData;
 
-	FModelData OldModelData;
+	FMAppearanceData OldModelData;
 
 	
 	// GAS

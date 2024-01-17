@@ -18,6 +18,10 @@ DEFINE_LOG_CATEGORY(LogGameTables);
 bool UGameTables::Init()
 {
 	UE_LOG(LogGameTables, Display, TEXT("[GameTables] Init Beginning..."));
+
+#if UE_SERVER
+
+#endif
 	
 	//INIT_TABLE(UZQiCollectorConfigManager, QiCollector);
 	
@@ -34,7 +38,7 @@ bool UGameTables::Init()
 		else
 		{
 			UE_LOG(LogGameTables, Error, TEXT("[ZGameTables] 加载失败 CommonConstants.jsondata"));
-		}		
+		}
 		check(bOk);
 	}*/
 

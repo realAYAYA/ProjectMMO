@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameDefines.h"
 #include "MGameTypes.h"
 
 #include "Net/MNetFwd.h"

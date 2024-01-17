@@ -2,7 +2,7 @@
 #include "CoreMinimal.h"
 
 #include "NetFwd.h"
-#include "GameMessage.h"
+#include "MGameMessage.h"
 
 
 #include "GameRpcClient.generated.h"
