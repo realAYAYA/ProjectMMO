@@ -82,3 +82,6 @@ Plugins/*/*/Intermediate/*
 .vscode/
 *.vsconfig
 *.code-workspace
+
+# Add by liudong
+/Plugins/Developer/RiderLink/
