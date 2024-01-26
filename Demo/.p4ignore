@@ -57,6 +57,7 @@ Build/*
 Build/*/**
 !Build/*/PakBlacklist*.txt
 
+
 # Don't ignore icon files in Build
 !Build/**/*.ico
 
@@ -76,6 +77,7 @@ DerivedDataCache/*
 # Add by liudong
 Plugins/*/*/Binaries/*
 Plugins/*/*/Intermediate/*
+!Build/UnrealGameSync.*
 *.DS_Store
 
 # VS Code
