@@ -85,3 +85,4 @@ Plugins/*/*/Intermediate/*
 
 # Add by liudong
 /Plugins/Developer/RiderLink/
+*.p4ignore
