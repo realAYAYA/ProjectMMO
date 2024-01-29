@@ -85,3 +85,4 @@ Plugins/*/*/Intermediate/*
 *.vsconfig
 *.code-workspace
 .gitignore
+/.idea
