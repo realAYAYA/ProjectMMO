@@ -1,0 +1,28 @@
+# DS登录WebSocket服务器
+rpc LoginAsDS LoginAsDSReq LoginAsDSAck
+
+# DS拉取玩家数据
+rpc PullRoleData PullRoleDataReq PullRoleDataAck
+
+# DS提交玩家数据
+rpc CommitRoleData CommitRoleDataReq CommitRoleDataAck
+
+
+
+# 登录游戏
+rpc LoginGame LoginGameReq LoginGameAck
+
+# 登录游戏
+rpc LogoutGame LogoutGameReq LogoutGameAck
+
+# 创建角色
+rpc CreateRole CreateRoleReq CreateRoleAck
+
+# 进入世界
+rpc EnterWorld EnterWorldReq EnterWorldAck
+
+
+
+# 收到聊天消息通知
+result UpdateChatMessage
+
