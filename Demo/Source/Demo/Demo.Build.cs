@@ -20,7 +20,7 @@ public class Demo : ModuleRules
 			"GameplayAbilities",
 			
 			"GameTables", 
-			"MGameShared",
+			"MGameProtocol",
 			"MRpc",
 		});
 		
@@ -39,7 +39,7 @@ public class Demo : ModuleRules
 			
 			"DeveloperSettings",
 			
-			"MGameShared", 
+			"MGameProtocol", 
 			"MGameClient",
 		});
 	}
