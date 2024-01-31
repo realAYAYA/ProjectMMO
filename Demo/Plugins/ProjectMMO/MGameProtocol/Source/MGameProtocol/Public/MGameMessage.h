@@ -160,7 +160,7 @@ struct FLoginGameAck : public FGameMessage
 
 	// 玩家设置
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FMUserSettings UserSettings;
+	FUserGameSettings UserSettings;
 };
 
 USTRUCT(BlueprintType)
@@ -238,7 +238,7 @@ struct FEnterWorldAck : public FGameMessage
 	FString NetAddress;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FMRoleSettings RoleSettings;
+	FRoleSettings RoleSettings;
 };
 
 //////////////////////////////////////////////////客户端专用通知消息类型////////////////////////////////////////////////////

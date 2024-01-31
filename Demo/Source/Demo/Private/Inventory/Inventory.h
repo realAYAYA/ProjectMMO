@@ -19,11 +19,11 @@ struct FRefreshItems
 
 	// 添加或更改
 	UPROPERTY()
-	TArray<FMItemData> AddOrModify;
+	TArray<FInventoryData> AddOrModify;
 
 	// 待删除道具
 	UPROPERTY()
-	TArray<FMItemData> Junks;
+	TArray<FInventoryData> Junks;
 
 	bool IsEmpty() const
 	{
@@ -73,9 +73,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProjectM", DisplayName = "SplitItem")
 	void K2_SplitItem(const int32 ID, const FOnRpcResult& InCallback);
 
-	void LoadData(const FMInventoryData& InData);
+	void LoadData(const FInventoryData& InData);
 	
-	void Fill(FMInventoryData& OutData);
+	void Fill(FInventoryData& OutData);
 
 	void SendRefreshItemsCacheToMe();
 

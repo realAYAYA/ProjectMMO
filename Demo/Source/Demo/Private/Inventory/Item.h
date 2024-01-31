@@ -32,5 +32,5 @@ protected:
 
 	//FDateTime
 
-	FMItemData ItemData;
+	FInventoryItemData ItemData;
 };

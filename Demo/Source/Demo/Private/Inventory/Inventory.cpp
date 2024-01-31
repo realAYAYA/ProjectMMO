@@ -33,11 +33,11 @@ void UInventory::K2_SplitItem(const int32 ID, const FOnRpcResult& InCallback)
 {
 }
 
-void UInventory::LoadData(const FMInventoryData& InData)
+void UInventory::LoadData(const FInventoryData& InData)
 {
 }
 
-void UInventory::Fill(FMInventoryData& OutData)
+void UInventory::Fill(FInventoryData& OutData)
 {
 	
 }

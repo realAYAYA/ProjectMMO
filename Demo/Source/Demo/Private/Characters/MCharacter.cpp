@@ -164,7 +164,7 @@ void AMCharacter::SetRoleRace(const ERace& InRace)
 #endif
 }
 
-void AMCharacter::SetModelData(const FMAppearanceData& InData)
+void AMCharacter::SetModelData(const FAppearanceData& InData)
 {
 	ModelData = InData;
 

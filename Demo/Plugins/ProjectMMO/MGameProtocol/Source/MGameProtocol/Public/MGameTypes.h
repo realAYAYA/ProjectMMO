@@ -24,7 +24,7 @@ void ParseFromArray(const TArray<uint8>& Data) const \
 
 // 键位设置
 USTRUCT(BlueprintType)
-struct FMInputSetting
+struct FUserInputSetting
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -39,7 +39,7 @@ struct FMInputSetting
 
 // 技能栏设置
 USTRUCT(BlueprintType)
-struct FMSkillBarSetting
+struct FRoleSkillBarSetting
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -54,7 +54,7 @@ struct FMSkillBarSetting
 
 /** 角色游戏设置*/
 USTRUCT(BlueprintType)
-struct FMRoleSettings
+struct FRoleSettings
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -65,12 +65,12 @@ struct FMRoleSettings
 
 	// 技能栏映射
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	TArray<FMSkillBarSetting> SkillBarMappings;
+	TArray<FRoleSkillBarSetting> SkillBarMappings;
 };
 
 /** 用户游戏设置*/
 USTRUCT(BlueprintType)
-struct FMUserSettings
+struct FUserGameSettings
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -78,13 +78,13 @@ struct FMUserSettings
 
 	// 按键设置，宏
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	TArray<FMInputSetting> InputSettings;
+	TArray<FUserInputSetting> InputSettings;
 };
 
 
 /** 道具数据*/
 USTRUCT(BlueprintType) 
-struct FMItemData
+struct FInventoryItemData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -115,22 +115,22 @@ struct FMItemData
 
 /** 背包数据*/
 USTRUCT(BlueprintType) 
-struct FMInventoryData
+struct FInventoryData
 {
 	GENERATED_USTRUCT_BODY()
 
 	// 背包里道具
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	TArray<FMItemData> Items;
+	TArray<FInventoryItemData> Items;
 
 	// 穿戴装备
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	TArray<FMItemData> Equipments;
+	TArray<FInventoryItemData> Equipments;
 };
 
 /** 外观数据*/
 USTRUCT(BlueprintType) 
-struct FMAppearanceData
+struct FAppearanceData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -145,7 +145,7 @@ struct FMAppearanceData
 
 /** 角色模型身体数据*/
 USTRUCT(BlueprintType) 
-struct FMBodyModelData
+struct FBodyModelData
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -207,7 +207,7 @@ struct FRoleData
 
 	// 背包数据, 装备数据
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	FMInventoryData InventoryData;
+	FInventoryData InventoryData;
 	
 	// Todo 天赋数据（种族天赋）
 	
@@ -252,11 +252,11 @@ struct FMPlayerData
 
 	// 用户全局设置
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	FMUserSettings UserSettings;
+	FUserGameSettings UserSettings;
 
 	// 角色设置
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	TArray<FMRoleSettings> RoleSettings;
+	TArray<FRoleSettings> RoleSettings;
 	
 	// 角色唯一ID序列器
 	UPROPERTY()
@@ -299,7 +299,7 @@ struct FCreateRoleParams
 
 	// Todo 外观数据
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FMBodyModelData ModelData;
+	FBodyModelData ModelData;
 };
 
 /** 登录节目角色数据预览*/
@@ -338,7 +338,7 @@ struct FPreviewRoleData
 
 	// Todo 外观数据
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectM")
-	FMBodyModelData ModelData;
+	FBodyModelData ModelData;
 	
 	// Todo 装扮（备）数据
 	
