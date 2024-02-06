@@ -24,10 +24,10 @@ class UMAttributeSet;
 class AMPlayerController;
 class AMPlayerState;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRoleDataChanged, EDressType, Postion, int32, NewValue);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleNameChanged, FName, NewName);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleCampChanged, ECamp, NewCamp);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleRaceChanged, ERace, NewRace);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRoleModelDataChanged, EModelSlot, Postion, int32, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleNameChanged, FName, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleCampChanged, ECamp, V);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoleRaceChanged, ERace, V);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCurrentTargetChanged, AMCharacter*, Target);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityFailed, EActivateFailCode, FailCode);
@@ -113,7 +113,7 @@ public:
 	FAppearanceData GetModelData() const { return ModelData; }
 
 	UPROPERTY(BlueprintAssignable, Category = "ProjectM")
-	FOnRoleDataChanged OnModelDataChanged;
+	FOnRoleModelDataChanged OnModelDataChanged;
 
 	UFUNCTION()
 	void SetRoleName(const FString& InName);

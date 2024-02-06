@@ -5,7 +5,7 @@
 
 // Config=Game：储存在 DefaultGame.ini, 在Project-Settings中的Game分段
 // default config： 存储在默认的配置文件里，而不是 项目目录-Saved-Config里面的那些
-UCLASS(Config=Game,defaultconfig,meta=(DisplayName = "ProjectM Settings"))
+UCLASS(Config=Game,defaultconfig,meta=(DisplayName = "ProjectMMO Settings"))
 class DEMO_API UMDeveloperSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()

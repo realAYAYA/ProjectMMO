@@ -175,11 +175,11 @@ enum class EEquipmentSlot : uint8
 	Pants				UMETA(Displayname = "Pants"),
 	InDoorShoes			UMETA(Displayname = "InDoorShoes"),
 
-	MaxNum
+	MaxNum				UMETA(Displayname = "MaxNum"),
 };
 
 UENUM(BlueprintType)
-enum class EDressType : uint8
+enum class EModelSlot : uint8
 {
 	Unknown				UMETA(Displayname = "Unknown"),
 	Head				UMETA(Displayname = "Head"),
@@ -203,5 +203,5 @@ enum class EDressType : uint8
 	Pants				UMETA(Displayname = "Pants"),
 	InDoorShoes			UMETA(Displayname = "InDoorShoes"),
 
-	MaxNum
+	MaxNum				UMETA(Displayname = "MaxNum"),
 };

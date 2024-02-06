@@ -172,7 +172,7 @@ void AMCharacter::SetModelData(const FAppearanceData& InData)
 	// 如果不是以DS编译，而是以Listening Server启动方式时，OnRep不会在主机上调用，需要手动触发
 	if (UKismetSystemLibrary::IsServer(this) && !UKismetSystemLibrary::IsDedicatedServer(this))
 	{
-		OnModelDataChanged.Broadcast(EDressType::Unknown, 0);
+		OnModelDataChanged.Broadcast(EModelSlot::Unknown, 0);
 	}
 #endif
 }
@@ -199,7 +199,7 @@ void AMCharacter::OnRep_CurrentTarget() const
 
 void AMCharacter::OnRep_ModelData() const
 {
-	OnModelDataChanged.Broadcast(EDressType::Unknown, 0);
+	OnModelDataChanged.Broadcast(EModelSlot::Unknown, 0);
 }
 
 UAbilitySystemComponent* AMCharacter::GetAbilitySystemComponent() const
