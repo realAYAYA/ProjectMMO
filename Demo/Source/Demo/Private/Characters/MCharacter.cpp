@@ -285,8 +285,8 @@ void AMCharacter::TryJump(const FInputActionValue& Value)
 {
 	// 检测是否可以移动
 	FGameplayTagContainer Container;
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Paralysis")));// 瘫痪类buff
+	Container.AddTag(FGasGlobalTags::Get().Root);
+	Container.AddTag(FGasGlobalTags::Get().Paralysis);// 瘫痪类buff
 
 	for (const FGameplayTag& Tag :Container)
 	{
@@ -301,8 +301,8 @@ void AMCharacter::MoveBeginInternal(const FVector2D& Value)
 {
 	// 检测是否可以移动
 	FGameplayTagContainer Container;
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Root")));
-	Container.AddTag(FGameplayTag::RequestGameplayTag(FName("GAS.GE.Limit.Paralysis")));// 瘫痪类buff
+	Container.AddTag(FGasGlobalTags::Get().Root);
+	Container.AddTag(FGasGlobalTags::Get().Paralysis);// 瘫痪类buff
 
 	for (const FGameplayTag& Tag :Container)
 	{

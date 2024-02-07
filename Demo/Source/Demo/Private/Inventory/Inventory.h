@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MGameMessageFwd.h"
 #include "MGameTypes.h"
 
 #include "Net/MNetFwd.h"
@@ -80,7 +81,7 @@ public:
 	void SendRefreshItemsCacheToMe();
 
 protected:
-
+	
 	virtual void Tick(float DeltaTime);
 	
 private:

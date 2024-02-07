@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "GameplayAbilitySystem/GameplayAbilitySystemGlobalTags.h"
 #include "Characters/MCharacter.h"
 #include "MAbilitySystemComponent.generated.h"
 
