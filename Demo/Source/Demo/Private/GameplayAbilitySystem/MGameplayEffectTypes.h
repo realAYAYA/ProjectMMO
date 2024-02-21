@@ -1,5 +1,6 @@
 #pragma once
 #include "GameplayEffectTypes.h"
+#include "GameplayEffects/MGameplayEffect.h"
 #include "MGameplayEffectTypes.generated.h"
 
 USTRUCT()
@@ -22,10 +23,7 @@ struct DEMO_API FMGameplayEffectContext : public FGameplayEffectContext
 		CriticalRate = In; // 添加数据
 	}
 
-	// 该方法必须被重写 应当在方法中创建子类并返回子类指针
-	// 原因在若不重写的话，复制之后就变回 父类了
-	// 此时如果强制转换，用子类指针父类 自然会报空指针
-	// 这类错误的强制转换 能够逃过 if(nullptr) 判定！！！
+	// 拷贝方法对应=号操作符
 	virtual FMGameplayEffectContext* Duplicate() const override
 	{
 		FMGameplayEffectContext* NewContext = new FMGameplayEffectContext();
@@ -38,12 +36,10 @@ struct DEMO_API FMGameplayEffectContext : public FGameplayEffectContext
 			NewContext->AddHitResult(*GetHitResult(), true);
 		}
 		
-		NewContext->CriticalRate = CriticalRate; // not necessary
-		
 		return NewContext;
 	}
 
-	// 注释上说子类必须重写该方法，保证能序列化
+	// 保证能序列化正确子类
 	virtual UScriptStruct* GetScriptStruct() const override
 	{
 		return StaticStruct();
@@ -52,4 +48,6 @@ struct DEMO_API FMGameplayEffectContext : public FGameplayEffectContext
 protected:
 	
 	float CriticalRate = 1.0f;
+
+	EMDamageType DamageType = EMDamageType::Physical;
 };
