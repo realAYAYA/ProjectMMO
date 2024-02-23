@@ -17,13 +17,13 @@ enum class EMBuffType : uint8
 UENUM(BlueprintType)
 enum class EMDamageType : uint8
 {
-	Chaos		UMETA(Displayname = "Chaos"),
 	Physical	UMETA(Displayname = "Physical"),
 	Frost		UMETA(Displayname = "Frost"),
 	Flame		UMETA(Displayname = "Flame"),
 	Nature		UMETA(Displayname = "Nature"),
 	Divine		UMETA(Displayname = "Divine"),
 	Shadow		UMETA(Displayname = "Shadow"),
+	Chaos		UMETA(Displayname = "Chaos"),
 };
 
 /**

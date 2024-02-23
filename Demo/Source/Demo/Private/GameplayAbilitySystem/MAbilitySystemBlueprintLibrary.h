@@ -24,6 +24,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "ProjectM", Meta = (DisplayName = "IsCritical"))
 	static bool EffectContextIsCritical(const FGameplayEffectContextHandle& EffectContext);
 
+	/** Returns true if there is a critical hit inside the effect context */
+	UFUNCTION(BlueprintPure, Category = "ProjectM", Meta = (DisplayName = "GetDamageType"))
+	static EMDamageType EffectContextGetDamageType(FGameplayEffectContextHandle& EffectContext);
+
 	// -------------------------------------------------------------------------------
 	//		GameplayCue
 	// -------------------------------------------------------------------------------

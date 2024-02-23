@@ -23,6 +23,16 @@ struct DEMO_API FMGameplayEffectContext : public FGameplayEffectContext
 		CriticalRate = In; // 添加数据
 	}
 
+	EMDamageType GetDamageType() const
+	{
+		return DamageType; // 获取数据
+	}
+
+	void SetDamageType(const EMDamageType In)
+	{
+		DamageType = In; // 添加数据
+	}
+
 	// 拷贝方法对应=号操作符
 	virtual FMGameplayEffectContext* Duplicate() const override
 	{
