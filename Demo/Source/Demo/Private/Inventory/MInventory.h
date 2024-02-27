@@ -47,8 +47,6 @@ public:
 	void LoadData(const FInventoryData& InData);
 	
 	void Fill(FInventoryData& OutData);
-
-	void SendRefreshItemsCacheToMe();
 	
 private:
 	
@@ -59,6 +57,4 @@ private:
 
 	UFUNCTION(Client, Reliable, Category = "ProjectM")
 	void UseItemAck(const ERpcErrorCode Code);
-
-	FRpcManager RpcManager;
 };
