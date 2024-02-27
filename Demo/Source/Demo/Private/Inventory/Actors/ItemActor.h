@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
-#include "Inventory/Item.h"
+#include "..\MItem.h"
 
 #include "ItemActor.generated.h"
 
@@ -61,7 +61,7 @@ private:
 	AActor* ItemOwner = nullptr;
 
 	UPROPERTY()
-	UItem* Item;
+	UMItem* Item;
 
 	/**
 	 * @Netwrok Replicated

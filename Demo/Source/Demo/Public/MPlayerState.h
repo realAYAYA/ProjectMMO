@@ -32,7 +32,7 @@ public:
 	const FRoleData& GetRoleData() const { return RoleData; }
 	
 	UPROPERTY(BlueprintReadOnly, Category = "ProjectM")
-	class UInventory* InventoryModule;// Todo 背包模块
+	class UMInventory* InventoryModule;// Todo 背包模块
 	
 	// Todo 天赋模块
 	// Todo 任务模块

@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class MGameServer : ModuleRules
+public class MGameShared : ModuleRules
 {
-	public MGameServer(ReadOnlyTargetRules Target) : base(Target)
+	public MGameShared(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -25,11 +25,8 @@ public class MGameServer : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core", 
-				"MGameProtocol", 
-				"RedisClient"
+				"Core",
 				// ... add other public dependencies that you statically link with here ...
-				
 			}
 			);
 			
@@ -39,12 +36,8 @@ public class MGameServer : ModuleRules
 			{
 				"CoreUObject",
 				"Engine",
-				"WebSocketNetworking", 
-				"WebSockets",
-				
-				"MRpc", 
-				"MGameCommon", 
-				"MGameShared"
+				"Slate",
+				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

@@ -3,14 +3,13 @@
 #include "MPlayerState.h"
 #include "MGameInstance.h"
 
-#include "Inventory/Inventory.h"
 #include "Net/UnrealNetwork.h"
 
 AMPlayerState::AMPlayerState(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
 	MPlayerID = 0;
-	InventoryModule = NewObject<UInventory>();
+	//InventoryModule = NewObject<UInventory>();
 }
 
 void AMPlayerState::LoadData(const FRoleData& InData)

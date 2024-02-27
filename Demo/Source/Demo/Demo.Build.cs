@@ -40,7 +40,8 @@ public class Demo : ModuleRules
 			"DeveloperSettings",
 			
 			"MGameProtocol", 
-			"MGameClient",
+			"MGameClient", 
+			"MGameShared",
 		});
 	}
 }

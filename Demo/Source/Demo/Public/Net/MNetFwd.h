@@ -48,7 +48,7 @@ struct FRpcPendingData
 #if WITH_EDITOR
 		return false;// 编辑器模式下没有超时
 #else
-		return (FDateTime::UtcNow() - BeginDate).GetTotalSeconds() >TimeoutSetting;
+		return (FDateTime::UtcNow() - BeginDate).GetTotalSeconds() > TimeoutSetting;
 #endif
 	}
 };

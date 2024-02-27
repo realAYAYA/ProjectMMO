@@ -40,7 +40,7 @@ FString MakeKey(const FString& InKey)
 		MachineId = BytesToHex(reinterpret_cast<const uint8*>(&HashId), sizeof(HashId));
 	}
 	return FString::Printf(TEXT("PROJECT_M:%s_%s"), *MachineId, *InKey);  // 编辑器模式将当前机器名编码到KEY里面
-	#else
+#else
 	return FString::Printf(TEXT("PROJECT_M_%s"), *InKey);
 #endif	
 }

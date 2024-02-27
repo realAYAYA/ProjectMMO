@@ -4,17 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "MGameTypes.h"
-#include "Item.generated.h"
+#include "MItemBase.h"
+#include "MItem.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UItem : public UObject
+class UMItem : public UMItemBase
 {
 	GENERATED_BODY()
 
-	UItem() {};
+	UMItem() {};
 
 public:
 	
