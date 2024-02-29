@@ -23,7 +23,7 @@ bool UMAbilitySystemBlueprintLibrary::EffectContextIsCritical(const FGameplayEff
 	return EffectContextGetCritical(EffectContext) > 1.0f;
 }
 
-EMDamageType UMAbilitySystemBlueprintLibrary::EffectContextGetDamageType(FGameplayEffectContextHandle& EffectContext)
+EMDamageType UMAbilitySystemBlueprintLibrary::EffectContextGetDamageType(FGameplayEffectContextHandle EffectContext)
 {
 	if (const FMGameplayEffectContext* MEffectContext = static_cast<FMGameplayEffectContext*>(EffectContext.Get()))
 		return MEffectContext->GetDamageType();

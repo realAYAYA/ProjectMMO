@@ -26,7 +26,7 @@ public:
 
 	/** Returns true if there is a critical hit inside the effect context */
 	UFUNCTION(BlueprintPure, Category = "ProjectM", Meta = (DisplayName = "GetDamageType"))
-	static EMDamageType EffectContextGetDamageType(FGameplayEffectContextHandle& EffectContext);
+	static EMDamageType EffectContextGetDamageType(FGameplayEffectContextHandle EffectContext);
 
 	// -------------------------------------------------------------------------------
 	//		GameplayCue
