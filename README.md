@@ -1,12 +1,22 @@
 # ProjectMMO
-A MMO RPG game frame based on UE5.3
+A MMO RPG game frame based on UE5.4
+
+# Features
+
+- Protobuf
+- Rpc based on Websocek
+- PuerTs, Typescript in UE
+- GameTables, Excel in UE
+
+- GAS
+- ToonLit
+- RPG gameplay about
 
 ### How to build
 
 ### How to start
 
 ### Todo
-GAS: 持续键入的技能，例如位移，被打断或阻断的问题  
 
 ### Development Log
 
