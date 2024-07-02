@@ -8,8 +8,8 @@ public class DemoServerTarget : TargetRules
 	public DemoServerTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Server;
-		DefaultBuildSettings = BuildSettingsVersion.V3;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 		ExtraModuleNames.Add("Demo");
 	}
 }

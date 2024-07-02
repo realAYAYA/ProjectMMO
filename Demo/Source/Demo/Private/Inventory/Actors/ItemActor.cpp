@@ -33,24 +33,6 @@ void AItemActor::OnBeginOverlap(
 	const FHitResult& SweepResult)
 {
 	return;
-	AMCharacter* Character = Cast<AMCharacter>(OtherActor);
-	//if(Character != nullptr && !Character->bHasRifle && HasAuthority())
-	{
-		// Notify that the actor is being picked up
-		PickComponent->OnPickUp.Broadcast(Character);
-
-		// Unregister from the Overlap Event so it is no longer triggered
-		PickComponent->OnComponentBeginOverlap.RemoveAll(this);
-
-		OnPickUp(Character);
-		OnTake(Character);
-		//FGameplayEventData EventPayload;
-		//EventPayload.Instigator = this;
-		//EventPayload.OptionalObject;// = ;
-		//EventPayload.EventTag;// = UInventory;
-
-		//UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OtherActor, EventPayload.EventTag, EventPayload);
-	}
 }
 
 void AItemActor::InitInternal()
@@ -58,30 +40,7 @@ void AItemActor::InitInternal()
 	// 从配置文件中读取道具配置
 	// 根据道具id从装备表中读取数据
 	// 根据资产类型来设置道具模型
-	if (true)
-	{
-		if (USkeletalMeshComponent * SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent")))
-		//if (USkeletalMeshComponent * SkeletalMeshComponent = NewObject<USkeletalMeshComponent>(this, USkeletalMeshComponent::StaticClass(), TEXT("MeshComponent")))
-		{
-			
-			SkeletalMeshComponent->SetupAttachment(GetRootComponent());
-			//SkeletalMeshComponent->SetSkeletalMesh(nullptr);// 设置资产
-			MeshComponent = SkeletalMeshComponent;
-			MeshComponent->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
-		}
-	}
-	else if (false)
-	{
-		UStaticMeshComponent* StaticMeshComponent = NewObject<UStaticMeshComponent>(this, UStaticMeshComponent::StaticClass(), TEXT("StaticMeshComponent"));
-		if (StaticMeshComponent)
-		{
-			StaticMeshComponent->RegisterComponent();
-			StaticMeshComponent->SetStaticMesh(nullptr);// 设置资产
-			StaticMeshComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
-			MeshComponent = StaticMeshComponent;
-		}
-	}
+	
 }
 
 void AItemActor::OnPickUp(AMCharacter* InOwner)

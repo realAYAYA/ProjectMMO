@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 void MGAMECOMMON_API FStringToString(const FString& In, std::string* Out);
 void MGAMECOMMON_API StringToFString(const std::string& In, FString* Out);
