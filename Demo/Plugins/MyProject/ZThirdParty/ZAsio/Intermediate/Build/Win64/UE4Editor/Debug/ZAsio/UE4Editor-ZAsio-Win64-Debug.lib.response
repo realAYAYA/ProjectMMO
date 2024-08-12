@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-ZAsio-Win64-Debug.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\liudong_zt-2018056_20090\Engine\Intermediate\Build\Win64\UE4Editor\Debug\Core\SharedPCH.Core.NoShadow.NoUndef.h.obj"
+"D:\liudong_zt-2018056_20090\Engine\Plugins\ZThirdParty\ZAsio\Intermediate\Build\Win64\UE4Editor\Debug\ZAsio\Module.ZAsio.cpp.obj"
+"D:\liudong_zt-2018056_20090\Engine\Intermediate\Build\Win64\UE4Editor\Debug\Default.rc2.res"
+/OUT:"D:\liudong_zt-2018056_20090\Engine\Plugins\ZThirdParty\ZAsio\Intermediate\Build\Win64\UE4Editor\Debug\ZAsio\UE4Editor-ZAsio-Win64-Debug.lib"

@@ -1,0 +1,53 @@
+/Zc:inline
+/nologo
+/Oi
+/c
+/Gw
+/Gy
+/Zm1000
+/wd4819
+/D_CRT_STDIO_LEGACY_WIDE_SPECIFIERS=1
+/D_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS=1
+/D_WINDLL
+/D_DISABLE_EXTENDED_ALIGNED_STORAGE
+/source-charset:utf-8
+/execution-charset:utf-8
+/Ob2
+/Od
+/Os
+/RTCs
+/errorReport:prompt
+/EHsc
+/Z7
+/MD
+/bigobj
+/fp:fast
+/Zp8
+/wd4456
+/wd4458
+/wd4459
+/wd4463
+/wd4244
+/wd4838
+/I .
+/I ..\Plugins\ZThirdParty\ZProtobuf\Source
+/I ..\Plugins\ZThirdParty\ZProtobuf\Source\Private
+/I ..\Plugins\ZThirdParty\ZProtobuf
+/I Runtime
+/I Runtime\TraceLog\Public
+/I Runtime\Core\Public
+/I D:\apps\Microsoft\VisualStudio\IDE\VC\Tools\MSVC\14.39.33519\INCLUDE
+/I "C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.2\include\um"
+/I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt"
+/I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\shared"
+/I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\um"
+/I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\winrt"
+/FI"D:\liudong_zt-2018056_20090\Engine\Intermediate\Build\Win64\UE4Editor\Debug\Core\SharedPCH.Core.NoShadow.NoUndef.h"
+/Yu"D:\liudong_zt-2018056_20090\Engine\Intermediate\Build\Win64\UE4Editor\Debug\Core\SharedPCH.Core.NoShadow.NoUndef.h"
+/Fp"D:\liudong_zt-2018056_20090\Engine\Intermediate\Build\Win64\UE4Editor\Debug\Core\SharedPCH.Core.NoShadow.NoUndef.h.pch"
+"D:\liudong_zt-2018056_20090\Engine\Plugins\ZThirdParty\ZProtobuf\Source\google\protobuf\text_format.cc"
+/FI"D:\liudong_zt-2018056_20090\Engine\Plugins\ZThirdParty\ZProtobuf\Intermediate\Build\Win64\UE4Editor\Debug\ZProtobuf\Definitions.ZProtobuf.h"
+/Fo"D:\liudong_zt-2018056_20090\Engine\Plugins\ZThirdParty\ZProtobuf\Intermediate\Build\Win64\UE4Editor\Debug\ZProtobuf\text_format.cc.obj"
+/TP
+/GR-
+/W4

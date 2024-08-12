@@ -1,0 +1,7 @@
+{
+	"BuildId": "26bdf2b8-3349-42d3-ad8e-404b594084c1",
+	"Modules": 
+	{
+		"ZRedisClient": "UE4Editor-ZRedisClient-Win64-Debug.dll"
+	}
+}

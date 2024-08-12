@@ -1,0 +1,10 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.ZAsio.cpp.obj": [
+			"asio.cpp.obj",
+			"ZAsioException.cpp.obj",
+			"ZAsioPrivate.cpp.obj"
+		]
+	}
+}

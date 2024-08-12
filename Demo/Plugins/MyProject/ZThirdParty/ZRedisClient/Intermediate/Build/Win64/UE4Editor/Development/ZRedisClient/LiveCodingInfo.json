@@ -1,0 +1,9 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.ZRedisClient.cpp.obj": [
+			"RedisClient.cpp.obj",
+			"ZRedisClientPrivate.cpp.obj"
+		]
+	}
+}
