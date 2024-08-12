@@ -1,0 +1,14 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-NetLib.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\code-check\ProjectMMO\Demo\Intermediate\Build\Win64\x64\DemoEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"D:\code-check\ProjectMMO\Demo\Plugins\MyProject\Shared\NetLib\Intermediate\Build\Win64\x64\UnrealEditor\Development\NetLib\Module.NetLib.cpp.obj"
+"D:\code-check\ProjectMMO\Demo\Plugins\MyProject\Shared\NetLib\Intermediate\Build\Win64\x64\UnrealEditor\Development\NetLib\MySocket.cpp.obj"
+"D:\code-check\ProjectMMO\Demo\Plugins\MyProject\Shared\NetLib\Intermediate\Build\Win64\x64\UnrealEditor\Development\NetLib\MyTcpServer.cpp.obj"
+"D:\code-check\ProjectMMO\Demo\Plugins\MyProject\Shared\NetLib\Intermediate\Build\Win64\x64\UnrealEditor\Development\NetLib\Default.rc2.res"
+/OUT:"D:\code-check\ProjectMMO\Demo\Plugins\MyProject\Shared\NetLib\Intermediate\Build\Win64\x64\UnrealEditor\Development\NetLib\UnrealEditor-NetLib.lib"

@@ -23,7 +23,7 @@ protected:
 	void RemoveConnection(const FTcpConnectionPtr& InConn);
 	
 	uint64 GenerateConnId();
-	virtual FTcpConnectionPtr NewConnection();
+	virtual FTcpConnectionPtr NewConnection() = 0;
 	
 private:
 	

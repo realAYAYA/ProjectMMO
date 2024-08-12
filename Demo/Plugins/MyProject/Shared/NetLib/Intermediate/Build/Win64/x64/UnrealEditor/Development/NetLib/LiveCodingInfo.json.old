@@ -1,0 +1,12 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.NetLib.cpp.obj": [
+			"MyDataBuffer.cpp.obj",
+			"MyTcpClient.cpp.obj",
+			"MyTcpConnection.cpp.obj",
+			"MyTcpServer.cpp.obj",
+			"MySocket.cpp.obj"
+		]
+	}
+}

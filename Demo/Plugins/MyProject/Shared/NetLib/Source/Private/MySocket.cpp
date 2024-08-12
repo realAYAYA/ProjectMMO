@@ -12,7 +12,8 @@ FMySocket::~FMySocket()
 
 void FMySocket::Init(INetworkingWebSocket* Socket)
 {
-	WebSocket = MakeUnique<INetworkingWebSocket>(*Socket);
+	auto Ptr = TSharedPtr<INetworkingWebSocket>(Socket);
+	WebSocket = MoveTemp(Ptr);
 }
 
 void FMySocket::Start()

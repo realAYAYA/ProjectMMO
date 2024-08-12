@@ -1,0 +1,9 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.MCommon.cpp.obj": [
+			"MTools.cpp.obj",
+			"MyJobQueue.cpp.obj"
+		]
+	}
+}

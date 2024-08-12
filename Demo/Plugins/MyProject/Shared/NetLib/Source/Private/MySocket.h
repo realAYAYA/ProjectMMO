@@ -46,7 +46,7 @@ private:
 	std::atomic<int64> LastSentTime;// 最后发送数据时间
 	std::atomic<int64> LastReceivedTime;// 最后接受数据时间
 	
-	TUniquePtr<INetworkingWebSocket> WebSocket = nullptr;
+	TSharedPtr<INetworkingWebSocket> WebSocket = nullptr;
 
 	FMySocketReceivedCallback ReceivedCallback;  // 接收到数据之回调 [**IO线程调用**]
 	FMySocketClosedCallback ClosedCallback;  // 连接断开之回调 [**IO线程调用**]

@@ -82,15 +82,6 @@ uint64 FMyTcpServer::GenerateConnId()
 	return NextConnId++;
 }
 
-FTcpConnectionPtr FMyTcpServer::NewConnection()
-{
-	auto Ptr = MakeShared<FMyTcpConnection>(GenerateConnId());
-
-	
-	
-	return Ptr;
-}
-
 FTcpConnectionPtr FPbTcpServer::NewConnection()
 {
 	auto Ptr = MakeShared<FPbConnection>(GenerateConnId());
