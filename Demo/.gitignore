@@ -76,6 +76,8 @@ DerivedDataCache/*
 # Add by liudong
 Plugins/*/*/Binaries/*
 Plugins/*/*/Intermediate/*
+Plugins/*/*/*/Binaries/*
+Plugins/*/*/*/Intermediate/*
 *.DS_Store
 
 # VS Code

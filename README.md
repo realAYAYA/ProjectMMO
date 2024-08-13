@@ -1,16 +1,16 @@
 # ProjectMMO
 A MMO RPG game frame based on UE5.4
+- Act or RPG or FPS gameplay about
 
 # Features
 
-- Protobuf
-- Rpc based on Websocek
-- PuerTs, Typescript in UE
+- ToonLit
+- GAS
 - GameTables, Excel in UE
 
-- GAS
-- ToonLit
-- RPG gameplay about
+- Protobuf
+- Rpc based on Websocket
+- PuerTs, Typescript in UE
 
 ### How to build
 

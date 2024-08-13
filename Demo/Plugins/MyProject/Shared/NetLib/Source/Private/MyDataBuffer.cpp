@@ -15,6 +15,12 @@ FMyDataBuffer::FMyDataBuffer(const char* InData, const uint32 Len)
 	Append(InData, Len);
 }
 
+FMyDataBuffer::FMyDataBuffer(const void* InData, const uint32 Len)
+	: Data(Len), ReaderIndex(0), WriterIndex(0)
+{
+	Append(InData, Len);
+}
+
 FMyDataBuffer::~FMyDataBuffer()
 {
 }

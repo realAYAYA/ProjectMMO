@@ -37,6 +37,7 @@ private:
 	virtual void HandleReceived(FMyDataBuffer* Buffer) = 0;  // 处理收到的数据 [**IO线程调用**]
 	virtual void HandleConnected() = 0;  // [**IO线程调用**]
 	virtual void HandleClosed() = 0;  // [**IO线程调用**]
+	virtual void HandleError() = 0;  // [**IO线程调用**]
 	virtual void HandleTimer() = 0;  // [**IO线程调用**]
 	
 	const uint64 Id = 0;
@@ -59,6 +60,7 @@ public:
 	typedef TFunction<void(FSelfType, uint64, FMyDataBufferPtr)> FPackageCallback;
 	typedef TFunction<void(FSelfType)> FConnectedCallback;
 	typedef TFunction<void(FSelfType)> FDisconnectedCallback;
+	typedef TFunction<void(FSelfType)> FErrorCallback;
 	typedef TFunction<void(FSelfType)> FTimerCallback;
 
 	virtual void SendMessage(const FPbMessagePtr& InMessage) override;
@@ -76,6 +78,7 @@ private:
 	virtual void HandleReceived(FMyDataBuffer* InBuffer) override;  // [**IO线程调用**]
 	virtual void HandleConnected() override;  // [**IO线程调用**]
 	virtual void HandleClosed() override;  // [**IO线程调用**]
+	virtual void HandleError() override;  // [**IO线程调用**]
 	virtual void HandleTimer() override;  // [**IO线程调用**]
 
 	void DirectSendPb(const FPbMessagePtr& InMessage);
@@ -86,5 +89,6 @@ private:
 	FPackageCallback PackageCallback;
 	FConnectedCallback ConnectedCallback;
 	FDisconnectedCallback DisconnectedCallback;
+	FErrorCallback ErrorCallback;
 	FTimerCallback TimerCallback;
 };

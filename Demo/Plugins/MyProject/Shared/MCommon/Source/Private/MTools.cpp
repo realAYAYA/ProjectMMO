@@ -10,7 +10,7 @@ FDateTime FMyTools::LocalNow()
 	return FDateTime::Now();
 }
 
-// TODO(hudawei): ZGetProjectVersion 需要补上 IOS 和 PC 的版本号获取方式，现在只有 Android 是对的
+// TODO(liudong): GetProjectVersion 需要补上 IOS 和 PC 的版本号获取方式，现在只有 Android 是对的
 #if PLATFORM_ANDROID
 FString FMyTools::GetProjectVersion()  // Android
 {

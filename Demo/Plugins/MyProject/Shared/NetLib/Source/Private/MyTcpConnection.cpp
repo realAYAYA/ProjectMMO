@@ -21,6 +21,39 @@ FMyTcpConnection::~FMyTcpConnection()
 void FMyTcpConnection::Init(const FMySocketPtr& InSocket)
 {
 	Socket = InSocket;
+
+	TWeakPtr<FMyTcpConnection, ESPMode::ThreadSafe> Self = AsShared();
+	Socket->SetConnectedCallback([Self]()
+	{
+		if (const auto Ptr = Self.Pin())
+		{
+			Ptr->HandleConnected();
+		}
+	});
+
+	Socket->SetClosedCallback([Self]()
+	{
+		if (const auto Ptr = Self.Pin())
+		{
+			Ptr->HandleClosed();
+		}
+	});
+
+	Socket->SetErrorCallback([Self]()
+	{
+		if (const auto Ptr = Self.Pin())
+		{
+			Ptr->HandleError();
+		}
+	});
+	
+	Socket->SetReceivedCallback([Self](FMyDataBuffer* Buffer)
+	{
+		if (const auto Ptr = Self.Pin())
+		{
+			Ptr->HandleReceived(Buffer);
+		}
+	});
 }
 
 void FMyTcpConnection::Start()
@@ -73,6 +106,12 @@ uint32 FMyTcpConnection::GenerateSerialNum()
 {
 	return NextSerialNum++;
 }
+
+
+
+// ========================================================================= //
+
+
 
 FPbConnection::FPbConnection(const uint64 Id): FMyTcpConnection(Id)
 {
@@ -245,6 +284,17 @@ void FPbConnection::HandleClosed()
 		if (const auto Self = StaticCastSharedPtr<FPbConnection, FMyTcpConnection, ESPMode::ThreadSafe>(AsShared()))
 		{
 			DisconnectedCallback(Self);
+		}
+	}
+}
+
+void FPbConnection::HandleError()
+{
+	if (ErrorCallback)
+	{
+		if (const auto Self = StaticCastSharedPtr<FPbConnection, FMyTcpConnection, ESPMode::ThreadSafe>(AsShared()))
+		{
+			ErrorCallback(Self);
 		}
 	}
 }

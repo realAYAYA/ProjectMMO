@@ -11,6 +11,7 @@ public:
 	
 	FMyDataBuffer(uint32 InitialSize = 1024);
 	FMyDataBuffer(const char* InData, uint32 Len);
+	FMyDataBuffer(const void* InData, uint32 Len);
 	~FMyDataBuffer();
 
 	void Swap(FMyDataBuffer& Rhs);
