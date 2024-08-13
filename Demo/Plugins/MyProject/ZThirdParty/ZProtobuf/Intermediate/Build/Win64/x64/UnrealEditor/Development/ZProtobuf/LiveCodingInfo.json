@@ -1,8 +1,0 @@
-{
-	"RemapUnityFiles": 
-	{
-		"Module.ZProtobuf.cpp.obj": [
-			"ZProtobufPrivate.cpp.obj"
-		]
-	}
-}
