@@ -9,11 +9,7 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine",
-				"GameplayAbilities",
-				"CoreUObject",
-				"GameTables",
-				"UMG"
+				"Engine"
 			]
 		}
 	],
@@ -26,22 +22,27 @@
 			]
 		},
 		{
-			"Name": "GameplayAbilities",
+			"Name": "GameTables",
 			"Enabled": true
 		},
 		{
-			"Name": "RenderDocPlugin",
-			"Enabled": true,
-			"TargetAllowList": [
-				"Editor"
-			]
-		},
-		{
-			"Name": "AnimationWarping",
+			"Name": "NetLib",
 			"Enabled": true
 		},
 		{
-			"Name": "AnimationLocomotionLibrary",
+			"Name": "MRpc",
+			"Enabled": true
+		},
+		{
+			"Name": "MProtocol",
+			"Enabled": true
+		},
+		{
+			"Name": "MCommon",
+			"Enabled": true
+		},
+		{
+			"Name": "MGameServices",
 			"Enabled": true
 		}
 	]

@@ -74,11 +74,6 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # Add by liudong
-Plugins/*/*/Binaries/*
-Plugins/*/*/Intermediate/*
-Plugins/*/*/*/Binaries/*
-Plugins/*/*/*/Intermediate/*
-*.DS_Store
 
 # VS Code
 .vscode/
@@ -89,3 +84,10 @@ Plugins/*/*/*/Intermediate/*
 /Plugins/Developer/RiderLink/
 *.p4ignore
 /.idea
+Plugins/*/*/Binaries/*
+Plugins/*/*/Intermediate/*
+Plugins/*/*/*/Binaries/*
+Plugins/*/*/*/Intermediate/*
+*.DS_Store
+!*.xlsx
+!Content/*

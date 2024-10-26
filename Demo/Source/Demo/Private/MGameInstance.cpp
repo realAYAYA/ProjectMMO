@@ -2,167 +2,24 @@
 
 
 #include "MGameInstance.h"
-
-#include "Demo.h"
-#include "GameRpcClient.h"
-#include "MGameClientSubsystem.h"
-#include "GameplayAbilitySystem/MAbilitySystemGlobals.h"
-#include "Developer/MSaveGame.h"
-
-#include "Kismet/GameplayStatics.h"
+#include "GameTablesModule.h"
+#include "Demo/Net/MGameClient.h"
 
 void UMGameInstance::Init()
 {
 	Super::Init();
-
-	UMAbilitySystemGlobals::Get().InitGlobalData();
-
-	LoadLocalSave();
-
-	LoginServer();
-}
-
-void UMGameInstance::BeginDestroy()
-{
-	if (SaveGame)
-	{
-		if (!UGameplayStatics::SaveGameToSlot(SaveGame, TEXT("MSaveGame"), 0))
-		{
-			UE_LOG(LogProjectM, Error, TEXT("SaveGame Failed."));
-		}
-	}
 	
-	Super::BeginDestroy();
 }
 
-UMGameInstance* UMGameInstance::GetMGameInstance(const UWorld* World)
+UMGameSession* UMGameInstance::GetMGameSession()
 {
-	return World ? Cast<UMGameInstance>(World->GetGameInstance()) : nullptr;
-}
-
-void UMGameInstance::LoadLocalSave()
-{
-	if (IsRunningDedicatedServer())
-		return;
+	if (!GameSession)
+		GameSession = NewObject<UMGameSession>();
 	
-	if (!UGameplayStatics::DoesSaveGameExist(TEXT("MSaveGame"), 0))
-	{
-		SaveGame = NewObject<UMSaveGame>(this);
-	}
-	else
-	{
-		SaveGame = Cast<UMSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("MSaveGame"), 0));
-		if (!SaveGame)
-			SaveGame = NewObject<UMSaveGame>(this);
-	}
+	return GameSession;
 }
 
-void UMGameInstance::LoginServer()
+UGameTables* UMGameInstance::GetGameTables()
 {
-	if (!IsRunningDedicatedServer())
-	{
-		return;
-	}
-	
-	if (UMGameClientSubsystem* Client = GetSubsystem<UMGameClientSubsystem>())
-	{
-		Client->OnConnectedCallback.BindUFunction(this, TEXT("GetReady"));
-
-		Client->CreateSocket(TEXT("ws://127.0.0.1:10086"), TEXT(""));
-	}
-}
-
-void UMGameInstance::CloseConnection()
-{
-}
-
-void UMGameInstance::OnDisConnected()
-{
-}
-
-void UMGameInstance::GetReady(bool Success)
-{
-	if (!Success)
-	{
-		// 连接到根服务器不成功，重连多次还失败，则关闭DS
-		UE_LOG(LogProjectM, Error, TEXT("DS Link root server failed!"));
-		return;
-	}
-
-	//Client->OnErrorCallback.AddDynamic(); //Todo 断线重连机制
-	
-	// Todo 如果是DS服务器，发起请求连接至WebSocket服务器
-	if (const UGameRpcClient* Stub = GetClientRpcStub())
-	{
-		//GetToken();
-		//
-		FLoginAsDSReq Req;
-		Req.Token = 123456;
-		Stub->LoginAsDS(Req, [this](ERpcErrorCode Code, const FLoginAsDSAck& Ack)
-		{
-			if (Code == ERpcErrorCode::Ok && Ack.bOk)
-			{
-				// 拿到游戏存档初始化世界
-				bReady = true;
-				UE_LOG(LogProjectM, Warning, TEXT("Level GetReady!"));
-			}
-			else if (Code == ERpcErrorCode::TimeOut)
-			{
-				GetReady(true);
-				UE_LOG(LogProjectM, Warning, TEXT("Login Timeout, Try again!"));
-			}
-		});
-	}
-	else
-	{
-		UE_LOG(LogProjectM, Error, TEXT("Get Client Stub Failed!"));
-	}
-}
-
-bool UMGameInstance::IsReady() const
-{
-	return bReady;
-}
-
-UGameRpcClient* UMGameInstance::GetClientRpcStub() const
-{
-	if (const UMGameClientSubsystem* Client = GetSubsystem<UMGameClientSubsystem>())
-	{
-		if (Client->IsConnected())
-			return Client->GameRpcClient;
-	}
-
-	return nullptr;
-}
-
-void UMGameInstance::SetLoginInfo(const FString& InUserID, const FString& InUserName)
-{
-	// Todo 从Steam获取信息
-	UserID = InUserID;
-	UserName = InUserName;
-}
-
-void UMGameInstance::K2_Login(const FString& Account, const FOnLoginResult& Callback)
-{
-	if (!IsValid(Callback.GetUObject()))
-		return;
-
-	const UGameRpcClient* RPC = GetClientRpcStub();
-	
-	FLoginGameReq Req;
-	Req.Account = Account;
-	Req.ClientVersion = TEXT("");
-	RPC->LoginGame(Req, [this, Callback](const ERpcErrorCode ErrorCode, const FLoginGameAck& Ack)
-	{
-		if (ErrorCode != ERpcErrorCode::Ok)
-		{
-			Callback.Execute(ELoginGameRetCode::UnKnow, TArray<FPreviewRoleData>());
-			return;
-		}
-
-		PlayerID = Ack.PlayerID;
-		//Ack.UserSettings.RoleSettings;// Todo 处理玩家设置
-
-		Callback.Execute(Ack.Ret, Ack.RolePreviewData);
-	});
+	return FGameTablesModule::Get().GetGameTables();
 }

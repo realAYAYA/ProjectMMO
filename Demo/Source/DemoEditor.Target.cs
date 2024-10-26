@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class DemoEditorTarget : TargetRules
 {
-	public DemoEditorTarget(TargetInfo Target) : base(Target)
+	public DemoEditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.Latest;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
+		DefaultBuildSettings = BuildSettingsVersion.V4;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 		ExtraModuleNames.Add("Demo");
 	}
 }
